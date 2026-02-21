@@ -10,8 +10,8 @@ const Hero = () => {
             <div className="max-w-full mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-2">
                     {/* Text Section */}
-                    <div className="bg-gradient-to-br from-primary to-red-800 p-10 md:p-16 flex flex-col justify-center text-white min-h-[500px] shadow-inner">
-                        <h1 className={`text-3xl md:text-5xl font-black leading-[1.1] mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                    <div className="bg-gradient-to-br from-primary to-red-800 p-8 md:p-16 flex flex-col justify-center text-white min-h-[360px] md:min-h-[500px] shadow-inner">
+                        <h1 className={`text-2xl md:text-5xl font-black leading-[1.1] mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
                             {t('hero.title')}
                         </h1>
                         <p className="text-white/80 text-lg mb-10 max-w-lg font-medium leading-relaxed">
@@ -32,9 +32,9 @@ const Hero = () => {
                     </div>
 
                     {/* Emblem Section */}
-                    <div className="bg-secondary relative flex items-center justify-center p-8 overflow-hidden group">
+                        <div className="bg-secondary relative flex items-center justify-center p-6 md:p-8 overflow-hidden group">
                         <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
-                        <div className="w-80 h-80 md:w-[32rem] md:h-[32rem] relative flex items-center justify-center">
+                        <div className="w-64 h-64 md:w-[32rem] md:h-[32rem] relative flex items-center justify-center">
                             {/* Decorative elements */}
                             <div className="absolute inset-0 border-8 border-black/10 rounded-full scale-110 animate-pulse"></div>
                             <div className="absolute inset-0 border-4 border-black/5 rounded-full scale-125"></div>
@@ -49,8 +49,8 @@ const Hero = () => {
                             </div>
 
                             {/* Floating tag */}
-                            <div className="absolute bottom-10 right-0 p-4 transform translate-x-1/2 translate-y-1/2 z-20">
-                                <div className="bg-slate-900 border-4 border-primary text-white px-6 py-2 rounded-xl font-black text-sm shadow-2xl uppercase tracking-[0.2em] font-header">
+                            <div className="absolute bottom-6 right-0 p-2 md:p-4 transform translate-x-1/2 translate-y-1/2 z-20">
+                                <div className="bg-slate-900 border-4 border-primary text-white px-4 py-1 md:px-6 md:py-2 rounded-xl font-black text-xs md:text-sm shadow-2xl uppercase tracking-[0.2em] font-header">
                                     TVPK
                                 </div>
                             </div>

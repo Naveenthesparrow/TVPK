@@ -26,11 +26,11 @@ const Navbar = () => {
                     <div className="flex justify-between h-20 items-center">
                         {/* Logo and Full Name */}
                         <Link to="/" className="flex items-center gap-4 transition-transform hover:scale-[1.02]">
-                            <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white font-black text-xl shadow-xl shadow-primary/30 transform -rotate-3 hover:rotate-0 transition-transform">
+                            <div className="w-10 h-10 md:w-12 md:h-12 bg-primary rounded-2xl flex items-center justify-center text-white font-black text-lg md:text-xl shadow-xl shadow-primary/30 transform -rotate-3 hover:rotate-0 transition-transform">
                                 {t('brand.short_name').substring(0, 1)}
                             </div>
                             <div className="flex flex-col">
-                                <span className={`text-primary font-black text-2xl leading-none tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                <span className={`text-primary font-black text-lg md:text-2xl leading-none tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                     {t('brand.name')}
                                 </span>
                             </div>

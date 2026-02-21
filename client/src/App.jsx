@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import ScrollToTop from './components/ScrollToTop';
 import Hero from './components/Hero';
 import NewsSection from './components/NewsSection';
 import EventsSection from './components/EventsSection';
@@ -26,6 +27,7 @@ const Home = () => (
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <div className="min-h-screen bg-light font-inter">
         <Navbar />
         <main>

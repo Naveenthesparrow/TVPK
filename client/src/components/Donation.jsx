@@ -15,7 +15,7 @@ const Donation = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="text-center mb-20">
-                    <h1 className={`text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
                         {t('donation.title')}
                     </h1>
                     <div className="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
@@ -24,7 +24,7 @@ const Donation = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
 
                     {/* Column 1: Info */}
-                    <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
+                    <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
                         <div className="flex flex-col items-center text-center mb-10">
                             <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center text-white mb-6 shadow-2xl shadow-primary/30 transform -rotate-6 hover:rotate-0 transition-transform">
                                 <div className="border-4 border-white/30 rounded-full p-3">
@@ -72,7 +72,7 @@ const Donation = () => {
                     </div>
 
                     {/* Column 2: Contribution */}
-                    <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col">
+                    <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col">
                         <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.title')}</h3>
 
                         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -152,7 +152,7 @@ const Donation = () => {
 
                     {/* Column 3: Summary & Personal Details */}
                     <div className="flex flex-col gap-10">
-                        <div className="bg-white rounded-[2.5rem] p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex-grow">
+                        <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex-grow">
                             <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.summary.title')}</h3>
 
                             <div className="space-y-6 mb-10">

@@ -10,10 +10,10 @@ const Contact = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
 
                 <div className="text-center mb-20">
-                    <h1 className={`text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
                         {t('contact_page.title')}
                     </h1>
-                    <p className="max-w-3xl mx-auto text-slate-500 text-lg leading-relaxed font-medium">
+                    <p className="max-w-3xl mx-auto text-slate-500 text-base md:text-lg leading-relaxed font-medium">
                         {t('contact_page.subtitle')}
                     </p>
                 </div>
@@ -21,7 +21,7 @@ const Contact = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
 
                     {/* Form Column */}
-                    <div className="bg-white rounded-[2.5rem] p-12 border border-slate-100 shadow-2xl shadow-slate-200/50 relative overflow-hidden group">
+                    <div className="bg-white rounded-[2.5rem] p-6 md:p-12 border border-slate-100 shadow-2xl shadow-slate-200/50 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors"></div>
                         <h2 className={`text-2xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-4 ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
                             <span className="w-10 h-1 bg-primary rounded-full"></span>
@@ -86,7 +86,7 @@ const Contact = () => {
 
                     {/* Info Column */}
                     <div className="space-y-10">
-                        <div className="bg-slate-900 rounded-[2.5rem] p-12 shadow-2xl shadow-slate-900/40 text-white h-fit relative overflow-hidden group">
+                        <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-slate-900/40 text-white h-fit relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-colors duration-700"></div>
 
                             <h2 className={`text-2xl font-black mb-10 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('contact_page.office.title')}</h2>
@@ -132,7 +132,7 @@ const Contact = () => {
                         </div>
 
                         {/* Social Links */}
-                        <div className="bg-primary rounded-[2.5rem] p-10 text-white flex items-center justify-between shadow-2xl shadow-primary/30">
+                        <div className="bg-primary rounded-[2.5rem] p-6 md:p-10 text-white flex items-center justify-between shadow-2xl shadow-primary/30">
                             <h3 className={`text-xl font-black uppercase tracking-widest ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('contact_page.connect')}</h3>
                             <div className="flex gap-4">
                                 <button className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center hover:bg-white text-white hover:text-primary transition-all"><Facebook size={20} /></button>
