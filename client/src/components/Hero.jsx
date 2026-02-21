@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import partyFlag from '../assets/party-flag.png';
+import partyFlag from '../assets/tamilannai.jpeg';
 
 const Hero = () => {
     const { t, i18n } = useTranslation();
@@ -41,9 +41,9 @@ const Hero = () => {
 
                             {/* The Flag Image */}
                             <div className="relative z-10 w-full h-full p-4 transform group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)]">
-                                <img
+                                    <img
                                     src={partyFlag}
-                                    alt="TVPK Party Flag"
+                                    alt="Tamil Annai"
                                     className="w-full h-full object-contain filter contrast-125 brightness-110"
                                 />
                             </div>
