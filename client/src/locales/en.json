@@ -1,6 +1,6 @@
 {
     "brand": {
-        "name": "Tamil Nadu Viduthalai Puli Katchi",
+        "name": "TAMILNADU VIDUTHALAIPPULI KATCHI",
         "short_name": "TVPK"
     },
     "nav": {
@@ -143,7 +143,7 @@
     },
     "leader": {
         "name": "Gopal Urangapuli",
-        "role": "Party President, Tamil Nadu Viduthalai Puli Katchi",
+        "role": "Party President, TAMILNADU VIDUTHALAIPPULI KATCHI",
         "bio_short": "A visionary leader and a dedicated servant of the people, Dr. Bharathi has tirelessly championed the rights and welfare of Tamil Nadu for over two decades. His unwavering commitment to social justice, economic empowerment, and sustainable development has inspired millions.",
         "read_full_bio": "Read Full Biography",
         "biography_title": "Biography",
@@ -175,7 +175,7 @@
     "manifesto": {
         "title": "Our Vision, Our Promise: The Manifesto",
         "summary_title": "Manifesto Summary",
-        "summary_text_1": "The Tamil Nadu Viduthalai Puli Katchi's Manifesto outlines our unwavering commitment to the holistic development and prosperity of Tamil Nadu. Our vision is rooted in social justice, economic empowerment, environmental sustainability, and cultural preservation, ensuring that every citizen has the opportunity to thrive.",
+        "summary_text_1": "The TAMILNADU VIDUTHALAIPPULI KATCHI's Manifesto outlines our unwavering commitment to the holistic development and prosperity of Tamil Nadu. Our vision is rooted in social justice, economic empowerment, environmental sustainability, and cultural preservation, ensuring that every citizen has the opportunity to thrive.",
         "summary_text_2": "We believe in a future where education is accessible to all, healthcare is comprehensive and affordable, and economic opportunities are abundant and equitable. Our policies are designed to build a strong, resilient, and inclusive society that respects diversity and champions the rights of every individual.",
         "key_pillars_title": "Key Pillars",
         "key_pillars_text": "Key pillars of our manifesto include investing heavily in rural infrastructure, promoting advanced agricultural practices, and fostering industrial growth that creates sustainable jobs. We are dedicated to transparent governance, upholding democratic values, and empowering local self-governance bodies to better serve their communities.",
@@ -241,7 +241,7 @@
                 "category": "Community Outreach",
                 "title": "Relief Efforts Reach Remote Villages Across Tamil Nadu",
                 "date": "November 2, 2023",
-                "desc": "Tamil Nadu Viduthalai Puli Katchi volunteers successfully distributed essential relief materials to several remote villages affected by recent disasters."
+                "desc": "TAMILNADU VIDUTHALAIPPULI KATCHI volunteers successfully distributed essential relief materials to several remote villages affected by recent disasters."
             },
             {
                 "category": "Leader's Speech",
@@ -299,7 +299,7 @@
         "items": [
             {
                 "title": "Grand Party Rally in Chennai",
-                "desc": "Thousands of enthusiastic supporters gathered at Marina Beach for a historic rally, showcasing the unwavering strength and unity of Tamil Nadu Viduthalai Puli Katchi. Our leader delivered an inspiring speech, outlining our vision for a prosperous Tamil Nadu.",
+                "desc": "Thousands of enthusiastic supporters gathered at Marina Beach for a historic rally, showcasing the unwavering strength and unity of TAMILNADU VIDUTHALAIPPULI KATCHI. Our leader delivered an inspiring speech, outlining our vision for a prosperous Tamil Nadu.",
                 "img": "https://images.unsplash.com/photo-1540910419892-f0c74b045366?q=80&w=800&h=600&auto=format&fit=crop"
             },
             {
@@ -331,7 +331,7 @@
         ]
     },
     "donation": {
-        "title": "Support Tamil Nadu Viduthalai Puli Katchi",
+        "title": "Support TAMILNADU VIDUTHALAIPPULI KATCHI",
         "slogan": "\"People's Power - Nation's Progress\"",
         "info": {
             "desc": "Your contribution empowers us to build a stronger, more prosperous Tamil Nadu. Every rupee makes a difference in advocating for the people and implementing welfare programs.",
@@ -364,7 +364,7 @@
             "name_placeholder": "Your Full Name",
             "email_label": "Email Address",
             "email_placeholder": "you@example.com",
-            "updates_check": "I would like to receive updates from Tamil Nadu Viduthalai Puli Katchi.",
+            "updates_check": "I would like to receive updates from TAMILNADU VIDUTHALAIPPULI KATCHI.",
             "box_title": "Donation Summary",
             "amount": "Amount",
             "payment": "Payment",
@@ -396,7 +396,7 @@
             "address": "123 Main Road, Chennai, Tamil Nadu 600001",
             "phone": "+91 98765 43210",
             "email": "info@tnmk.org",
-            "map_placeholder": "Map of Tamil Nadu Viduthalai Puli Katchi Office",
+            "map_placeholder": "Map of TAMILNADU VIDUTHALAIPPULI KATCHI Office",
             "hours": {
                 "title": "Office Hours",
                 "days": {
