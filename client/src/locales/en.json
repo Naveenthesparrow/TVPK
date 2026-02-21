@@ -1,0 +1,415 @@
+{
+    "brand": {
+        "name": "Tamil Nadu Makkal Katchi",
+        "short_name": "T.N.M.K"
+    },
+    "nav": {
+        "home": "Home",
+        "party_history": "Party History",
+        "leadership": "Leadership",
+        "manifesto": "Manifesto",
+        "news_events": "News & Events",
+        "gallery": "Gallery",
+        "contact": "Contact",
+        "donate": "Donate"
+    },
+    "hero": {
+        "title": "People's Welfare is Our Life, Tamil Nadu's Development is Our Goal",
+        "desc": "A new political power dedicated to the progress of Tamil Nadu.",
+        "cta_learn_more": "Learn More About Us",
+        "cta_join": "Join Now"
+    },
+    "recent_news": {
+        "title": "Recent News",
+        "news1": {
+            "title": "Leader Announces New Schemes",
+            "desc": "A technology-driven and transformative initiative, the leader has announced several new schemes for public welfare.",
+            "date": "Oct 12, 2024"
+        },
+        "news2": {
+            "title": "Art and Cultural Works",
+            "desc": "Our party continues to present many art events to protect and promote the cultural heritage of Tamil Nadu.",
+            "date": "Oct 10, 2024"
+        },
+        "news3": {
+            "title": "Education Reform Seminar",
+            "desc": "Our party is taking initiatives to bring reforms in the education sector and ensure proper job opportunities for youth.",
+            "date": "Oct 05, 2024"
+        },
+        "news4": {
+            "title": "Free Medical Camp",
+            "desc": "Our party provides free medical services to rural people.",
+            "date": "Sep 28, 2024"
+        },
+        "news5": {
+            "title": "Environmental Protection Movement",
+            "desc": "A major protection movement was launched by our party to protect the environment and create awareness.",
+            "date": "Sep 15, 2024"
+        }
+    },
+    "upcoming_events": {
+        "title": "Upcoming Events",
+        "event1": {
+            "title": "Farmers Conference",
+            "day": "12",
+            "month": "NOV"
+        },
+        "event2": {
+            "title": "Youth Rally",
+            "day": "24",
+            "month": "NOV"
+        },
+        "event3": {
+            "title": "Party Anniversary Celebration",
+            "day": "15",
+            "month": "DEC"
+        }
+    },
+    "quick_links": {
+        "title": "Quick Links",
+        "history": {
+            "title": "Party History",
+            "desc": "Learn about the history of our party"
+        },
+        "leadership": {
+            "title": "Leadership",
+            "desc": "Details about our leaders"
+        },
+        "manifesto": {
+            "title": "Manifesto",
+            "desc": "Our policy announcements"
+        },
+        "news": {
+            "title": "Awareness & News",
+            "desc": "Awareness programs and news"
+        },
+        "gallery": {
+            "title": "Gallery",
+            "desc": "Beautiful party media"
+        },
+        "contact": {
+            "title": "Contact",
+            "desc": "Details to contact us"
+        },
+        "donate": {
+            "title": "Donate",
+            "desc": "Your trustworthy donation to the party"
+        }
+    },
+    "footer": {
+        "about": "About Us",
+        "links": "Useful Links",
+        "contact": "Contact Us",
+        "desc": "Serving the people of Tamil Nadu with integrity and progress. Together we build a better future.",
+        "address": "123 Main Road, Chennai, Tamil Nadu 600001",
+        "phone": "+91 98765 43210",
+        "email": "info@tnmk.org",
+        "privacy": "Privacy Policy",
+        "terms": "Terms of Service",
+        "copy": "All rights reserved."
+    },
+    "history": {
+        "title": "Our Journey: A Legacy of Service",
+        "sidebar_title": "Related Documents & Links",
+        "links": {
+            "constitution": "Party Constitution",
+            "principles": "Founding Principles Document",
+            "manifesto": "Previous Manifestos (Archive)",
+            "speeches": "Key Speeches by Leaders",
+            "statistics": "Statistical Data on TVPK Impact"
+        },
+        "milestones": {
+            "1985": {
+                "title": "Founding of the Party",
+                "desc": "The party was founded with a singular goal to champion the rights and aspirations of the Tamil people. Built on principles of social justice and economic equality."
+            },
+            "1992": {
+                "title": "First Major Electoral Victory",
+                "desc": "Building on robust public support, the party achieved its first major electoral victory, securing numerous seats in the state assembly."
+            },
+            "2001": {
+                "title": "Launch of Education Reforms Program",
+                "desc": "Under the leadership of its charismatic leader, a groundbreaking education reform program was introduced to improve access to quality education."
+            },
+            "2010": {
+                "title": "Economic Empowerment Initiatives",
+                "desc": "Focused on sustainable growth and poverty alleviation, several economic empowerment initiatives were launched for small and medium-sized enterprises."
+            },
+            "2023": {
+                "title": "Vision 2030: A Progressive Blueprint",
+                "desc": "Looking towards the future, the Vision 2030 blueprint was unveiled, outlining ambitious plans for technological advancement and sustainable development."
+            }
+        }
+    },
+    "leader": {
+        "name": "Gopal Urangapuli",
+        "role": "Party President, Tamil Nadu Makkal Katchi",
+        "bio_short": "A visionary leader and a dedicated servant of the people, Dr. Bharathi has tirelessly championed the rights and welfare of Tamil Nadu for over two decades. His unwavering commitment to social justice, economic empowerment, and sustainable development has inspired millions.",
+        "read_full_bio": "Read Full Biography",
+        "biography_title": "Biography",
+        "biography_text": "Born in a small village in Madurai district, Dr. Bharathi's journey has been one of profound dedication to public service. From an early age, he exhibited a keen intellect and a deep empathy for the struggles of the common people.",
+        "early_life_title": "Early Life and Education",
+        "early_life_text": "Growing up amidst the rich cultural heritage and socio-political fervor of Tamil Nadu, Dr. Bharathi was profoundly influenced by the ideals of Dravidian movement and social equality. His academic parents focused on sustainable governance and inclusive development.",
+        "politics_title": "Entry into Politics and Rise to Leadership",
+        "politics_text": "Dr. Bharathi entered politics with a clear vision to create a prosperous and equitable Tamil Nadu. He quickly gained recognition for his articulate speeches and genuine connection with the electorate.",
+        "achievements_title": "Key Achievements",
+        "achievements_list": [
+            "Spearheaded the 'Clean Cauvery Initiative': A landmark project that revitalized river ecosystems.",
+            "Introduced the 'Rural Empowerment Bill': Provided crucial financial support and skills to 50,000 entrepreneurs.",
+            "Championed the 'Digital Literacy Drive': Implemented digital education programs in 5,000 schools.",
+            "Advocated for increased healthcare funding: Secured state budget allocations for upgrading public hospitals."
+        ],
+        "media_title": "Speeches & Media",
+        "media_sections": {
+            "speeches": "Major Policy Speeches",
+            "interviews": "Interviews & Discussions",
+            "broadcasts": "Party Broadcasts"
+        },
+        "media_items": [
+            "Vision for Tamil Nadu's Future - 2023 Annual Address",
+            "Addressing Agricultural Reforms - Farmers Summit 2022",
+            "The Role of Youth in Governance - University Conclave 2021"
+        ],
+        "connect_title": "Connect with Dr. Bharathi"
+    },
+    "manifesto": {
+        "title": "Our Vision, Our Promise: The Manifesto",
+        "summary_title": "Manifesto Summary",
+        "summary_text_1": "The Tamil Nadu Makkal Katchi's Manifesto outlines our unwavering commitment to the holistic development and prosperity of Tamil Nadu. Our vision is rooted in social justice, economic empowerment, environmental sustainability, and cultural preservation, ensuring that every citizen has the opportunity to thrive.",
+        "summary_text_2": "We believe in a future where education is accessible to all, healthcare is comprehensive and affordable, and economic opportunities are abundant and equitable. Our policies are designed to build a strong, resilient, and inclusive society that respects diversity and champions the rights of every individual.",
+        "key_pillars_title": "Key Pillars",
+        "key_pillars_text": "Key pillars of our manifesto include investing heavily in rural infrastructure, promoting advanced agricultural practices, and fostering industrial growth that creates sustainable jobs. We are dedicated to transparent governance, upholding democratic values, and empowering local self-governance bodies to better serve their communities.",
+        "environment_text": "Environmental protection and climate change mitigation are central to our agenda. We pledge to safeguard our natural resources, promote renewable energy, and ensure a healthy living environment for future generations. Join us in building a vibrant Tamil Nadu, where progress is shared by all.",
+        "download_btn": "Download Full Manifesto (PDF)",
+        "policy_areas_title": "Key Policy Areas",
+        "read_more": "Read More",
+        "areas": {
+            "education": {
+                "title": "Education Reform",
+                "desc": "Empowering every child with quality education and modern skills for a brighter future."
+            },
+            "healthcare": {
+                "title": "Healthcare Access",
+                "desc": "Ensuring accessible and affordable healthcare services for all citizens."
+            },
+            "economy": {
+                "title": "Economic Growth",
+                "desc": "Fostering sustainable economic development and job creation across the state."
+            },
+            "environment": {
+                "title": "Environmental Protection",
+                "desc": "Pledging to protect our natural resources and promote green energy."
+            },
+            "justice": {
+                "title": "Social Justice",
+                "desc": "Championing equality and justice for all sections of society, ensuring fair opportunities."
+            }
+        }
+    },
+    "news": {
+        "title": "Latest News & Updates",
+        "read_more": "Read More",
+        "sidebar": {
+            "recent": "Recent Updates",
+            "categories": "Categories",
+            "tags": "Tags"
+        },
+        "sidebar_items": [
+            {
+                "title": "Leader's Vision 2030: Building a New Tamil Nadu",
+                "date": "Nov 2, 2023"
+            },
+            {
+                "title": "Public Consultation on Water Management Project",
+                "date": "Oct 31, 2023"
+            },
+            {
+                "title": "Empowering Rural Artisans: New Support Schemes",
+                "date": "Oct 28, 2023"
+            },
+            {
+                "title": "Digital Literacy Campaign Gathers Momentum",
+                "date": "Oct 22, 2023"
+            },
+            {
+                "title": "Roadmap for Sustainable Urban Development Unveiled",
+                "date": "Oct 20, 2023"
+            }
+        ],
+        "items": [
+            {
+                "category": "Community Outreach",
+                "title": "Relief Efforts Reach Remote Villages Across Tamil Nadu",
+                "date": "November 2, 2023",
+                "desc": "Tamil Nadu Makkal Katchi volunteers successfully distributed essential relief materials to several remote villages affected by recent disasters."
+            },
+            {
+                "category": "Leader's Speech",
+                "title": "Leader Addresses Public Rally on Economic Reform Agenda",
+                "date": "October 28, 2023",
+                "desc": "Our esteemed leader delivered a powerful speech outlining the party's comprehensive plan for job creation and economic growth."
+            },
+            {
+                "category": "Youth Empowerment",
+                "title": "Youth Wing Launches Statewide Environmental Clean-up",
+                "date": "October 20, 2023",
+                "desc": "A major environmental initiative was launched today, with thousands of youth volunteers participating in clean-up drives nationwide."
+            },
+            {
+                "category": "Women's Initiative",
+                "title": "New Skill Development Programs for Women Inaugurated",
+                "date": "October 15, 2023",
+                "desc": "A series of new vocational training programs was launched to support women's economic independence and skill building."
+            },
+            {
+                "category": "Policy Debates",
+                "title": "Dialogue Session on Modernizing Agriculture Sector",
+                "date": "October 10, 2023",
+                "desc": "Party officials hosted an insightful dialogue session with farmers and agricultural experts to discuss innovative strategies for modernizing the sector."
+            },
+            {
+                "category": "Infrastructure & Development",
+                "title": "Grand Opening of New Community Library in Madurai",
+                "date": "October 7, 2023",
+                "desc": "The party proudly announced the grand opening of a state-of-the-art community library in Madurai, promoting education and literacy."
+            }
+        ],
+        "categories_list": [
+            "Party Announcements",
+            "Policy Debates",
+            "Community Events",
+            "Leader's Speeches",
+            "Development Projects",
+            "Youth Initiatives"
+        ],
+        "tags_list": [
+            "Election 2024",
+            "Education",
+            "Health",
+            "Agriculture",
+            "Women Empowerment",
+            "Environment",
+            "Social Justice"
+        ]
+    },
+    "gallery": {
+        "title": "Photo Gallery",
+        "subtitle": "Capturing the moments of our party's events and social works.",
+        "close": "Close",
+        "items": [
+            {
+                "title": "Grand Party Rally in Chennai",
+                "desc": "Thousands of enthusiastic supporters gathered at Marina Beach for a historic rally, showcasing the unwavering strength and unity of Tamil Nadu Makkal Katchi. Our leader delivered an inspiring speech, outlining our vision for a prosperous Tamil Nadu.",
+                "img": "https://images.unsplash.com/photo-1540910419892-f0c74b045366?q=80&w=800&h=600&auto=format&fit=crop"
+            },
+            {
+                "category": "Youth Initiative",
+                "title": "Tree Planting Volunteering",
+                "desc": "Our youth wing organized a successful tree planting drive to promote environmental awareness and sustainability in local communities.",
+                "img": "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=800&h=600&auto=format&fit=crop"
+            },
+            {
+                "title": "Social Aid Programs",
+                "desc": "Providing essential aid and support to underprivileged families as part of our ongoing commitment to community welfare.",
+                "img": "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=800&h=600&auto=format&fit=crop"
+            },
+            {
+                "title": "Cultural Festivals",
+                "desc": "Celebrating the rich cultural heritage of Tamil Nadu through various traditional art forms and festivals.",
+                "img": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=800&h=600&auto=format&fit=crop"
+            },
+            {
+                "title": "Education Awareness Camp",
+                "desc": "Organized a camp to raise awareness about the importance of education and provide guidance to students.",
+                "img": "https://images.unsplash.com/photo-1524178232363-1fb28f74b0cd?q=80&w=800&h=600&auto=format&fit=crop"
+            },
+            {
+                "title": "Environmental Protection",
+                "desc": "A major environmental initiative was launched by our party to protect the environment and create awareness.",
+                "img": "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?q=80&w=800&h=600&auto=format&fit=crop"
+            }
+        ]
+    },
+    "donation": {
+        "title": "Support Tamil Nadu Makkal Katchi",
+        "slogan": "\"People's Power - Nation's Progress\"",
+        "info": {
+            "desc": "Your contribution empowers us to build a stronger, more prosperous Tamil Nadu. Every rupee makes a difference in advocating for the people and implementing welfare programs.",
+            "why_title": "Why Your Support Matters:",
+            "point1": "**Grassroots Campaigns:** Fund outreach efforts to connect with every citizen.",
+            "point2": "**Policy Research:** Support data-driven policies for sustainable development.",
+            "point3": "**Community Welfare:** Enable initiatives in education, health, and social justice.",
+            "secure_title": "Secure & Transparent Process:",
+            "secure_desc": "We ensure that all donations are handled with utmost transparency and utilized responsibly for the party's objectives. Your trust is our greatest asset."
+        },
+        "contribution": {
+            "title": "Choose Your Contribution",
+            "custom_amount_prompt": "Or enter a custom amount",
+            "custom_placeholder": "Enter custom amount (e.g., 750)",
+            "payment_method_title": "Select Payment Method",
+            "methods": {
+                "card": "Card",
+                "upi": "UPI",
+                "netbanking": "Netbanking",
+                "wallet": "Wallet"
+            },
+            "card_number": "Card Number",
+            "expiry": "Expiry Date",
+            "cvv": "CVV",
+            "secure_msg": "We do not store your card details."
+        },
+        "summary": {
+            "title": "Your Details & Summary",
+            "name_label": "Full Name",
+            "name_placeholder": "Your Full Name",
+            "email_label": "Email Address",
+            "email_placeholder": "you@example.com",
+            "updates_check": "I would like to receive updates from Tamil Nadu Makkal Katchi.",
+            "box_title": "Donation Summary",
+            "amount": "Amount",
+            "payment": "Payment",
+            "selected": "Selected",
+            "method": "Method",
+            "btn": "Donate Now"
+        }
+    },
+    "contact_page": {
+        "title": "Contact Us",
+        "subtitle": "We value your feedback, questions, and support. Please reach out to us using the form below, or visit our office during business hours.",
+        "connect": "Connect With Us",
+        "form": {
+            "title": "Send Us a Message",
+            "name": "Your Name",
+            "name_placeholder": "Enter your full name",
+            "email": "Email Address",
+            "email_placeholder": "your.email@example.com",
+            "phone": "Phone Number (Optional)",
+            "phone_placeholder": "+91 98765 43210",
+            "subject": "Subject (Optional)",
+            "subject_placeholder": "Regarding party manifesto, event query, etc.",
+            "message": "Your Message",
+            "message_placeholder": "Type your message here...",
+            "send": "Send Message"
+        },
+        "office": {
+            "title": "Our Office",
+            "address": "123 Main Road, Chennai, Tamil Nadu 600001",
+            "phone": "+91 98765 43210",
+            "email": "info@tnmk.org",
+            "map_placeholder": "Map of Tamil Nadu Makkal Katchi Office",
+            "hours": {
+                "title": "Office Hours",
+                "days": {
+                    "weekday": "Monday - Friday:",
+                    "saturday": "Saturday:",
+                    "sunday": "Sunday:"
+                },
+                "times": {
+                    "weekday": "9:00 AM - 6:00 PM",
+                    "saturday": "10:00 AM - 2:00 PM",
+                    "sunday": "Closed"
+                }
+            }
+        }
+    }
+}

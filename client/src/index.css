@@ -1,0 +1,82 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: #F8FAFC;
+  color: #1E293B;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Tone down font-black from 900 → 800 (extrabold) — slightly lighter but still strong */
+.font-black {
+  font-weight: 800 !important;
+}
+
+.font-tamil {
+  font-family: "Noto Sans Tamil", sans-serif;
+}
+
+/*
+  Noto Sans Tamil renders ~15% larger than Outfit at the same px size.
+  These subtle corrections ensure both languages have the same visual
+  weight and spacing — no layout shifts when switching language.
+*/
+.font-tamil.text-6xl,
+.font-tamil.md\:text-6xl {
+  font-size: 3.25rem !important;
+  line-height: 1.15 !important;
+}
+
+.font-tamil.text-5xl,
+.font-tamil.md\:text-5xl {
+  font-size: 2.5rem !important;
+  line-height: 1.15 !important;
+}
+
+.font-tamil.text-4xl,
+.font-tamil.md\:text-4xl {
+  font-size: 1.875rem !important;
+  line-height: 1.2 !important;
+}
+
+.font-tamil.text-3xl,
+.font-tamil.md\:text-3xl {
+  font-size: 1.625rem !important;
+  line-height: 1.25 !important;
+}
+
+.font-tamil.text-2xl,
+.font-tamil.md\:text-2xl {
+  font-size: 1.35rem !important;
+  line-height: 1.3 !important;
+}
+
+.font-tamil.text-xl {
+  font-size: 1.1rem !important;
+  line-height: 1.35 !important;
+}
+
+.font-tamil.text-lg {
+  font-size: 1rem !important;
+  line-height: 1.4 !important;
+}
