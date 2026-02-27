@@ -1,20 +1,56 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram } from 'lucide-react';
+// AdminBadge removed
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Pencil } from 'lucide-react';
+import ContactEditorModal from './ContactEditorModal';
+import { isAdmin } from '../utils/adminHelpers';
 
 const Contact = () => {
     const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+
+    const [editorOpen, setEditorOpen] = React.useState(false);
+    const [editingItem, setEditingItem] = React.useState(null);
+
+    const openEditor = async () => {
+        const api = import.meta.env.VITE_API_URL || '';
+        const token = localStorage.getItem('tvpk_token');
+        try {
+            const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+            const j = await r.json();
+            const doc = j.content || {};
+            const top = doc.contact || {};
+                if (!top || Object.keys(top).length === 0) {
+                setEditingItem({
+                    title: t('contact_page.title', { lng: currentLang }),
+                    subtitle: t('contact_page.subtitle', { lng: currentLang }),
+                    office: {
+                        address: t('contact_page.office.address', { lng: currentLang }),
+                        phone: t('contact_page.office.phone', { lng: currentLang }),
+                        email: t('contact_page.office.email', { lng: currentLang }),
+                        hours: {
+                            weekday: t('contact_page.office.hours.times.weekday', { lng: currentLang }),
+                            saturday: t('contact_page.office.hours.times.saturday', { lng: currentLang }),
+                            sunday: t('contact_page.office.hours.times.sunday', { lng: currentLang })
+                        }
+                    },
+                    connect: {}
+                });
+            } else setEditingItem(top);
+        } catch (e) { setEditingItem(null); }
+        setEditorOpen(true);
+    };
 
     return (
-        <div className="bg-white min-h-screen">
+        <div className="bg-white min-h-screen relative group">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
 
                 <div className="text-center mb-20">
-                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                        {t('contact_page.title')}
+                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {t('contact_page.title', { lng: currentLang })}
                     </h1>
                     <p className="max-w-3xl mx-auto text-slate-500 text-base md:text-lg leading-relaxed font-medium">
-                        {t('contact_page.subtitle')}
+                        {t('contact_page.subtitle', { lng: currentLang })}
                     </p>
                 </div>
 
@@ -23,27 +59,27 @@ const Contact = () => {
                     {/* Form Column */}
                     <div className="bg-white rounded-[2.5rem] p-6 md:p-12 border border-slate-100 shadow-2xl shadow-slate-200/50 relative overflow-hidden group">
                         <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors"></div>
-                        <h2 className={`text-2xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-4 ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        <h2 className={`text-2xl font-black text-slate-900 mb-10 tracking-tight flex items-center gap-4 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                             <span className="w-10 h-1 bg-primary rounded-full"></span>
-                            {t('contact_page.form.title')}
+                            {t('contact_page.form.title', { lng: currentLang })}
                         </h2>
 
                         <form className="space-y-8 relative">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.name')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.name', { lng: currentLang })}</label>
                                     <input
                                         type="text"
-                                        placeholder={t('contact_page.form.name_placeholder')}
+                                        placeholder={t('contact_page.form.name_placeholder', { lng: currentLang })}
                                         className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
                                     />
                                 </div>
 
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.email')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.email', { lng: currentLang })}</label>
                                     <input
                                         type="email"
-                                        placeholder={t('contact_page.form.email_placeholder')}
+                                        placeholder={t('contact_page.form.email_placeholder', { lng: currentLang })}
                                         className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
                                     />
                                 </div>
@@ -51,81 +87,98 @@ const Contact = () => {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.phone')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.phone', { lng: currentLang })}</label>
                                     <input
                                         type="text"
-                                        placeholder={t('contact_page.form.phone_placeholder')}
+                                        placeholder={t('contact_page.form.phone_placeholder', { lng: currentLang })}
                                         className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
                                     />
                                 </div>
 
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.subject')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.subject', { lng: currentLang })}</label>
                                     <input
                                         type="text"
-                                        placeholder={t('contact_page.form.subject_placeholder')}
+                                        placeholder={t('contact_page.form.subject_placeholder', { lng: currentLang })}
                                         className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all"
                                     />
                                 </div>
                             </div>
 
                             <div className="group">
-                                <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.message')}</label>
+                                <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-[0.2em] font-header group-focus-within:text-primary transition-colors">{t('contact_page.form.message', { lng: currentLang })}</label>
                                 <textarea
                                     rows="6"
-                                    placeholder={t('contact_page.form.message_placeholder')}
+                                    placeholder={t('contact_page.form.message_placeholder', { lng: currentLang })}
                                     className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all resize-none"
                                 ></textarea>
                             </div>
 
                             <button className="w-full bg-primary text-white py-5 rounded-[1.5rem] text-sm font-black shadow-2xl shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 transition-all uppercase tracking-[0.2em] font-header">
-                                {t('contact_page.form.send')}
+                                {t('contact_page.form.send', { lng: currentLang })}
                             </button>
                         </form>
                     </div>
 
                     {/* Info Column */}
                     <div className="space-y-10">
+                        {isAdmin() && (
+                            <div className="absolute top-6 right-6 z-40">
+                                <button onClick={openEditor} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit contact"><Pencil size={16} className="text-slate-700"/></button>
+                            </div>
+                        )}
                         <div className="bg-slate-900 rounded-[2.5rem] p-6 md:p-12 shadow-2xl shadow-slate-900/40 text-white h-fit relative overflow-hidden group">
                             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl group-hover:bg-white/10 transition-colors duration-700"></div>
 
-                            <h2 className={`text-2xl font-black mb-10 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('contact_page.office.title')}</h2>
+                            <h2 className={`text-2xl font-black mb-10 tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('contact_page.office.title', { lng: currentLang })}</h2>
 
                             <div className="space-y-8 mb-12 relative">
                                 <div className="flex items-start gap-6 group/item">
                                     <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover/item:bg-primary transition-colors">
                                         <MapPin className="text-white" size={20} />
                                     </div>
-                                    <p className="text-slate-300 text-base leading-relaxed font-bold italic pt-2">{t('contact_page.office.address')}</p>
+                                    <p className="text-slate-300 text-base leading-relaxed font-bold italic pt-2">{t('contact_page.office.address', { lng: currentLang })}</p>
                                 </div>
                                 <div className="flex items-center gap-6 group/item">
                                     <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover/item:bg-primary transition-colors">
                                         <Phone className="text-white" size={20} />
                                     </div>
-                                    <p className="text-slate-300 text-base font-bold italic">{t('contact_page.office.phone')}</p>
+                                    <p className="text-slate-300 text-base font-bold italic">{t('contact_page.office.phone', { lng: currentLang })}</p>
                                 </div>
                                 <div className="flex items-center gap-6 group/item">
                                     <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center group-hover/item:bg-primary transition-colors">
                                         <Mail className="text-white" size={20} />
                                     </div>
-                                    <p className="text-slate-300 text-base font-bold italic">{t('contact_page.office.email')}</p>
+                                    <p className="text-slate-300 text-base font-bold italic">{t('contact_page.office.email', { lng: currentLang })}</p>
                                 </div>
+
+                                    <ContactEditorModal open={editorOpen} onClose={() => setEditorOpen(false)} item={editingItem} onSave={async (data) => {
+                                        const api = import.meta.env.VITE_API_URL || '';
+                                        const token = localStorage.getItem('tvpk_token');
+                                        try {
+                                            const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: data, focus: 'contact' }) });
+                                            const out = await res.json();
+                                            if (!res.ok) return alert(out.error || 'Save failed');
+                                            window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'contact', content: out.content?.contact } }));
+                                            setEditorOpen(false);
+                                        } catch (e) { alert('Save failed'); }
+                                    }} />
                             </div>
 
                             <div className="bg-white/5 rounded-[2rem] p-10 border border-white/10">
-                                <h3 className={`text-lg font-black mb-8 uppercase tracking-[0.2em] font-header text-primary`}>{t('contact_page.office.hours.title')}</h3>
+                                <h3 className={`text-lg font-black mb-8 uppercase tracking-[0.2em] font-header text-primary`}>{t('contact_page.office.hours.title', { lng: currentLang })}</h3>
                                 <div className="space-y-4">
                                     <div className="flex justify-between text-sm font-bold">
-                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.weekday')}</span>
-                                        <span className="text-white italic">{t('contact_page.office.hours.times.weekday')}</span>
+                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.weekday', { lng: currentLang })}</span>
+                                        <span className="text-white italic">{t('contact_page.office.hours.times.weekday', { lng: currentLang })}</span>
                                     </div>
                                     <div className="flex justify-between text-sm font-bold">
-                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.saturday')}</span>
-                                        <span className="text-white italic">{t('contact_page.office.hours.times.saturday')}</span>
+                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.saturday', { lng: currentLang })}</span>
+                                        <span className="text-white italic">{t('contact_page.office.hours.times.saturday', { lng: currentLang })}</span>
                                     </div>
                                     <div className="flex justify-between text-sm font-bold">
-                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.sunday')}</span>
-                                        <span className="text-red-400 italic font-black uppercase tracking-widest">{t('contact_page.office.hours.times.sunday')}</span>
+                                        <span className="text-slate-400 uppercase tracking-widest">{t('contact_page.office.hours.days.sunday', { lng: currentLang })}</span>
+                                        <span className="text-red-400 italic font-black uppercase tracking-widest">{t('contact_page.office.hours.times.sunday', { lng: currentLang })}</span>
                                     </div>
                                 </div>
                             </div>

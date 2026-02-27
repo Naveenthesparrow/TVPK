@@ -1,5 +1,10 @@
 import { useTranslation } from 'react-i18next';
-import { Calendar, Tag, ChevronRight, Clock } from 'lucide-react';
+// AdminBadge removed
+import { Calendar, Tag, ChevronRight, Clock, Pencil, Trash2 } from 'lucide-react';
+import { isAdmin } from '../utils/adminHelpers';
+import React from 'react';
+import NewsEditorModal from './NewsEditorModal';
+import { Link } from 'react-router-dom';
 
 // Unique images per card index — different photos for each news story
 const CARD_IMAGES = [
@@ -12,7 +17,7 @@ const CARD_IMAGES = [
 ];
 
 const NewsCard = ({ category, title, date, desc, readMoreText, language, index }) => (
-    <div className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group transform hover:-translate-y-1 flex flex-col">
+    <Link to={`/news/${index}`} className="bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-md hover:shadow-xl hover:shadow-primary/5 transition-all duration-300 group transform hover:-translate-y-1 flex flex-col">
         <div className="aspect-video relative overflow-hidden shrink-0">
             <img
                 src={CARD_IMAGES[index % CARD_IMAGES.length]}
@@ -34,11 +39,12 @@ const NewsCard = ({ category, title, date, desc, readMoreText, language, index }
             <p className="text-slate-500 text-sm leading-relaxed mb-5 line-clamp-2 font-medium">
                 {desc}
             </p>
-            <button className="flex items-center gap-2 text-[11px] font-extrabold text-primary border border-primary/20 rounded-lg px-4 py-2.5 hover:bg-primary hover:text-white hover:border-primary transition-all uppercase tracking-[0.15em] font-header self-start">
-                {readMoreText} <ChevronRight size={12} />
-            </button>
+            <div className="flex items-center gap-2 text-[11px] font-extrabold text-primary border border-primary/20 rounded-lg px-4 py-2.5 transition-all uppercase tracking-[0.15em] font-header self-start">
+                <span>{readMoreText}</span>
+                <ChevronRight size={12} />
+            </div>
         </div>
-    </div>
+    </Link>
 );
 
 const SidebarItem = ({ title, date, language }) => (
@@ -57,41 +63,70 @@ const SidebarItem = ({ title, date, language }) => (
 const NewsUpdates = () => {
     const { t, i18n } = useTranslation();
 
-    const newsItems = Array.isArray(t('news.items', { returnObjects: true }))
-        ? t('news.items', { returnObjects: true }) : [];
-    const sidebarItems = Array.isArray(t('news.sidebar_items', { returnObjects: true }))
-        ? t('news.sidebar_items', { returnObjects: true }) : [];
-    const categoriesList = Array.isArray(t('news.categories_list', { returnObjects: true }))
-        ? t('news.categories_list', { returnObjects: true }) : [];
-    const tagsList = Array.isArray(t('news.tags_list', { returnObjects: true }))
-        ? t('news.tags_list', { returnObjects: true }) : [];
+    const [editorOpen, setEditorOpen] = React.useState(false);
+    const [editingItem, setEditingItem] = React.useState(null);
+    const [editingIndex, setEditingIndex] = React.useState(null);
+
+    React.useEffect(() => {
+        const onOpen = (e) => {
+            const d = e?.detail; if (!d) return;
+            if (d.section === 'news') {
+                setEditingItem(d.item || null);
+                setEditingIndex(typeof d.index === 'number' ? d.index : null);
+                setEditorOpen(true);
+            }
+        };
+        window.addEventListener('tvpk-admin-open', onOpen);
+        return () => window.removeEventListener('tvpk-admin-open', onOpen);
+    }, []);
+
+    const rawLang = i18n?.resolvedLanguage || i18n?.language || 'en';
+    const currentLang = String(rawLang).split('-')[0];
+
+    const newsItems = Array.isArray(t('news.items', { returnObjects: true, lng: currentLang }))
+        ? t('news.items', { returnObjects: true, lng: currentLang }) : [];
+    const sidebarItems = Array.isArray(t('news.sidebar_items', { returnObjects: true, lng: currentLang }))
+        ? t('news.sidebar_items', { returnObjects: true, lng: currentLang }) : [];
+    const categoriesList = Array.isArray(t('news.categories_list', { returnObjects: true, lng: currentLang }))
+        ? t('news.categories_list', { returnObjects: true, lng: currentLang }) : [];
+    const tagsList = Array.isArray(t('news.tags_list', { returnObjects: true, lng: currentLang }))
+        ? t('news.tags_list', { returnObjects: true, lng: currentLang }) : [];
 
     return (
-        <div className="bg-slate-50/30 py-20">
+        <div className="bg-slate-50/30 py-24 relative group">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 {/* Page Header */}
-                <h1 className={`text-3xl md:text-4xl font-extrabold text-slate-900 mb-12 tracking-tight ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                    {t('news.title')}
-                </h1>
+                <div className="text-center mb-20">
+                    <h1 className={`text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {t('news.title', { lng: currentLang })}
+                    </h1>
+                    <div className="h-1.5 w-24 bg-primary mx-auto rounded-full opacity-30"></div>
+                </div>
 
                 {/* Main: News Grid + Sidebar */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-
                     {/* News Grid — 2 column */}
                     <div className="lg:col-span-8">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             {newsItems.map((item, index) => (
-                                <NewsCard
-                                    key={index}
-                                    index={index}
-                                    category={item.category}
-                                    title={item.title}
-                                    date={item.date}
-                                    desc={item.desc}
-                                    readMoreText={t('news.read_more')}
-                                    language={i18n.language}
-                                />
+                                <div key={index} className="relative">
+                                    {isAdmin() && (
+                                        <div className="absolute top-3 right-3 z-40 flex gap-2">
+                                            <button onClick={() => window.dispatchEvent(new CustomEvent('tvpk-admin-edit', { detail: { section: 'news', index, item } }))} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit news"><Pencil size={16} className="text-slate-700"/></button>
+                                            <button onClick={() => window.dispatchEvent(new CustomEvent('tvpk-admin-delete', { detail: { section: 'news', index } }))} className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition" title="Delete news"><Trash2 size={16} className="text-rose-600"/></button>
+                                        </div>
+                                    )}
+                                    <NewsCard
+                                        index={index}
+                                        category={item.category}
+                                        title={item.title}
+                                        date={item.date}
+                                        desc={item.desc}
+                                        readMoreText={t('news.read_more', { lng: currentLang })}
+                                        language={currentLang}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </div>
@@ -107,7 +142,7 @@ const NewsUpdates = () => {
                             </h3>
                             <div className="space-y-0">
                                 {sidebarItems.map((item, index) => (
-                                    <SidebarItem key={index} title={item.title} date={item.date} language={i18n.language} />
+                                    <SidebarItem key={index} title={item.title} date={item.date} language={currentLang} />
                                 ))}
                             </div>
                         </div>
@@ -143,6 +178,39 @@ const NewsUpdates = () => {
 
                     </div>
                 </div>
+                <NewsEditorModal open={editorOpen} onClose={() => { setEditorOpen(false); setEditingItem(null); setEditingIndex(null); }} item={editingItem} index={editingIndex} onSave={async (data, idx) => {
+                    const api = import.meta.env.VITE_API_URL || '';
+                    const token = localStorage.getItem('tvpk_token');
+                    try {
+                        const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+                        const j = await r.json();
+                        const doc = j.content || {};
+                        const arr = Array.isArray(doc.news) ? doc.news.slice() : [];
+                        if (typeof idx === 'number') arr[idx] = { ...arr[idx], ...data };
+                        else arr.push(data);
+                        const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: arr, focus: 'news' }) });
+                        const out = await res.json();
+                        if (!res.ok) return alert(out.error || 'Save failed');
+                        window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'news', content: out.content.news } }));
+                        setEditorOpen(false); setEditingItem(null); setEditingIndex(null);
+                    } catch (e) { alert('Save failed'); }
+                }} onDelete={async (idx) => {
+                    if (!confirm('Delete this news item?')) return;
+                    const api = import.meta.env.VITE_API_URL || '';
+                    const token = localStorage.getItem('tvpk_token');
+                    try {
+                        const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+                        const j = await r.json();
+                        const doc = j.content || {};
+                        const arr = Array.isArray(doc.news) ? doc.news.slice() : [];
+                        arr.splice(idx, 1);
+                        const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: arr, focus: 'news' }) });
+                        const out = await res.json();
+                        if (!res.ok) return alert(out.error || 'Delete failed');
+                        window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'news', content: out.content.news } }));
+                        setEditorOpen(false); setEditingItem(null); setEditingIndex(null);
+                    } catch (e) { alert('Delete failed'); }
+                }} />
             </div>
         </div>
     );

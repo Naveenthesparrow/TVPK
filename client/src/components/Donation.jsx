@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CheckCircle2, CreditCard, Smartphone, Landmark, Wallet } from 'lucide-react';
+import { CheckCircle2, CreditCard, Smartphone, Landmark, Wallet, Pencil } from 'lucide-react';
+import DonationEditorModal from './DonationEditorModal';
+import { isAdmin } from '../utils/adminHelpers';
+// AdminBadge removed
 
 const Donation = () => {
     const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const [editorOpen, setEditorOpen] = React.useState(false);
+    const [editingItem, setEditingItem] = React.useState(null);
     const [amount, setAmount] = useState(100);
     const [customAmount, setCustomAmount] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('card');
@@ -11,13 +17,38 @@ const Donation = () => {
     const presetAmounts = [100, 250, 500, 1000, 2500, 5000];
 
     return (
-        <div className="bg-slate-50/50 py-24 min-h-screen">
+        <div className="bg-slate-50/50 py-24 min-h-screen relative group">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="text-center mb-20">
-                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                        {t('donation.title')}
+                    <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {t('donation.title', { lng: currentLang })}
                     </h1>
+                    {isAdmin() && (
+                        <div className="absolute top-6 right-6 z-40">
+                            <button onClick={async () => {
+                                const api = import.meta.env.VITE_API_URL || '';
+                                const token = localStorage.getItem('tvpk_token');
+                                try {
+                                    const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+                                    const j = await r.json();
+                                    const doc = j.content || {};
+                                    const top = doc.donation || {};
+                                    if (!top || Object.keys(top).length === 0) {
+                                        // fallback to translations
+                                        setEditingItem({
+                                            title: t('donation.title', { lng: currentLang }),
+                                            slogan: t('donation.slogan', { lng: currentLang }),
+                                            info: { desc: t('donation.info.desc', { lng: currentLang }), why_title: t('donation.info.why_title', { lng: currentLang }), point1: t('donation.info.point1', { lng: currentLang }), point2: t('donation.info.point2', { lng: currentLang }), point3: t('donation.info.point3', { lng: currentLang }), secure_title: t('donation.info.secure_title', { lng: currentLang }), secure_desc: t('donation.info.secure_desc', { lng: currentLang }) },
+                                            contribution: { title: t('donation.contribution.title', { lng: currentLang }), custom_amount_prompt: t('donation.contribution.custom_amount_prompt', { lng: currentLang }), custom_placeholder: t('donation.contribution.custom_placeholder', { lng: currentLang }), payment_method_title: t('donation.contribution.payment_method_title', { lng: currentLang }) },
+                                            summary: { title: t('donation.summary.title', { lng: currentLang }), name_label: t('donation.summary.name_label', { lng: currentLang }), email_label: t('donation.summary.email_label', { lng: currentLang }), updates_check: t('donation.summary.updates_check', { lng: currentLang }), box_title: t('donation.summary.box_title', { lng: currentLang }), btn: t('donation.summary.btn', { lng: currentLang }) }
+                                        });
+                                    } else setEditingItem(top);
+                                } catch (e) { setEditingItem(null); }
+                                setEditorOpen(true);
+                            }} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit donate"><Pencil size={16} className="text-slate-700"/></button>
+                        </div>
+                    )}
                     <div className="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
                 </div>
 
@@ -31,29 +62,29 @@ const Donation = () => {
                                     <div className="bg-white w-4 h-4 rounded-full"></div>
                                 </div>
                             </div>
-                            <h2 className={`text-3xl font-black text-slate-900 leading-none mb-3 uppercase tracking-tighter ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {t('brand.name')}
+                            <h2 className={`text-3xl font-black text-slate-900 leading-none mb-3 uppercase tracking-tighter ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                {t('brand.name', { lng: currentLang })}
                             </h2>
-                            <p className={`text-primary font-black italic text-xl tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {t('donation.slogan')}
+                            <p className={`text-primary font-black italic text-xl tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                {t('donation.slogan', { lng: currentLang })}
                             </p>
                         </div>
 
                         <div className="space-y-8">
                             <p className="text-slate-500 text-base leading-relaxed font-medium">
-                                {t('donation.info.desc')}
+                                {t('donation.info.desc', { lng: currentLang })}
                             </p>
 
                             <div className="space-y-5">
                                 <h3 className={`font-black text-slate-900 text-sm uppercase tracking-[0.2em] font-header`}>
-                                    {t('donation.info.why_title')}
+                                    {t('donation.info.why_title', { lng: currentLang })}
                                 </h3>
                                 <ul className="space-y-4">
                                     {[1, 2, 3].map((i) => (
                                         <li key={i} className="flex gap-4 group">
                                             <CheckCircle2 className="text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" size={20} />
-                                            <p className="text-slate-600 text-sm font-medium">
-                                                <span dangerouslySetInnerHTML={{ __html: t(`donation.info.point${i}`).replace(/\*\*(.*?)\*\*/g, '<span class="font-black text-slate-900">$1</span>') }} />
+                                                <p className="text-slate-600 text-sm font-medium">
+                                                <span dangerouslySetInnerHTML={{ __html: t(`donation.info.point${i}`, { lng: currentLang }).replace(/\*\*(.*?)\*\*/g, '<span class="font-black text-slate-900">$1</span>') }} />
                                             </p>
                                         </li>
                                     ))}
@@ -62,10 +93,10 @@ const Donation = () => {
 
                             <div className="pt-8 border-t border-slate-100">
                                 <h3 className={`font-black text-slate-900 text-sm uppercase tracking-[0.2em] font-header mb-3`}>
-                                    {t('donation.info.secure_title')}
+                                    {t('donation.info.secure_title', { lng: currentLang })}
                                 </h3>
                                 <p className="text-slate-400 text-xs leading-relaxed font-medium">
-                                    {t('donation.info.secure_desc')}
+                                    {t('donation.info.secure_desc', { lng: currentLang })}
                                 </p>
                             </div>
                         </div>
@@ -73,7 +104,7 @@ const Donation = () => {
 
                     {/* Column 2: Contribution */}
                     <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col">
-                        <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.title')}</h3>
+                        <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.title', { lng: currentLang })}</h3>
 
                         <div className="grid grid-cols-3 gap-4 mb-6">
                             {presetAmounts.map((amt) => (
@@ -91,12 +122,12 @@ const Donation = () => {
                         </div>
 
                         <div className="mb-10">
-                            <p className="text-[10px] text-slate-400 mb-3 uppercase tracking-[0.3em] font-black font-header">{t('donation.contribution.custom_amount_prompt')}</p>
+                            <p className="text-[10px] text-slate-400 mb-3 uppercase tracking-[0.3em] font-black font-header">{t('donation.contribution.custom_amount_prompt', { lng: currentLang })}</p>
                             <div className="relative group">
                                 <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-black text-lg">₹</span>
                                 <input
                                     type="text"
-                                    placeholder={t('donation.contribution.custom_placeholder')}
+                                    placeholder={t('donation.contribution.custom_placeholder', { lng: currentLang })}
                                     value={customAmount}
                                     onChange={(e) => {
                                         const val = e.target.value.replace(/[^0-9]/g, '');
@@ -108,13 +139,13 @@ const Donation = () => {
                             </div>
                         </div>
 
-                        <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.payment_method_title')}</h3>
+                        <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.payment_method_title', { lng: currentLang })}</h3>
                         <div className="grid grid-cols-4 gap-2 mb-10 bg-slate-50 p-1.5 rounded-[1.5rem]">
-                            {[
-                                { id: 'card', icon: CreditCard, label: t('donation.contribution.methods.card') },
-                                { id: 'upi', icon: Smartphone, label: t('donation.contribution.methods.upi') },
-                                { id: 'netbanking', icon: Landmark, label: t('donation.contribution.methods.netbanking') },
-                                { id: 'wallet', icon: Wallet, label: t('donation.contribution.methods.wallet') },
+                                {[
+                                { id: 'card', icon: CreditCard, label: t('donation.contribution.methods.card', { lng: currentLang }) },
+                                { id: 'upi', icon: Smartphone, label: t('donation.contribution.methods.upi', { lng: currentLang }) },
+                                { id: 'netbanking', icon: Landmark, label: t('donation.contribution.methods.netbanking', { lng: currentLang }) },
+                                { id: 'wallet', icon: Wallet, label: t('donation.contribution.methods.wallet', { lng: currentLang }) },
                             ].map((method) => (
                                 <button
                                     key={method.id}
@@ -133,16 +164,16 @@ const Donation = () => {
                         {paymentMethod === 'card' && (
                             <div className="space-y-5 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div>
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.card_number')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.card_number', { lng: currentLang })}</label>
                                     <input type="text" placeholder="XXXX XXXX XXXX XXXX" className="w-full px-5 py-4 bg-white border-2 border-white rounded-xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-primary/10 transition-all" />
                                 </div>
                                 <div className="grid grid-cols-2 gap-5">
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.expiry')}</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.expiry', { lng: currentLang })}</label>
                                         <input type="text" placeholder="MM/YY" className="w-full px-5 py-4 bg-white border-2 border-white rounded-xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-primary/10 transition-all" />
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.cvv')}</label>
+                                        <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.cvv', { lng: currentLang })}</label>
                                         <input type="password" placeholder="***" className="w-full px-5 py-4 bg-white border-2 border-white rounded-xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-primary/10 transition-all" />
                                     </div>
                                 </div>
@@ -157,11 +188,11 @@ const Donation = () => {
 
                             <div className="space-y-6 mb-10">
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header group-focus-within:text-primary transition-colors">{t('donation.summary.name_label')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header group-focus-within:text-primary transition-colors">{t('donation.summary.name_label', { lng: currentLang })}</label>
                                     <input type="text" placeholder={t('donation.summary.name_placeholder')} className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all" />
                                 </div>
                                 <div className="group">
-                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header group-focus-within:text-primary transition-colors">{t('donation.summary.email_label')}</label>
+                                    <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header group-focus-within:text-primary transition-colors">{t('donation.summary.email_label', { lng: currentLang })}</label>
                                     <input type="email" placeholder={t('donation.summary.email_placeholder')} className="w-full px-6 py-4 bg-slate-50 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all" />
                                 </div>
 
@@ -180,26 +211,38 @@ const Donation = () => {
 
                             <div className="bg-primary/5 rounded-[2rem] p-8 mb-10 border border-primary/10 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors"></div>
-                                <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6 font-header">{t('donation.summary.box_title')}</h4>
+                                <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6 font-header">{t('donation.summary.box_title', { lng: currentLang })}</h4>
                                 <div className="space-y-4 relative">
                                     <div className="flex justify-between items-end">
-                                        <span className="text-slate-500 font-bold text-sm">{t('donation.summary.amount')}</span>
+                                        <span className="text-slate-500 font-bold text-sm">{t('donation.summary.amount', { lng: currentLang })}</span>
                                         <span className="font-black text-slate-900 text-3xl font-header tracking-tight">₹{amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                                     </div>
                                     <div className="flex justify-between text-sm pt-2 border-t border-primary/10">
-                                        <span className="text-slate-500 font-medium">{t('donation.summary.method')}</span>
+                                        <span className="text-slate-500 font-medium">{t('donation.summary.method', { lng: currentLang })}</span>
                                         <span className="text-slate-800 font-black uppercase tracking-wider text-xs font-header">{paymentMethod}</span>
                                     </div>
                                 </div>
                             </div>
 
                             <button className="w-full bg-primary text-white py-5 rounded-[1.5rem] text-sm font-black shadow-2xl shadow-primary/30 hover:shadow-primary/40 hover:-translate-y-1 active:translate-y-0 transition-all uppercase tracking-[0.2em] font-header">
-                                {t('donation.summary.btn')}
+                                {t('donation.summary.btn', { lng: currentLang })}
                             </button>
                         </div>
                     </div>
 
                 </div>
+
+                <DonationEditorModal open={editorOpen} onClose={() => setEditorOpen(false)} item={editingItem} onSave={async (data) => {
+                    const api = import.meta.env.VITE_API_URL || '';
+                    const token = localStorage.getItem('tvpk_token');
+                    try {
+                        const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: data, focus: 'donation' }) });
+                        const out = await res.json();
+                        if (!res.ok) return alert(out.error || 'Save failed');
+                        window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'donation', content: out.content?.donation } }));
+                        setEditorOpen(false);
+                    } catch (e) { alert('Save failed'); }
+                }} />
 
             </div>
         </div>

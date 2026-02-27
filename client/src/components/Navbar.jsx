@@ -1,14 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Languages, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
+import ProfileMenu from './ProfileMenu';
 import { NavLink, Link } from 'react-router-dom';
 
 const Navbar = () => {
     const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const [user, setUser] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('tvpk_user')) || null; } catch { return null; }
+    });
+
+    // Keep navbar user in sync with auth changes (login/logout)
+    useEffect(() => {
+        const onAuth = () => {
+            try { setUser(JSON.parse(localStorage.getItem('tvpk_user')) || null); } catch { setUser(null); }
+        };
+        window.addEventListener('tvpk-auth-change', onAuth);
+        return () => window.removeEventListener('tvpk-auth-change', onAuth);
+    }, []);
+
+    // keep user in sync when auth changes
+    useEffect(() => {
+        const onAuth = () => {
+            try { setUser(JSON.parse(localStorage.getItem('tvpk_user')) || null); } catch { setUser(null); }
+        };
+        window.addEventListener('tvpk-auth-change', onAuth);
+        return () => window.removeEventListener('tvpk-auth-change', onAuth);
+    }, []);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleLanguage = () => {
-        const newLang = i18n.language === 'ta' ? 'en' : 'ta';
+        const raw = i18n.resolvedLanguage || i18n.language || 'en';
+        const newLang = String(raw).split('-')[0] === 'ta' ? 'en' : 'ta';
         i18n.changeLanguage(newLang);
     };
 
@@ -16,7 +40,7 @@ const Navbar = () => {
         `px-4 py-3 text-[13px] font-extrabold transition-all border-b-2 hover:text-primary tracking-wide uppercase ${isActive
             ? 'border-primary text-primary bg-primary/5'
             : 'border-transparent text-slate-600 hover:bg-slate-50'
-        } ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`;
+        } ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`;
 
     return (
         <nav className="bg-white/95 backdrop-blur-md shadow-lg sticky top-0 z-50">
@@ -31,7 +55,7 @@ const Navbar = () => {
                             </div>
                             <div className="flex flex-col">
                                 <span className={`text-primary font-black text-lg md:text-2xl leading-none tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                    {t('brand.name')}
+                                    {t('brand.name', { lng: currentLang })}
                                 </span>
                             </div>
                         </Link>
@@ -40,13 +64,18 @@ const Navbar = () => {
                         <div className="hidden md:flex items-center gap-4">
                             <button
                                 onClick={toggleLanguage}
-                                className="flex items-center gap-2 text-slate-700 hover:text-primary border-2 border-slate-100 rounded-full px-5 py-2.5 text-xs font-black transition-all hover:border-primary/20 hover:bg-primary/5 uppercase tracking-widest font-header"
+                                aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
+                                className="flex items-center justify-center text-slate-700 hover:text-primary border-2 border-slate-100 rounded-full px-2 py-2 text-xs font-black transition-all hover:border-primary/20 hover:bg-primary/5"
                             >
-                                <Languages size={15} />
-                                {i18n.language === 'ta' ? 'English' : 'தமிழ்'}
+                                <span className="w-8 h-8 rounded-full grid place-items-center bg-slate-100 text-[13px] font-extrabold">
+                                    {currentLang === 'ta' ? 'En' : 'அ'}
+                                </span>
                             </button>
+                            <div className="max-w-[180px] min-w-0">
+                                <ProfileMenu />
+                            </div>
                             <Link to="/donate" className="bg-primary text-white px-8 py-3 rounded-full text-xs font-black shadow-2xl shadow-primary/40 hover:shadow-primary/50 hover:-translate-y-1 active:translate-y-0 transition-all uppercase tracking-[0.2em] font-header">
-                                {t('nav.donate')}
+                                {t('nav.donate', { lng: currentLang })}
                             </Link>
                         </div>
 
@@ -65,13 +94,16 @@ const Navbar = () => {
             <div className="hidden md:block bg-slate-50/80">
                 <div className="w-full max-w-[1600px] mx-auto px-4">
                     <div className="flex justify-center items-center gap-2">
-                        <NavLink to="/" className={navLinkClass}>{t('nav.home')}</NavLink>
-                        <NavLink to="/history" className={navLinkClass}>{t('nav.party_history')}</NavLink>
-                        <NavLink to="/leader" className={navLinkClass}>{t('nav.leadership')}</NavLink>
-                        <NavLink to="/manifesto" className={navLinkClass}>{t('nav.manifesto')}</NavLink>
-                        <NavLink to="/news" className={navLinkClass}>{t('nav.news_events')}</NavLink>
-                        <NavLink to="/gallery" className={navLinkClass}>{t('nav.gallery')}</NavLink>
-                        <NavLink to="/contact" className={navLinkClass}>{t('nav.contact')}</NavLink>
+                        <NavLink to="/" className={navLinkClass}>{t('nav.home', { lng: currentLang })}</NavLink>
+                        <NavLink to="/history" className={navLinkClass}>{t('nav.party_history', { lng: currentLang })}</NavLink>
+                        <NavLink to="/leader" className={navLinkClass}>{t('nav.leadership', { lng: currentLang })}</NavLink>
+                        <NavLink to="/manifesto" className={navLinkClass}>{t('nav.manifesto', { lng: currentLang })}</NavLink>
+                        <NavLink to="/news" className={navLinkClass}>{t('nav.news_events', { lng: currentLang })}</NavLink>
+                        <NavLink to="/gallery" className={navLinkClass}>{t('nav.gallery', { lng: currentLang })}</NavLink>
+                        <NavLink to="/join" className={navLinkClass}>{t('nav.join', { lng: currentLang })}</NavLink>
+                        <NavLink to="/contact" className={navLinkClass}>{t('nav.contact', { lng: currentLang })}</NavLink>
+                            {user && user.role === 'admin' && <NavLink to="/admin/dashboard" className={navLinkClass}>Admin</NavLink>}
+                                <NavLink to="/login" className={navLinkClass}>{t('nav.login', { lng: currentLang })}</NavLink>
                     </div>
                 </div>
             </div>
@@ -80,22 +112,31 @@ const Navbar = () => {
             {isMenuOpen && (
                 <div className="md:hidden bg-white border-t border-slate-100 animate-in slide-in-from-top duration-500 ease-out shadow-2xl">
                     <div className="px-6 pt-4 pb-10 space-y-2">
-                        <NavLink to="/" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.home')}</NavLink>
-                        <NavLink to="/history" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.party_history')}</NavLink>
-                        <NavLink to="/leader" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.leadership')}</NavLink>
-                        <NavLink to="/manifesto" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.manifesto')}</NavLink>
-                        <NavLink to="/news" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.news_events')}</NavLink>
-                        <NavLink to="/gallery" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.gallery')}</NavLink>
-                        <NavLink to="/contact" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.contact')}</NavLink>
+                        <NavLink to="/" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.home', { lng: currentLang })}</NavLink>
+                        <NavLink to="/history" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.party_history', { lng: currentLang })}</NavLink>
+                        <NavLink to="/leader" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.leadership', { lng: currentLang })}</NavLink>
+                        <NavLink to="/manifesto" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.manifesto', { lng: currentLang })}</NavLink>
+                        <NavLink to="/news" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.news_events', { lng: currentLang })}</NavLink>
+                        <NavLink to="/gallery" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.gallery', { lng: currentLang })}</NavLink>
+                        <NavLink to="/contact" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.contact', { lng: currentLang })}</NavLink>
+                        <NavLink to="/join" onClick={() => setIsMenuOpen(false)} className={`block px-6 py-4 text-base font-black text-slate-700 hover:bg-primary/5 hover:text-primary rounded-2xl transition-all ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('nav.join', { lng: currentLang })}</NavLink>
 
                         <div className="pt-8 border-t border-slate-100 flex flex-col gap-4 mt-6">
                             <button
                                 onClick={() => { toggleLanguage(); setIsMenuOpen(false); }}
-                                className="flex items-center justify-center gap-3 w-full py-5 text-sm font-black text-slate-700 border-2 border-slate-100 rounded-2xl hover:bg-slate-50 transition-all uppercase tracking-widest font-header"
+                                aria-label={i18n.language === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
+                                className="flex items-center justify-center w-full py-3 text-sm font-black text-slate-700 border-2 border-slate-100 rounded-2xl hover:bg-slate-50 transition-all"
                             >
-                                <Languages size={20} />
-                                {i18n.language === 'ta' ? 'English' : 'தமிழ்'}
+                                <span className="w-8 h-8 rounded-full grid place-items-center bg-slate-100 text-[14px] font-extrabold">
+                                    {i18n.language === 'ta' ? 'En' : 'அ'}
+                                </span>
                             </button>
+                                                                <div className="px-4 max-w-full">
+                                                                        <div className="max-w-[240px] min-w-0">
+                                                                            <ProfileMenu />
+                                                                        </div>
+                                                                </div>
+                                <Link to="/login" onClick={() => setIsMenuOpen(false)} className="block text-center w-full py-3 rounded-2xl border">{t('nav.login')}</Link>
                             <Link
                                 to="/donate"
                                 onClick={() => setIsMenuOpen(false)}

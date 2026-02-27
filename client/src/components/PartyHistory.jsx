@@ -1,8 +1,15 @@
 import React from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
+import { isAdmin } from '../utils/adminHelpers';
+import HistoryEditorModal from './HistoryEditorModal';
 import { useTranslation } from 'react-i18next';
+// AdminBadge removed
 import { FileText, Award, Calendar, MessageSquare, PieChart, ChevronRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const HistoryCard = ({ year, title, desc, image, language }) => (
+const HistoryCard = ({ year, title, desc, image, language, index }) => {
+    const admin = isAdmin();
+    return (
     <div className="flex gap-10 mb-20 relative group">
         {/* Milestone Dot & Year */}
         <div className="flex flex-col items-center min-w-[120px] pt-12">
@@ -12,6 +19,12 @@ const HistoryCard = ({ year, title, desc, image, language }) => (
 
         {/* Content Card */}
         <div className="bg-white p-10 rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 flex-1 flex flex-col md:flex-row gap-10 items-center transform group-hover:-translate-y-2 transition-all duration-500 overflow-hidden relative">
+            {admin && (
+                <div className="absolute top-4 right-4 z-40 flex gap-2">
+                    <button onClick={() => window.dispatchEvent(new CustomEvent('tvpk-admin-edit', { detail: { section: 'history.milestones', index, item: { year, title, desc, image } } }))} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit milestone"><Pencil size={16} className="text-slate-700"/></button>
+                    <button onClick={() => window.dispatchEvent(new CustomEvent('tvpk-admin-delete', { detail: { section: 'history.milestones', index } }))} className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition" title="Delete milestone"><Trash2 size={16} className="text-rose-600"/></button>
+                </div>
+            )}
             <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors"></div>
             <div className="w-full md:w-1/3 aspect-[4/3] bg-slate-50 rounded-3xl flex items-center justify-center text-slate-300 relative overflow-hidden shadow-inner">
                 {/* Placeholder for image */}
@@ -27,85 +40,155 @@ const HistoryCard = ({ year, title, desc, image, language }) => (
         </div>
     </div>
 );
+};
 
-const SidebarLink = ({ icon: Icon, label, language }) => (
-    <div className="flex items-center justify-between p-5 bg-white rounded-2xl border border-slate-100 hover:border-primary hover:shadow-2xl hover:shadow-primary/5 shadow-xl shadow-slate-200/30 transition-all cursor-pointer group mb-4">
-        <div className="flex items-center gap-4">
-            <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white group-hover:rotate-6 transition-all">
-                <Icon size={20} />
+const SidebarLink = ({ icon: Icon, label, language, to }) => {
+    const Inner = (
+        <div className="flex items-center justify-between p-5 bg-white rounded-2xl border border-slate-100 hover:border-primary hover:shadow-2xl hover:shadow-primary/5 shadow-xl shadow-slate-200/30 transition-all cursor-pointer group mb-4">
+            <div className="flex items-center gap-4">
+                <div className="w-10 h-10 bg-slate-50 rounded-xl flex items-center justify-center text-slate-400 group-hover:bg-primary group-hover:text-white group-hover:rotate-6 transition-all">
+                    <Icon size={20} />
+                </div>
+                <span className={`text-sm font-black text-slate-600 group-hover:text-slate-900 uppercase tracking-widest ${language === 'ta' ? 'font-tamil' : 'font-header'}`}>{label}</span>
             </div>
-            <span className={`text-sm font-black text-slate-600 group-hover:text-slate-900 uppercase tracking-widest ${language === 'ta' ? 'font-tamil' : 'font-header'}`}>{label}</span>
+            <ChevronRight size={18} className="text-slate-200 group-hover:text-primary transition-colors" />
         </div>
-        <ChevronRight size={18} className="text-slate-200 group-hover:text-primary transition-colors" />
-    </div>
-);
+    );
+    if (to) return (<Link to={to}>{Inner}</Link>);
+    return Inner;
+};
 
 const PartyHistory = () => {
     const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const [editorOpen, setEditorOpen] = React.useState(false);
+    const [editingItem, setEditingItem] = React.useState(null);
+    const [editingIndex, setEditingIndex] = React.useState(null);
+
+    React.useEffect(() => {
+        const onOpen = (e) => {
+            const d = e?.detail; if (!d) return;
+            if (d.section === 'history.milestones') {
+                setEditingItem(d.item || null);
+                setEditingIndex(typeof d.index === 'number' ? d.index : null);
+                setEditorOpen(true);
+            }
+        };
+        window.addEventListener('tvpk-admin-open', onOpen);
+        return () => window.removeEventListener('tvpk-admin-open', onOpen);
+    }, []);
+
+    const closeEditor = () => { setEditorOpen(false); setEditingItem(null); setEditingIndex(null); };
+
+    const saveItem = async (data, idx) => {
+        const api = import.meta.env.VITE_API_URL || '';
+        const token = localStorage.getItem('tvpk_token');
+        try {
+            const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+            const j = await r.json();
+            const doc = j.content || {};
+            const top = doc.history ?? {};
+            const arr = Array.isArray(top.milestones) ? top.milestones.slice() : [];
+            if (typeof idx === 'number') arr[idx] = { ...arr[idx], ...data };
+            else arr.push(data);
+            const newTop = { ...(top || {}), milestones: arr };
+            const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: newTop, focus: 'history' }) });
+            const out = await res.json();
+            if (!res.ok) return alert(out.error || 'Save failed');
+            window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'history', content: out.content?.history } }));
+            closeEditor();
+        } catch (e) { alert('Save failed'); }
+    };
+
+    const deleteItem = async (idx) => {
+        if (!confirm('Delete this milestone?')) return;
+        const api = import.meta.env.VITE_API_URL || '';
+        const token = localStorage.getItem('tvpk_token');
+        try {
+            const r = await fetch(`${api}/admin/content`, { headers: { Authorization: `Bearer ${token}` } });
+            const j = await r.json();
+            const doc = j.content || {};
+            const top = doc.history ?? {};
+            const arr = Array.isArray(top.milestones) ? top.milestones.slice() : [];
+            arr.splice(idx, 1);
+            const newTop = { ...(top || {}), milestones: arr };
+            const res = await fetch(`${api}/admin/content`, { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ content: newTop, focus: 'history' }) });
+            const out = await res.json();
+            if (!res.ok) return alert(out.error || 'Delete failed');
+            window.dispatchEvent(new CustomEvent('tvpk-content-updated', { detail: { section: 'history', content: out.content?.history } }));
+            closeEditor();
+        } catch (e) { alert('Delete failed'); }
+    };
 
     return (
-        <div className="bg-slate-50/50 py-24">
+        <>
+        <div className="bg-slate-50/50 py-24 relative group">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-20">
+                    <h1 className={`text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {t('history.title', { lng: currentLang })}
+                    </h1>
+                    <div className="h-1.5 w-24 bg-primary mx-auto rounded-full opacity-30"></div>
+                </div>
+
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-16">
 
                     {/* Main Timeline Section */}
                     <div className="lg:col-span-8">
-                        <div className="flex items-center gap-6 mb-16">
-                            <h2 className={`text-3xl md:text-5xl font-black text-slate-900 uppercase tracking-tighter ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {t('history.title')}
-                            </h2>
-                            <div className="h-1 flex-grow bg-slate-200 rounded-full opacity-50"></div>
-                        </div>
-
                         <div className="relative">
                             {/* Vertical Line */}
                             <div className="absolute left-[59px] top-12 bottom-0 w-1 bg-gradient-to-b from-primary via-slate-200 to-slate-100 rounded-full opacity-20"></div>
 
                             <HistoryCard
                                 year="1985"
-                                title={t('history.milestones.1985.title')}
-                                desc={t('history.milestones.1985.desc')}
-                                language={i18n.language}
+                                title={t('history.milestones.1985.title', { lng: currentLang })}
+                                desc={t('history.milestones.1985.desc', { lng: currentLang })}
+                                language={currentLang}
+                                index={0}
                             />
                             <HistoryCard
                                 year="1992"
-                                title={t('history.milestones.1992.title')}
-                                desc={t('history.milestones.1992.desc')}
-                                language={i18n.language}
+                                title={t('history.milestones.1992.title', { lng: currentLang })}
+                                desc={t('history.milestones.1992.desc', { lng: currentLang })}
+                                language={currentLang}
+                                index={1}
                             />
                             <HistoryCard
                                 year="2001"
-                                title={t('history.milestones.2001.title')}
-                                desc={t('history.milestones.2001.desc')}
-                                language={i18n.language}
+                                title={t('history.milestones.2001.title', { lng: currentLang })}
+                                desc={t('history.milestones.2001.desc', { lng: currentLang })}
+                                language={currentLang}
+                                index={2}
                             />
                             <HistoryCard
                                 year="2010"
-                                title={t('history.milestones.2010.title')}
-                                desc={t('history.milestones.2010.desc')}
-                                language={i18n.language}
+                                title={t('history.milestones.2010.title', { lng: currentLang })}
+                                desc={t('history.milestones.2010.desc', { lng: currentLang })}
+                                language={currentLang}
+                                index={3}
                             />
                             <HistoryCard
                                 year="2023"
-                                title={t('history.milestones.2023.title')}
-                                desc={t('history.milestones.2023.desc')}
-                                language={i18n.language}
+                                title={t('history.milestones.2023.title', { lng: currentLang })}
+                                desc={t('history.milestones.2023.desc', { lng: currentLang })}
+                                language={currentLang}
+                                index={4}
                             />
                         </div>
                     </div>
 
                     {/* Sidebar Section */}
-                    <div className="lg:col-span-4">
+                    <div className="lg:col-span-4 mt-12 lg:mt-24">
                         <div className="sticky top-32">
                             <h3 className={`text-xl font-black mb-10 text-slate-900 uppercase tracking-[0.2em] font-header pb-4 border-b-2 border-primary w-fit`}>
                                 {t('history.sidebar_title')}
                             </h3>
                             <div className="space-y-2">
-                                <SidebarLink icon={FileText} label={t('history.links.constitution')} language={i18n.language} />
-                                <SidebarLink icon={Award} label={t('history.links.principles')} language={i18n.language} />
-                                <SidebarLink icon={Calendar} label={t('history.links.manifesto')} language={i18n.language} />
-                                <SidebarLink icon={MessageSquare} label={t('history.links.speeches')} language={i18n.language} />
-                                <SidebarLink icon={PieChart} label={t('history.links.statistics')} language={i18n.language} />
+                                <SidebarLink icon={FileText} label={t('history.links.constitution', { lng: currentLang })} language={currentLang} to="/docs/constitution" />
+                                <SidebarLink icon={Award} label={t('history.links.principles', { lng: currentLang })} language={currentLang} to="/docs/founding-principles" />
+                                <SidebarLink icon={Calendar} label={t('history.links.manifesto', { lng: currentLang })} language={currentLang} to="/manifesto" />
+                                <SidebarLink icon={MessageSquare} label={t('history.links.speeches', { lng: currentLang })} language={currentLang} to="/speeches" />
+                                <SidebarLink icon={PieChart} label={t('history.links.statistics', { lng: currentLang })} language={currentLang} to="/stats" />
                             </div>
 
                             <div className="mt-12 p-10 bg-primary rounded-[2.5rem] shadow-2xl shadow-primary/30 text-white relative overflow-hidden group">
@@ -122,6 +205,8 @@ const PartyHistory = () => {
                 </div>
             </div>
         </div>
+        <HistoryEditorModal open={editorOpen} onClose={closeEditor} item={editingItem} index={editingIndex} onSave={saveItem} onDelete={(i) => { deleteItem(i); closeEditor(); }} />
+        </>
     );
 };
 
