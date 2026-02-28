@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import partyFlag from '../assets/tamilannai.jpeg';
+import heroBg from '../assets/hero.jpeg';
 import { Pencil } from 'lucide-react';
 import HeroEditorModal from './HeroEditorModal';
 import { isAdmin } from '../utils/adminHelpers';
@@ -66,72 +67,77 @@ const Hero = () => {
 
     return (
         <div className="relative overflow-hidden group">
-            <div className="max-w-full mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2">
-                    {/* Text Section */}
-                    <div className="bg-gradient-to-br from-primary to-red-800 p-8 md:p-16 flex flex-col justify-center text-white min-h-[360px] md:min-h-[500px] shadow-inner relative">
-                        {isAdmin() && (
-                            <div className="absolute top-6 right-6 z-40">
-                                <button onClick={openEditor} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit hero"><Pencil size={16} className="text-slate-700"/></button>
-                            </div>
-                        )}
-                        <h1 className={`text-2xl md:text-5xl font-black leading-[1.1] mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                            {(() => {
-                                const key = currentLang;
-                                if (heroOverride) {
-                                    const val = heroOverride.title;
-                                    if (val && typeof val === 'object') return val[key] || val.en || val.ta || '';
-                                    return val || t('hero.title', { lng: currentLang });
-                                }
-                                return t('hero.title', { lng: currentLang });
-                            })()}
-                        </h1>
-                        <p className="text-white/80 text-lg mb-10 max-w-lg font-medium leading-relaxed">
-                            {(() => {
-                                const key = currentLang;
-                                if (heroOverride) {
-                                    const val = heroOverride.desc;
-                                    if (val && typeof val === 'object') return val[key] || val.en || val.ta || '';
-                                    return val || t('hero.desc', { lng: currentLang });
-                                }
-                                return t('hero.desc', { lng: currentLang });
-                            })()}
-                        </p>
-                        <div className="flex flex-wrap gap-5">
-                            <Link to="/history">
-                                <button className="bg-transparent border-2 border-white/30 text-white px-8 py-4 rounded-2xl font-black text-sm hover:bg-white hover:text-primary hover:border-white transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-lg uppercase tracking-widest font-header">
-                                    {t('hero.cta_learn_more', { lng: currentLang })}
-                                </button>
-                            </Link>
-                            <Link to="/contact">
-                                <button className="bg-white text-primary px-10 py-4 rounded-2xl font-black text-sm hover:bg-secondary hover:text-dark transition-all transform hover:-translate-y-1 active:translate-y-0 shadow-2xl shadow-white/20 uppercase tracking-widest font-header">
-                                    {t('hero.cta_join', { lng: currentLang })}
-                                </button>
-                            </Link>
+            <div className="w-full min-h-screen flex flex-col md:flex-row">
+
+                {/* ── LEFT: Text Section ── */}
+                <div className="relative flex-1 bg-gradient-to-br from-red-700 via-primary to-red-900 flex flex-col justify-center px-10 md:px-20 py-20 md:py-0 overflow-hidden">
+                    {/* decorative circles */}
+                    <div className="absolute -bottom-32 -left-32 w-96 h-96 rounded-full bg-white/5 pointer-events-none"></div>
+                    <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 pointer-events-none"></div>
+                    <div className="absolute bottom-1/3 right-8 w-32 h-32 rounded-full bg-white/5 pointer-events-none"></div>
+
+                    {/* admin edit button */}
+                    {isAdmin() && (
+                        <div className="absolute top-6 right-6 z-40">
+                            <button onClick={openEditor} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit hero">
+                                <Pencil size={16} className="text-slate-700"/>
+                            </button>
                         </div>
-                    </div>
+                    )}
 
-                    {/* Emblem Section */}
-                        <div className="bg-secondary relative flex items-center justify-center p-6 md:p-8 overflow-hidden group">
-                        <div className="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors duration-700"></div>
-                        <div className="w-64 h-64 md:w-[32rem] md:h-[32rem] relative flex items-center justify-center">
-                            {/* Decorative elements */}
-                            <div className="absolute inset-0 border-8 border-black/10 rounded-full scale-110 animate-pulse"></div>
-                            <div className="absolute inset-0 border-4 border-black/5 rounded-full scale-125"></div>
+                    {/* accent line */}
+                    <div className="w-16 h-1.5 bg-yellow-400 rounded-full mb-8"></div>
 
-                            {/* The Flag Image */}
-                            <div className="relative z-10 w-full h-full p-4 transform group-hover:scale-105 transition-transform duration-700 drop-shadow-[0_35px_35px_rgba(0,0,0,0.5)]">
-                                    <img
-                                    src={heroImage || partyFlag}
-                                    alt="Tamil Annai"
-                                    className="w-full h-full object-contain filter contrast-125 brightness-110"
-                                />
-                            </div>
+                    <h1 className={`text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] mb-6 tracking-tight uppercase text-white drop-shadow-lg ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {(() => {
+                            const key = currentLang;
+                            if (heroOverride) {
+                                const val = heroOverride.title;
+                                if (val && typeof val === 'object') return val[key] || val.en || val.ta || '';
+                                return val || t('hero.title', { lng: currentLang });
+                            }
+                            return t('hero.title', { lng: currentLang });
+                        })()}
+                    </h1>
 
-                            {/* floating tag removed */}
-                        </div>
+                    <p className="text-white/85 text-lg md:text-xl mb-12 max-w-xl font-medium leading-relaxed">
+                        {(() => {
+                            const key = currentLang;
+                            if (heroOverride) {
+                                const val = heroOverride.desc;
+                                if (val && typeof val === 'object') return val[key] || val.en || val.ta || '';
+                                return val || t('hero.desc', { lng: currentLang });
+                            }
+                            return t('hero.desc', { lng: currentLang });
+                        })()}
+                    </p>
+
+                    <div className="flex flex-wrap gap-4">
+                        <Link to="/history">
+                            <button className="border-2 border-white/50 text-white px-8 py-4 rounded-xl font-black text-sm hover:bg-white hover:text-primary hover:border-white transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-widest font-header shadow-lg">
+                                {t('hero.cta_learn_more', { lng: currentLang })}
+                            </button>
+                        </Link>
+                        <Link to="/contact">
+                            <button className="bg-yellow-400 text-red-900 px-10 py-4 rounded-xl font-black text-sm hover:bg-yellow-300 transition-all duration-300 transform hover:-translate-y-1 uppercase tracking-widest font-header shadow-2xl">
+                                {t('hero.cta_join', { lng: currentLang })}
+                            </button>
+                        </Link>
                     </div>
                 </div>
+
+                {/* ── RIGHT: Full-bleed Image Section ── */}
+                <div className="relative flex-1 overflow-hidden min-h-[60vw] md:min-h-0">
+                    {/* Background hero image */}
+                    <img
+                        src={heroBg}
+                        alt="Hero Background"
+                        className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105 brightness-110"
+                    />
+                    {/* remove overlay or make very light */}
+                    <div className="absolute inset-0 bg-black/5 mix-blend-screen pointer-events-none"></div>
+                </div>
+
             </div>
 
             <HeroEditorModal open={editorOpen} onClose={() => setEditorOpen(false)} item={editingItem} onSave={async (data) => {
