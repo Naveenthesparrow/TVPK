@@ -85,10 +85,34 @@ app.get('/', (req, res) => {
   res.json({ message: 'Welcome to TVPK API' });
 });
 
-// MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI)
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('MongoDB connection error:', err));
+// MongoDB Connection with retry logic
+const MONGO_OPTIONS = {
+  serverSelectionTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  maxPoolSize: 10,
+};
+
+const connectWithRetry = (attempt = 1) => {
+  console.log(`MongoDB connection attempt ${attempt}...`);
+  mongoose.connect(process.env.MONGODB_URI, MONGO_OPTIONS)
+    .then(() => console.log('✅ Connected to MongoDB'))
+    .catch((err) => {
+      console.error(`❌ MongoDB connection failed (attempt ${attempt}):`, err.message);
+      const delay = Math.min(5000 * attempt, 30000);
+      console.log(`Retrying in ${delay / 1000}s...`);
+      setTimeout(() => connectWithRetry(attempt + 1), delay);
+    });
+};
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB disconnected. Attempting reconnect...');
+  setTimeout(() => connectWithRetry(), 5000);
+});
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB error:', err.message);
+});
+
+connectWithRetry();
 
 // Simple protected route example
 const jwt = require('jsonwebtoken');
