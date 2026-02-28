@@ -88,7 +88,7 @@ const Hero = () => {
                     {/* accent line */}
                     <div className="w-16 h-1.5 bg-yellow-400 rounded-full mb-8"></div>
 
-                    <h1 className={`text-4xl md:text-5xl lg:text-6xl font-black leading-[1.1] mb-6 tracking-tight uppercase text-white drop-shadow-lg ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                    <h1 className={`font-black leading-[1.1] mb-6 tracking-tight uppercase text-white drop-shadow-lg ${currentLang === 'ta' ? 'font-tamil text-6xl md:text-7xl lg:text-8xl' : 'font-header text-4xl md:text-5xl lg:text-6xl'}`}>
                         {(() => {
                             const key = currentLang;
                             if (heroOverride) {

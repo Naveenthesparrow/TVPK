@@ -29,7 +29,7 @@ const Navbar = () => {
     };
 
     const navLinkClass = ({ isActive }) =>
-        `px-4 py-3 text-[13px] font-extrabold transition-all border-b-2 hover:text-primary tracking-wide uppercase ${isActive
+        `px-2 py-3 text-[12px] font-extrabold transition-all border-b-2 hover:text-primary tracking-wide uppercase whitespace-nowrap ${isActive
             ? 'border-primary text-primary bg-primary/5'
             : 'border-transparent text-slate-600 hover:bg-slate-50'
         } ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`;
@@ -42,8 +42,8 @@ const Navbar = () => {
                     <div className="flex justify-between h-20 items-center">
                         {/* Logo and Full Name */}
                         <Link to="/" className="flex items-center gap-4 transition-transform hover:scale-[1.02]">
-                            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center">
-                                <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
+                            <div className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center rounded-full overflow-hidden">
+                                <img src={logoImg} alt="Logo" className="w-full h-full object-cover" />
                             </div>
                             <div className="flex flex-col">
                                 <span className={`text-primary font-black text-lg md:text-2xl leading-none tracking-tighter uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
@@ -84,8 +84,8 @@ const Navbar = () => {
 
             {/* Bottom Tier: Navigation Links (Desktop) */}
             <div className="hidden md:block bg-slate-50/80">
-                <div className="w-full max-w-[1600px] mx-auto px-4">
-                    <div className="flex justify-center items-center gap-2">
+                <div className="w-full max-w-[1600px] mx-auto px-4 overflow-x-auto">
+                    <div className="flex flex-nowrap justify-center items-center gap-2">
                         <NavLink to="/" className={navLinkClass}>{t('nav.home', { lng: currentLang })}</NavLink>
                         <NavLink to="/history" className={navLinkClass}>{t('nav.party_history', { lng: currentLang })}</NavLink>
                         <NavLink to="/leader" className={navLinkClass}>{t('nav.leadership', { lng: currentLang })}</NavLink>
@@ -94,7 +94,7 @@ const Navbar = () => {
                         <NavLink to="/gallery" className={navLinkClass}>{t('nav.gallery', { lng: currentLang })}</NavLink>
                         <NavLink to="/join" className={navLinkClass}>{t('nav.join', { lng: currentLang })}</NavLink>
                         <NavLink to="/contact" className={navLinkClass}>{t('nav.contact', { lng: currentLang })}</NavLink>
-                            {user && user.role === 'admin' && <NavLink to="/admin/dashboard" className={navLinkClass}>Admin</NavLink>}
+                            {user && user.role === 'admin' && <NavLink to="/admin/dashboard" className={navLinkClass}>{t('nav.admin', { lng: currentLang })}</NavLink>}
                                 <NavLink to="/login" className={navLinkClass}>{t('nav.login', { lng: currentLang })}</NavLink>
                     </div>
                 </div>
