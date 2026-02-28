@@ -7,7 +7,10 @@ const User = require('../models/User');
 // middleware: verify JWT and require admin role
 const authenticateAdmin = async (req, res, next) => {
   const auth = req.headers.authorization;
-  if (!auth) return res.status(401).json({ error: 'Missing authorization header' });
+  if (!auth) {
+    console.warn('Admin access attempt without Authorization header from', req.ip, req.headers.origin || 'unknown');
+    return res.status(401).json({ error: 'Missing authorization header' });
+  }
   const token = auth.split(' ')[1];
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
@@ -16,6 +19,7 @@ const authenticateAdmin = async (req, res, next) => {
     req.user = user;
     next();
   } catch (err) {
+    console.warn('Admin auth failure:', err && err.message ? err.message : err);
     return res.status(401).json({ error: 'Invalid token' });
   }
 };
