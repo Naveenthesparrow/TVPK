@@ -5,7 +5,9 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID || '';
+if (!googleClientId) console.warn('Warning: GOOGLE_CLIENT_ID not set in environment. Google sign-in will fail.');
+const client = new OAuth2Client(googleClientId);
 
 // Signup with email/password
 router.post('/signup', async (req, res) => {
@@ -50,10 +52,11 @@ router.post('/login', async (req, res) => {
 // Google sign-in
 router.post('/google', async (req, res) => {
   try {
+    console.log('Google sign-in request from', req.headers.origin || req.ip, 'googleClientIdSet=', !!googleClientId);
     const { id_token } = req.body;
     if (!id_token) return res.status(400).json({ error: 'Missing id_token' });
 
-    const ticket = await client.verifyIdToken({ idToken: id_token, audience: process.env.GOOGLE_CLIENT_ID });
+    const ticket = await client.verifyIdToken({ idToken: id_token, audience: googleClientId });
     const payload = ticket.getPayload();
     const googleId = payload.sub;
     const email = payload.email;
@@ -73,9 +76,10 @@ router.post('/google', async (req, res) => {
     }
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '12h' });
+    console.log('Google auth success:', { email, googleId: googleId ? '[redacted]' : null });
     res.json({ token, user: { id: user._id, email: user.email, name: user.name, picture: user.picture, role: user.role } });
   } catch (err) {
-    console.error('Google auth error', err);
+    console.error('Google auth error', err && err.message ? err.message : err);
     res.status(500).json({ error: 'Authentication failed' });
   }
 });

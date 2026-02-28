@@ -5,6 +5,19 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 require('dotenv').config();
 
+// Basic environment checks and helpful warnings
+const checkEnvs = () => {
+  const missing = [];
+  if (!process.env.MONGODB_URI) missing.push('MONGODB_URI');
+  if (!process.env.JWT_SECRET) missing.push('JWT_SECRET');
+  // Google client ID may be provided as GOOGLE_CLIENT_ID (server) or VITE_GOOGLE_CLIENT_ID (if mistakenly copied)
+  if (!(process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID)) missing.push('GOOGLE_CLIENT_ID (or VITE_GOOGLE_CLIENT_ID)');
+  if (missing.length) {
+    console.warn('Warning: Missing environment variables:', missing.join(', '));
+  }
+};
+checkEnvs();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -37,6 +50,18 @@ app.get('/health', (req, res) => {
     status: 'Server is running',
     database: dbStatus,
     environment: process.env.NODE_ENV
+  });
+});
+
+// Debug endpoint (non-secret) to help troubleshoot deployment environment
+app.get('/debug', (req, res) => {
+  res.json({
+    nodeEnv: process.env.NODE_ENV || null,
+    hasMongo: !!process.env.MONGODB_URI,
+    hasJwt: !!process.env.JWT_SECRET,
+    hasGoogleClientId: !!(process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID),
+    clientUrl: process.env.CLIENT_URL || null,
+    viteApiUrl: process.env.VITE_API_URL || null
   });
 });
 

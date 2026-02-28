@@ -86,6 +86,8 @@ const Auth = () => {
         localStorage.setItem('tvpk_user', JSON.stringify(data.user));
         setUser(data.user);
         window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: data.user }));
+        // redirect to home so user leaves the login page after Google sign-in
+        try { window.location.href = '/'; } catch (e) { /* ignore */ }
       }
     } catch (err) { console.error('Sign-in error', err); }
   };
