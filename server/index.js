@@ -24,7 +24,22 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
-app.use(helmet());
+
+// Configure a Content Security Policy that allows Google Identity scripts and related resources
+const cspDirectives = {
+  directives: {
+    defaultSrc: ["'self'"],
+    scriptSrc: ["'self'", 'https://accounts.google.com', 'https://apis.google.com'],
+    connectSrc: ["'self'", 'https://accounts.google.com', 'https://play.google.com'],
+    imgSrc: ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://www.gstatic.com'],
+    styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
+    fontSrc: ["'self'", 'https:', 'data:'],
+    frameAncestors: ["'self'"],
+    objectSrc: ["'none'"],
+    upgradeInsecureRequests: [],
+  }
+};
+app.use(helmet({ contentSecurityPolicy: cspDirectives }));
 app.use(morgan('dev'));
 
 // Auth routes
