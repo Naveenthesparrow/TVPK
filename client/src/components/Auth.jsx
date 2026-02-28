@@ -36,6 +36,18 @@ const Auth = () => {
     clearSession();
     setUser(null);
     broadcast(null);
+    // Tell Google to forget the selected account so the button resets to "Sign in with Google"
+    try { window.google?.accounts?.id?.disableAutoSelect(); } catch {}
+    // Re-render the Google button after a tick so it shows the plain button
+    setTimeout(() => {
+      try {
+        if (window.google?.accounts?.id && btnRef.current) {
+          window.google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: () => {} });
+          btnRef.current.innerHTML = '';
+          window.google.accounts.id.renderButton(btnRef.current, { theme: 'outline', size: 'large', width: btnRef.current.offsetWidth || 300 });
+        }
+      } catch {}
+    }, 100);
     if (window.location.pathname !== '/login') window.location.href = '/login';
   }, []);
 
