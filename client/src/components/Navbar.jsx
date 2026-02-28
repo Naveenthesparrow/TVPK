@@ -19,15 +19,6 @@ const Navbar = () => {
         window.addEventListener('tvpk-auth-change', onAuth);
         return () => window.removeEventListener('tvpk-auth-change', onAuth);
     }, []);
-
-    // keep user in sync when auth changes
-    useEffect(() => {
-        const onAuth = () => {
-            try { setUser(JSON.parse(localStorage.getItem('tvpk_user')) || null); } catch { setUser(null); }
-        };
-        window.addEventListener('tvpk-auth-change', onAuth);
-        return () => window.removeEventListener('tvpk-auth-change', onAuth);
-    }, []);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const toggleLanguage = () => {

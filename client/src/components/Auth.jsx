@@ -24,6 +24,42 @@ const Auth = () => {
     }
   };
 
+  // On mount: verify token against server (catches deleted users, role changes)
+  useEffect(() => {
+    const verifyWithServer = async () => {
+      const token = localStorage.getItem('tvpk_token');
+      if (!token || isTokenExpired(token)) {
+        // locally expired — clear and logout silently
+        localStorage.removeItem('tvpk_token');
+        localStorage.removeItem('tvpk_user');
+        setUser(null);
+        return;
+      }
+      try {
+        const api = import.meta.env.VITE_API_URL || '';
+        const res = await fetch(`${api}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        if (!res.ok) {
+          // Token invalid or user deleted from DB — force logout
+          localStorage.removeItem('tvpk_token');
+          localStorage.removeItem('tvpk_user');
+          setUser(null);
+          window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: null }));
+        } else {
+          const data = await res.json();
+          // refresh user in storage with latest DB values (role may have changed etc.)
+          localStorage.setItem('tvpk_user', JSON.stringify(data.user));
+          setUser(data.user);
+          window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: data.user }));
+        }
+      } catch (e) {
+        // Network error — don't log out, keep existing session
+      }
+    };
+    verifyWithServer();
+  }, []);
+
   // Load Google Identity script and initialize button
   useEffect(() => {
     if (!clientId) return;
@@ -58,7 +94,7 @@ const Auth = () => {
     return () => {};
   }, [clientId, user]);
 
-  // Listen to auth-change events (other components may dispatch)
+  // Listen to auth-change events (login/logout from any component)
   useEffect(() => {
     const onAuth = (e) => {
       try {

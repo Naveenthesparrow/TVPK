@@ -84,4 +84,25 @@ router.post('/google', async (req, res) => {
   }
 });
 
+// Verify token — checks JWT validity AND that user still exists in DB
+router.get('/me', async (req, res) => {
+  try {
+    const auth = req.headers.authorization;
+    if (!auth || !auth.startsWith('Bearer ')) return res.status(401).json({ error: 'Missing token' });
+    const token = auth.split(' ')[1];
+    let payload;
+    try {
+      payload = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (e) {
+      return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+    const user = await User.findById(payload.id).select('-passwordHash');
+    if (!user) return res.status(401).json({ error: 'User not found' });
+    res.json({ user: { id: user._id, email: user.email, name: user.name, picture: user.picture, role: user.role } });
+  } catch (err) {
+    console.error('/auth/me error', err);
+    res.status(500).json({ error: 'Verification failed' });
+  }
+});
+
 module.exports = router;
