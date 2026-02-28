@@ -93,8 +93,8 @@ router.post('/applicants/:id/caste', authenticateAdmin, upload.single('casteCert
   }
 });
 
-// Get current site content (singleton)
-router.get('/content', authenticateAdmin, async (req, res) => {
+// Get current site content (public — read-only, no auth required)
+router.get('/content', async (req, res) => {
   try {
     let doc = await SiteContent.findOne();
     if (!doc) doc = await SiteContent.create({ content: {} });
