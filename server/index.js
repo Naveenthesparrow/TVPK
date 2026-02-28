@@ -87,9 +87,14 @@ app.get('/', (req, res) => {
 
 // MongoDB Connection with retry logic
 const MONGO_OPTIONS = {
-  serverSelectionTimeoutMS: 10000,
+  serverSelectionTimeoutMS: 15000,
   socketTimeoutMS: 45000,
+  connectTimeoutMS: 15000,
   maxPoolSize: 10,
+  tls: true,
+  tlsAllowInvalidCertificates: false,
+  retryWrites: true,
+  w: 'majority',
 };
 
 const connectWithRetry = (attempt = 1) => {
