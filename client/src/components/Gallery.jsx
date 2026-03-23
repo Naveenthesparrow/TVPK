@@ -40,7 +40,9 @@ const Gallery = () => {
         };
         window.addEventListener('tvpk-admin-open', onOpen);
         return () => window.removeEventListener('tvpk-admin-open', onOpen);
+    }, []);
 
+    useEffect(() => {
         let mounted = true;
         const api = import.meta.env.VITE_API_URL || '';
         const token = localStorage.getItem('tvpk_token');

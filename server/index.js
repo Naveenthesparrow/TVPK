@@ -23,7 +23,34 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: process.env.CLIENT_URL || '*' }));
+const normalizeOrigins = (value) => {
+  if (!value) return [];
+  return String(value)
+    .split(',')
+    .map((v) => v.trim())
+    .filter(Boolean)
+    .flatMap((origin) => {
+      if (origin.startsWith('http://') || origin.startsWith('https://')) return [origin];
+      return [`http://${origin}`, `https://${origin}`];
+    });
+};
+
+const allowedOrigins = new Set([
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  ...normalizeOrigins(process.env.CLIENT_URL),
+]);
+
+app.use(cors({
+  origin(origin, callback) {
+    // Allow tools like curl/Postman that may not send Origin.
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    return callback(new Error(`CORS blocked for origin: ${origin}`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Configure a Content Security Policy that allows Google Identity scripts and related resources
 const cspDirectives = {
@@ -31,12 +58,13 @@ const cspDirectives = {
     defaultSrc: ["'self'"],
     scriptSrc: ["'self'", 'https://accounts.google.com', 'https://apis.google.com'],
     connectSrc: ["'self'", 'https://accounts.google.com', 'https://play.google.com'],
+    frameSrc: ["'self'", 'https://accounts.google.com'],
     imgSrc: ["'self'", 'data:', 'https://lh3.googleusercontent.com', 'https://www.gstatic.com'],
     styleSrc: ["'self'", 'https:', "'unsafe-inline'"],
     fontSrc: ["'self'", 'https:', 'data:'],
     frameAncestors: ["'self'"],
     objectSrc: ["'none'"],
-    upgradeInsecureRequests: [],
+    ...(process.env.NODE_ENV === 'production' ? { upgradeInsecureRequests: [] } : {}),
   }
 };
 app.use(helmet({ contentSecurityPolicy: cspDirectives }));

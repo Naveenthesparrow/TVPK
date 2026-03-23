@@ -71,7 +71,9 @@ const NewsSection = () => {
         };
         window.addEventListener('tvpk-admin-open', onOpen);
         return () => window.removeEventListener('tvpk-admin-open', onOpen);
+    }, []);
 
+    React.useEffect(() => {
         const api = import.meta.env.VITE_API_URL || '';
         const token = localStorage.getItem('tvpk_token');
         let mounted = true;
