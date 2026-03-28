@@ -71,8 +71,12 @@ const Navbar = () => {
     const today = new Date().toLocaleDateString(currentLang === 'ta' ? 'ta-IN' : 'en-IN');
     const desktopNavGap = currentLang === 'ta' ? 'gap-4' : 'gap-6';
     const desktopItemClass = currentLang === 'ta'
-        ? 'inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-black transition-colors tracking-wide whitespace-nowrap text-white hover:text-secondary font-tamil'
+        ? 'inline-flex items-center gap-1 px-2 py-1.5 text-xs 2xl:text-sm font-black transition-colors tracking-wide whitespace-nowrap text-white hover:text-secondary font-tamil'
         : 'inline-flex items-center gap-2 px-4 py-2 text-base font-black transition-colors tracking-wide whitespace-nowrap text-white hover:text-secondary font-header';
+
+    const actionBtnClass = currentLang === 'ta'
+        ? 'px-3 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-xs inline-flex items-center justify-center hover:brightness-105 transition whitespace-nowrap'
+        : 'px-4 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm inline-flex items-center justify-center hover:brightness-105 transition whitespace-nowrap';
 
     return (
         <nav className="sticky top-0 z-50 shadow-2xl shadow-red-900/30 overflow-x-clip">
@@ -97,9 +101,17 @@ const Navbar = () => {
                     <Link to="/" className="flex items-center gap-2.5 min-w-0 shrink-0">
                         <img src={logoImg} alt="TVPK logo" className="w-12 h-12 rounded-full object-cover ring-2 ring-secondary/80" />
                         <div className="min-w-0">
-                            <p className={`text-sm md:text-base xl:text-lg font-black leading-tight text-secondary truncate ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                <span className="hidden md:inline">{t('brand.name', { lng: currentLang })}</span>
-                                <span className="md:hidden">{t('brand.short_name', { lng: currentLang })}</span>
+                            <p className={`text-sm md:text-base xl:text-lg font-black leading-tight text-secondary ${currentLang === 'ta' ? 'font-tamil whitespace-normal' : 'font-header truncate'}`}>
+                                {currentLang === 'ta' ? (
+                                    <>
+                                        <span>{t('brand.name', { lng: currentLang })}</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="hidden md:inline">{t('brand.name', { lng: currentLang })}</span>
+                                        <span className="md:hidden">{t('brand.short_name', { lng: currentLang })}</span>
+                                    </>
+                                )}
                             </p>
                             <p className={`hidden lg:block text-xs tracking-wide text-yellow-100 truncate ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                 {currentLang === 'ta' ? 'மக்கள் சேவையே அரசியல்' : 'Service First'}
@@ -147,16 +159,16 @@ const Navbar = () => {
                         <button
                             onClick={toggleLanguage}
                             aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
-                            className="px-3.5 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm hover:brightness-105 transition"
+                            className={currentLang === 'ta' ? 'px-3 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-xs hover:brightness-105 transition' : 'px-3.5 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm hover:brightness-105 transition'}
                         >
                             {currentLang === 'ta' ? 'En' : 'அ'}
                         </button>
                         {!user && (
-                            <Link to="/login" className="px-4 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm inline-flex items-center justify-center hover:brightness-105 transition">
+                            <Link to="/login" className={actionBtnClass}>
                                 {t('nav.login', { lng: currentLang })}
                             </Link>
                         )}
-                        <Link to="/join" className="px-4 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm inline-flex items-center justify-center hover:brightness-105 transition">
+                        <Link to="/join" className={actionBtnClass}>
                             {t('nav.join', { lng: currentLang })}
                         </Link>
                         <Link to="/donate" className="hidden xl:inline-flex px-4 h-10 rounded-lg border border-secondary/70 text-secondary font-black text-sm items-center justify-center hover:bg-secondary hover:text-[#5c0d0d] transition">
