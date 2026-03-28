@@ -93,6 +93,45 @@ router.post('/applicants/:id/caste', authenticateAdmin, upload.single('casteCert
   }
 });
 
+// List all users (admin only)
+router.get('/users', authenticateAdmin, async (req, res) => {
+  try {
+    const users = await User.find({}, { passwordHash: 0 }).sort({ createdAt: -1 }).lean();
+    res.json({ users });
+  } catch (err) {
+    console.error('Failed to list users', err);
+    res.status(500).json({ error: 'Failed to list users' });
+  }
+});
+
+// Update a user's role (admin only)
+router.patch('/users/:id/role', authenticateAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!['user', 'admin'].includes(role)) {
+      return res.status(400).json({ error: 'Invalid role' });
+    }
+
+    if (String(req.user._id) === String(id) && role !== 'admin') {
+      return res.status(400).json({ error: 'You cannot remove your own admin role' });
+    }
+
+    const updated = await User.findByIdAndUpdate(
+      id,
+      { role },
+      { new: true, projection: { passwordHash: 0 } }
+    ).lean();
+
+    if (!updated) return res.status(404).json({ error: 'User not found' });
+    res.json({ success: true, user: updated });
+  } catch (err) {
+    console.error('Failed to update user role', err);
+    res.status(500).json({ error: 'Failed to update role' });
+  }
+});
+
 // Get current site content (public — read-only, no auth required)
 router.get('/content', async (req, res) => {
   try {

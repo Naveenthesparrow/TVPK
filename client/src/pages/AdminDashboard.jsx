@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { Users, FileText, Settings } from 'lucide-react';
 import { isAdmin } from '../utils/adminHelpers';
+
+const API =
+  (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
+  (import.meta.env.DEV ? 'http://localhost:5000' : '');
 
 const Card = ({ to, icon: Icon, title, desc }) => (
   <Link to={to} className="block p-6 bg-white rounded-2xl shadow hover:shadow-2xl transition">
@@ -17,9 +20,49 @@ const Card = ({ to, icon: Icon, title, desc }) => (
 );
 
 export default function AdminDashboard() {
-  const { t, i18n } = useTranslation();
-  if (!isAdmin()) return <div className="p-8">Access denied</div>;
-  const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+  const [authChecked, setAuthChecked] = React.useState(false);
+  const [authorized, setAuthorized] = React.useState(isAdmin());
+
+  React.useEffect(() => {
+    const verifyAdmin = async () => {
+      const token = localStorage.getItem('tvpk_token');
+      if (!token) {
+        setAuthorized(false);
+        setAuthChecked(true);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API}/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) {
+          localStorage.removeItem('tvpk_token');
+          localStorage.removeItem('tvpk_user');
+          window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: null }));
+          setAuthorized(false);
+          setAuthChecked(true);
+          return;
+        }
+
+        const { user } = await res.json();
+        localStorage.setItem('tvpk_user', JSON.stringify(user));
+        window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: user }));
+        setAuthorized(user?.role === 'admin');
+      } catch {
+        setAuthorized(isAdmin());
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+
+    verifyAdmin();
+  }, []);
+
+  if (!authChecked) return <div className="p-8">Checking access...</div>;
+  if (!authorized) return <div className="p-8">Access denied</div>;
+
   return (
     <div className="min-h-screen bg-slate-50 py-12">
       <div className="max-w-6xl mx-auto px-4">

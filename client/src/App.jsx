@@ -18,6 +18,7 @@ import Contact from './components/Contact';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminUsers from './pages/AdminUsers';
 import Join from './pages/Join';
 import Footer from './components/Footer';
 import { initAdminEventHandler } from './utils/adminEventHandler';
@@ -56,6 +57,7 @@ function AppContent() {
           <Route path="/login" element={<Login />} />
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="/admin/users" element={<AdminUsers />} />
         </Routes>
       </main>
       {/* footer removed project-wide as requested */}
