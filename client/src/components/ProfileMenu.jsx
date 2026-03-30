@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { LogOut, Crown, LayoutDashboard } from 'lucide-react';
 
 const ProfileMenu = () => {
@@ -50,10 +51,10 @@ const ProfileMenu = () => {
             {user.role && <div className="text-xs text-yellow-100 font-semibold mt-0.5 flex items-center gap-1.5"><Crown size={14} /> {user.role.toUpperCase()}</div>}
           </div>
           {user.role === 'admin' && (
-            <a href="/admin/dashboard" className="block px-4 py-3 text-sm font-semibold text-primary hover:bg-primary/5 transition border-b border-slate-100 cursor-pointer flex items-center gap-2">
+            <Link to="/admin/dashboard" className="block px-4 py-3 text-sm font-semibold text-primary hover:bg-primary/5 transition border-b border-slate-100 cursor-pointer flex items-center gap-2">
               <LayoutDashboard size={16} />
               Admin Dashboard
-            </a>
+            </Link>
           )}
           <button onClick={logout} className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition">
             <LogOut size={16} />

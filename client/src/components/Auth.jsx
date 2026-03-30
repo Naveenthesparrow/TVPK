@@ -1,4 +1,5 @@
 ﻿import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 
 const API =
   (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
@@ -187,7 +188,7 @@ const Auth = () => {
                 <div className="text-xs text-slate-500 uppercase">{user.role}</div>
               </div>
               {user.role === 'admin' && (
-                <a href="/admin/dashboard" className="block px-3 py-2 text-sm hover:bg-slate-50 font-semibold text-red-600">Admin Dashboard</a>
+                <Link to="/admin/dashboard" className="block px-3 py-2 text-sm hover:bg-slate-50 font-semibold text-red-600">Admin Dashboard</Link>
               )}
               <button onClick={() => { logout(); setOpen(false); }} className="w-full text-left px-3 py-2 text-sm hover:bg-slate-50 text-red-500 font-semibold">Logout</button>
             </div>
