@@ -2,7 +2,19 @@
 import Auth from '../components/Auth';
 import { useTranslation } from 'react-i18next';
 
-const API = import.meta.env.VITE_API_URL || '';
+const API =
+  (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
+  (import.meta.env.DEV ? 'http://localhost:5000' : '');
+
+async function readJsonSafe(res) {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
 
 function isExpired(token) {
   if (!token) return true;
@@ -40,8 +52,16 @@ const Login = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password, ...(mode === 'signup' ? { name } : {}) }),
       });
-      const data = await res.json();
-      if (!res.ok) { setError(data.error || 'Request failed.'); return; }
+      const data = await readJsonSafe(res);
+      if (!data) {
+        setError('Server returned invalid response. Check API URL/server.');
+        return;
+      }
+      if (!res.ok) { setError(data.error || `Request failed (HTTP ${res.status}).`); return; }
+      if (!data.token || !data.user) {
+        setError('Server returned incomplete login response.');
+        return;
+      }
 
       localStorage.setItem('tvpk_token', data.token);
       localStorage.setItem('tvpk_user', JSON.stringify(data.user));

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Users, FileText, Settings } from 'lucide-react';
+import { Users, Settings } from 'lucide-react';
 import { isAdmin } from '../utils/adminHelpers';
 
 const API =
@@ -71,9 +71,8 @@ export default function AdminDashboard() {
           <p className="text-sm text-slate-500">Manage applicants, content and users.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Card to="/admin" icon={Users} title="Member Applications" desc="View and manage member applications, approve/reject and upload certificates." />
-          <Card to="/admin/content" icon={FileText} title="Site Content" desc="Edit site content and announcements (content editor)." />
           <Card to="/admin/users" icon={Settings} title="Users & Roles" desc="Manage users and their roles (promote to admin)." />
         </div>
       </div>

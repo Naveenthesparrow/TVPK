@@ -53,18 +53,18 @@ const Navbar = () => {
 
     const dropdownItems = {
         '/news': [
-            { label: currentLang === 'ta' ? 'விவசாயிகளின் உரிமைகள்' : 'Farmers Rights', to: '/news' },
-            { label: currentLang === 'ta' ? 'மகளிர் பாசையை' : 'Womens Empowerment', to: '/news' },
-            { label: currentLang === 'ta' ? 'இளையோர் பாசையை' : 'Youth Programs', to: '/news' },
-            { label: currentLang === 'ta' ? 'முறைக்கொண்டல்பு பாசையை' : 'Education Schemes', to: '/news' },
-            { label: currentLang === 'ta' ? 'குடிசொகொனைப்பு பாசையை' : 'Housing Schemes', to: '/news' },
-            { label: currentLang === 'ta' ? 'சம்புச்சூழும் பாசையை' : 'Social Welfare', to: '/news' },
-        ],
-        '/history': [
             { label: currentLang === 'ta' ? 'ஆரம்ப வரலாறு' : 'Foundation', to: '/history' },
             { label: currentLang === 'ta' ? 'மைல் கற்கள்' : 'Milestones', to: '/history' },
             { label: currentLang === 'ta' ? 'தலைவர் சரிதிரம்' : 'Leadership History', to: '/history' },
             { label: currentLang === 'ta' ? 'பெரும் செயல்கள்' : 'Achievements', to: '/history' },
+        ],
+        '/history': [
+            { label: currentLang === 'ta' ? 'விவசாயிகளின் உரிமைகள்' : "Farmers' Rights", to: '/news' },
+            { label: currentLang === 'ta' ? 'மகளிர் பாசையை' : "Women's Empowerment", to: '/news' },
+            { label: currentLang === 'ta' ? 'இளையோர் பாசையை' : 'Youth Programs', to: '/news' },
+            { label: currentLang === 'ta' ? 'முறைக்கொண்டல்பு பாசையை' : 'Education Schemes', to: '/news' },
+            { label: currentLang === 'ta' ? 'குடிசொகொனைப்பு பாசையை' : 'Housing Schemes', to: '/news' },
+            { label: currentLang === 'ta' ? 'சம்புச்சூழும் பாசையை' : 'Social Welfare', to: '/news' },
         ],
     };
 
@@ -114,7 +114,7 @@ const Navbar = () => {
                                 )}
                             </p>
                             <p className={`hidden lg:block text-xs tracking-wide text-yellow-100 truncate ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {currentLang === 'ta' ? 'மக்கள் சேவையே அரசியல்' : 'Service First'}
+                                {currentLang === 'ta' ? 'சமநிலையும் சமூகநீதியும்' : 'Equality and Social Justice'}
                             </p>
                         </div>
                     </Link>

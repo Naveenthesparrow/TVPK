@@ -14,9 +14,21 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
+const uploadMemberFiles = upload.fields([
+  { name: 'aadharImage', maxCount: 1 },
+  { name: 'casteCertificate', maxCount: 1 },
+]);
 
 // Public endpoint to apply for membership
-router.post('/apply', upload.single('aadharImage'), async (req, res) => {
+router.post('/apply', (req, res, next) => {
+  uploadMemberFiles(req, res, (err) => {
+    if (!err) return next();
+    if (err instanceof multer.MulterError) {
+      return res.status(400).json({ error: `Upload failed: ${err.message}` });
+    }
+    return res.status(400).json({ error: 'Upload failed' });
+  });
+}, async (req, res) => {
   try {
     const { name, email, phone, dob, address, aadharNumber, additionalInfo, bornTamilOrKudi, agreeRules } = req.body;
 
@@ -26,6 +38,9 @@ router.post('/apply', upload.single('aadharImage'), async (req, res) => {
     const agree = (agreeRules === 'true' || agreeRules === true || agreeRules === 'on');
     if (!born) return res.status(403).json({ error: 'Only applicants born in Tamil caste / Tamil kudi may join' });
     if (!agree) return res.status(400).json({ error: 'You must accept the rules to apply' });
+
+    const aadharFile = req.files?.aadharImage?.[0];
+    const casteFile = req.files?.casteCertificate?.[0];
 
     const applicant = new MemberApplicant({
       name,
@@ -37,7 +52,8 @@ router.post('/apply', upload.single('aadharImage'), async (req, res) => {
       additionalInfo,
       bornTamilOrKudi: born,
       agreeRules: agree,
-      aadharImage: req.file ? `/uploads/${req.file.filename}` : undefined
+      aadharImage: aadharFile ? `/uploads/${aadharFile.filename}` : undefined,
+      casteCertificate: casteFile ? `/uploads/${casteFile.filename}` : undefined,
     });
 
     await applicant.save();

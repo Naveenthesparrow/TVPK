@@ -3,9 +3,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
 import Hero from './components/Hero';
-import NewsSection from './components/NewsSection';
 import EventsSection from './components/EventsSection';
-import QuickLinks from './components/QuickLinks';
 import PartyHistory from './components/PartyHistory';
 import LeaderProfile from './components/LeaderProfile';
 import Manifesto from './components/Manifesto';
@@ -26,9 +24,7 @@ import { initAdminEventHandler } from './utils/adminEventHandler';
 const Home = () => (
   <>
     <Hero />
-    <NewsSection />
     <EventsSection />
-    <QuickLinks />
     <Footer />
   </>
 );

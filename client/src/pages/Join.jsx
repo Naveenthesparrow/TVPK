@@ -1,13 +1,25 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
+async function readJsonSafe(res) {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
 export default function Join() {
   const { t } = useTranslation();
   const [form, setForm] = useState({ name: '', email: '', phone: '', dob: '', aadharNumber: '', address: '', born: false, agree: false });
   const [file, setFile] = useState(null);
   const [communityFile, setCommunityFile] = useState(null);
   const [status, setStatus] = useState(null);
-  const api = import.meta.env.VITE_API_URL || '';
+  const api =
+    (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
+    (import.meta.env.DEV ? 'http://localhost:5000' : '');
   const fileInputRef = useRef(null);
   const communityFileRef = useRef(null);
 
@@ -18,11 +30,19 @@ export default function Join() {
     setStatus('pending');
     try {
       const fd = new FormData();
-      Object.keys(form).forEach(k => fd.append(k, form[k]));
+      fd.append('name', form.name);
+      fd.append('email', form.email);
+      fd.append('phone', form.phone);
+      fd.append('dob', form.dob);
+      fd.append('aadharNumber', form.aadharNumber);
+      fd.append('address', form.address);
+      fd.append('bornTamilOrKudi', form.born ? 'true' : 'false');
+      fd.append('agreeRules', form.agree ? 'true' : 'false');
       if (file) fd.append('aadharImage', file);
       if (communityFile) fd.append('casteCertificate', communityFile);
       const res = await fetch(`${api}/members/apply`, { method: 'POST', body: fd });
-      const j = await res.json();
+      const j = await readJsonSafe(res);
+      if (!j) throw new Error('Server returned invalid response. Check API/server.');
       if (!res.ok) throw new Error(j.error || 'Submit failed');
       setStatus('success');
       // preserve submitted email to reload applications
@@ -43,7 +63,8 @@ export default function Join() {
       if (!email) { setApplications([]); return; }
       const res = await fetch(`${api}/members?email=${encodeURIComponent(email)}`);
       if (!res.ok) throw new Error('Failed');
-      const j = await res.json();
+      const j = await readJsonSafe(res);
+      if (!j) throw new Error('Invalid response');
       setApplications(j.applicants || []);
     } catch (e) {
       setApplications([]);
@@ -83,22 +104,46 @@ export default function Join() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="flex items-center gap-4">
-              <span className="inline-block w-36 text-sm text-slate-700">{t('join.uploadAadhar')}</span>
-              <div className="flex items-center gap-3">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <span className="block text-sm text-slate-700">{t('join.uploadAadhar')}</span>
+              <div className="flex flex-wrap items-center gap-3">
                 <input ref={fileInputRef} id="aadhar" type="file" accept="image/*,application/pdf" onChange={e => setFile(e.target.files && e.target.files[0])} className="hidden" />
-                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white">{t('join.chooseFile')}</button>
-                <div className="text-sm text-slate-500">{file ? file.name : t('join.noFileChosen')}</div>
+                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
+                {file && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setFile(null);
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className="px-3 py-2 border rounded text-sm bg-white text-red-600 border-red-200 shrink-0"
+                  >
+                    {t('join.remove')}
+                  </button>
+                )}
+                <div className="text-sm text-slate-500 min-w-0 break-all">{file ? file.name : t('join.noFileChosen')}</div>
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
-              <span className="inline-block w-36 text-sm text-slate-700">{t('join.uploadCommunityCertificate')}</span>
-              <div className="flex items-center gap-3">
+            <div className="space-y-2">
+              <span className="block text-sm text-slate-700">{t('join.uploadCommunityCertificate')}</span>
+              <div className="flex flex-wrap items-center gap-3">
                 <input ref={communityFileRef} id="community" type="file" accept="image/*,application/pdf" onChange={e => setCommunityFile(e.target.files && e.target.files[0])} className="hidden" />
-                <button type="button" onClick={() => communityFileRef.current && communityFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white">{t('join.chooseFile')}</button>
-                <div className="text-sm text-slate-500">{communityFile ? communityFile.name : t('join.noFileChosen')}</div>
+                <button type="button" onClick={() => communityFileRef.current && communityFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
+                {communityFile && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCommunityFile(null);
+                      if (communityFileRef.current) communityFileRef.current.value = '';
+                    }}
+                    className="px-3 py-2 border rounded text-sm bg-white text-red-600 border-red-200 shrink-0"
+                  >
+                    {t('join.remove')}
+                  </button>
+                )}
+                <div className="text-sm text-slate-500 min-w-0 break-all">{communityFile ? communityFile.name : t('join.noFileChosen')}</div>
               </div>
             </div>
           </div>

@@ -1,8 +1,20 @@
 ﻿import React, { useEffect, useRef, useState, useCallback } from 'react';
 
-const API = import.meta.env.VITE_API_URL || '';
+const API =
+  (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
+  (import.meta.env.DEV ? 'http://localhost:5000' : '');
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 const GSI_INIT_KEY = '__tvpk_gsi_initialized';
+
+async function readJsonSafe(res) {
+  const text = await res.text();
+  if (!text) return {};
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
 
 function isExpired(token) {
   if (!token) return true;
@@ -52,7 +64,14 @@ const Auth = () => {
         const res = await fetch(`${API}/auth/me`, { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) { clearSession(); setUser(null); broadcast(null); }
         else {
-          const { user: fresh } = await res.json();
+          const data = await readJsonSafe(res);
+          const fresh = data?.user;
+          if (!fresh) {
+            clearSession();
+            setUser(null);
+            broadcast(null);
+            return;
+          }
           saveSession(token, fresh);
           setUser(fresh);
           broadcast(fresh);
@@ -113,7 +132,8 @@ const Auth = () => {
       const res = await fetch(`${API}/auth/google`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id_token }),
       });
-      const data = await res.json();
+      const data = await readJsonSafe(res);
+      if (!data) { alert('Server returned invalid response.'); return; }
       if (!res.ok) { alert(data.error || 'Google sign-in failed.'); return; }
       saveSession(data.token, data.user);
       setUser(data.user);
