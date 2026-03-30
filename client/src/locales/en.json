@@ -105,9 +105,9 @@
         "links": "Useful Links",
         "contact": "Contact Us",
         "desc": "Serving the people of Tamil Nadu with integrity and progress. Together we build a better future.",
-        "address": "123 Main Road, Chennai, Tamil Nadu 600001",
+        "address": "Five Road Junction, Paramakudi, Tamil Nadu 623707",
         "phone": "+91 98765 43210",
-        "email": "info@tnmk.org",
+        "email": "info@tvpk.org",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service",
         "copy": "All rights reserved."
@@ -179,6 +179,7 @@
     "manifesto": {
         "title": "Our Vision, Our Promise: The Manifesto",
         "summary_title": "Manifesto Summary",
+        "representative_text": "Tamil Nadu Viduthalaip Puli Katchi\n\nParty Policy Leadership:\nUnder the leadership of Mother Tamil\n\n1. Avvai - Tolkappiyar\n2. Mangayarkkarasiyar - Thiruvalluvar\n3. Karaikkal Ammaiyar - Vallalar\n4. Kannagi - Sankaralinganar\n\nWho is a Tamil?\nOnly those born in Tamil communities with Tamil as their mother tongue are Tamils. Tamil community identity can be inherited only through the paternal line.\n\nWho is this party for?\n• Only those born in Tamil communities can become members.\n• Eligibility to lead every level of party structure belongs only to people from Tamil communities.\n• Non-Tamil-language groups will not be given any responsibility in the party and cannot become even basic members.\n\nWho can lead the party?\n• Under the leadership of a person born in a historically oppressed Tamil community, and with coalition governance under Tamil leadership, Tamil Nadu politics can transform and Tamil historical recovery can happen.\n• After the historically oppressed Tamil communities advance in life, and after all Tamil community relations evolve into an equal social family, a qualified person born in a Tamil community will be selected as party leader by administrators across all levels of the party.\n• From local body to Parliament, election candidates will be selected by a committee formed with representation from all Tamil communities. In our governance, the Speaker of the Assembly will be a person born in a historically oppressed Tamil community.\n\nWhat qualification is required for party leadership?\n• Commitment to Tamil community unity and a deep desire for ethnic liberation.\n\nWhat discipline applies to party leadership?\n• The party leader will handle only organizational structuring of the party.\n• Opportunities are available only as people's representatives (from ward member to legislative assembly and parliament member).\n• No position as Chief Minister or Minister.\n\nWhat is the party's primary policy?\n• Elimination of Aryan-Dravidian division politics.\n• Social equality for historically oppressed Tamil communities and liberation of the Tamil national identity.\n• A united life where all Tamils stand together as Tamil communities.\n\nGuidelines for party events:\n• Using representation from 5 Tamil communities, along with state-level coordinators from other Tamil communities, arrangements can be made for election campaigns and all public meetings and protests. Permission must be obtained from the party leader for these events.\n\nParty Rules\nCore Philosophy\n• This party is not a political structure where power is imposed from top to bottom.\n• It functions as a people-centric political movement that rises from the people to the level of governance.\n\nResponsibility Eligibility\n• All party responsibilities are not position-based titles.\n• They are assigned only on the basis of work, accountability, and field experience.\n\nDiscipline and Language Respect\n• This party is a movement that conducts politics not through verbal violence, but through ideological firmness and public respect.\n• No party functionary or member may use vulgar, obscene, insulting, or abusive words in stage speeches, public meetings, media interactions, or direct public engagement.\n• No matter how severe ideological differences are, emotional reactions must be avoided; only ideas must be addressed while preserving language dignity. This is the party's core political discipline.\n• This discipline is equally and mandatorily applicable to all leadership levels, from public coordinators to people's architects.\n\nWhat if discipline is violated?\nAny person violating this rule, regardless of their other major contributions to the party,\n• must issue a public apology in the name of the party, and\n• must then step away from the party.\nThere are no exceptions.\nIf there is a complaint that this rule was misused with bad intent, the party will determine truth through inquiry.\n\nHierarchy of Party Responsibilities\nThe party structure will function through the following levels:\n• State-Level Leadership Architects\n• State-Level People's Architects\n• District-Level People's Consolidators\n• Constituency-Level Public Connectors\n• Branch-Level Public Connectors\nThese 5 levels must operate as interlinked and continuous workflow structures.\n\nBranch-Level Public Connectors\nThese are field tigers of the party who will build branch units of at least 25-50 people at town/area/village levels.\nDuties:\n• Engage directly with people on the ground.\n• Record social, economic, and political demands of the people.\n• Compile information in written, audio, or data format and support constituency-level coordinators for evaluation.\n\nPublic Connector (Constituency)\nThe constituency public connector is the primary field-level officer at constituency scale.\nDuties:\n• Engage directly with people on the ground.\n• Record social, economic, and political demands of the people.\n• Compile information in written, audio, or data format.\n• Forward collected information to district level.\nA public connector has no authority to make policy decisions individually.\n\nPeople's Consolidator (District)\nThe district people's consolidator serves as district-level coordinator.\nDuties:\n• Consolidate information received from constituencies.\n• Convert individual issues into district-wide public issues.\n• Classify data and set priorities.\n• Submit district reports to state level.\nA people's consolidator must not alter or suppress information.\n\nPeople's Architect (State)\nThe people's architect is a senior state-level responsibility holder.\nDuties:\n• Review district consolidations.\n• Convert people's demands into policy, movement, protest, and election programs.\n• Form state-level political decisions with approval from state leadership architects.\n• Determine the overall political direction of the party.\nState decisions must be based only on data submitted by people's consolidators.\n\nPromotion and Eligibility\n• Only those who served as public connectors can be promoted as people's consolidators.\n• Only those who served as people's consolidators can be selected as people's architects.\n• Higher responsibilities will not be assigned to those without field experience.\n\nPower Control\n• No responsibility holder at any level may make personal decisions against information received from the people.\n• Any action violating this structure will be treated as a violation of party rules.\n\nCore Political Flow\nField Contact -> Information Consolidation -> State Structuring\nThis flow is the party's permanent political practice.\n\nPrimary Commitment\nThis rule framework is created\n• to prevent dynastic politics,\n• to control money politics, and\n• to build genuine people's leadership.\nThis is not a promise.\nThis is how our party will function.\n\nParty Slogan\nA Tamil Nadu with social balance and social justice!\nRestoration of Tamil civilizational faith is our goal!",
         "summary_text_1": "The TAMILNADU VIDUTHALAIPPULI KATCHI's Manifesto outlines our unwavering commitment to the holistic development and prosperity of Tamil Nadu. Our vision is rooted in social justice, economic empowerment, environmental sustainability, and cultural preservation, ensuring that every citizen has the opportunity to thrive.",
         "summary_text_2": "We believe in a future where education is accessible to all, healthcare is comprehensive and affordable, and economic opportunities are abundant and equitable. Our policies are designed to build a strong, resilient, and inclusive society that respects diversity and champions the rights of every individual.",
         "key_pillars_title": "Key Pillars",
@@ -208,6 +209,32 @@
                 "title": "Social Justice",
                 "desc": "Championing equality and justice for all sections of society, ensuring fair opportunities."
             }
+        }
+    },
+    "subpages": {
+        "party_structure": {
+            "title": "Party Structure",
+            "content": "The party functions through five levels:\n• State Leadership Architects\n• State People's Architects\n• District People's Consolidators\n• Constituency Public Connectors\n• Branch Public Connectors\n\nAll levels operate in an interconnected and continuous workflow."
+        },
+        "party_policies": {
+            "title": "Party Policies",
+            "content": "Primary party policies:\n• Elimination of Aryan-Dravidian division politics\n• Social balance for historically oppressed Tamil communities\n• Liberation of Tamil national identity\n• Unified life of all Tamils as Tamil communities"
+        },
+        "party_tiger_forces": {
+            "title": "Party Tiger Forces",
+            "content": "Branch-level public connectors function as the party's field tigers.\n\nKey duties:\n• Direct ground engagement with people\n• Recording social, economic, and political demands\n• Compiling information in written, audio, and data forms"
+        },
+        "party_events": {
+            "title": "Party Events",
+            "content": "Guidelines for party events:\n• Campaigns, public meetings, and protests must be organized by a committee formed with representation from 5 Tamil communities along with state coordinators.\n• Prior permission from the party leadership is mandatory for such events."
+        },
+        "state_rights": {
+            "title": "State Rights",
+            "content": "Tamil Nadu's political, linguistic, cultural, and social rights must be protected.\n\nState autonomy and social advancement of Tamils remain core objectives of the party."
+        },
+        "governance_policies": {
+            "title": "Governance Policies",
+            "content": "Governance policies follow a people-centric framework:\n• Responsibilities are assigned by work quality and field experience, not titles\n• Political discipline, language dignity, and public accountability are mandatory\n• The flow is: public data -> district consolidation -> state decision"
         }
     },
     "news": {
@@ -397,9 +424,9 @@
         },
         "office": {
             "title": "Our Office",
-            "address": "123 Main Road, Chennai, Tamil Nadu 600001",
+            "address": "Five Road Junction, Paramakudi, Tamil Nadu 623707",
             "phone": "+91 98765 43210",
-            "email": "info@tnmk.org",
+            "email": "info@tvpk.org",
             "map_placeholder": "Map of TAMILNADU VIDUTHALAIPPULI KATCHI Office",
             "hours": {
                 "title": "Office Hours",

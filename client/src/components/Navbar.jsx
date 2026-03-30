@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Menu, X, Home, Facebook, Instagram, Youtube, Send, ChevronDown } from 'lucide-react';
 import ProfileMenu from './ProfileMenu';
@@ -13,6 +13,7 @@ const Navbar = () => {
         try { return JSON.parse(localStorage.getItem('tvpk_user')) || null; } catch { return null; }
     });
     const [openDropdown, setOpenDropdown] = useState(null);
+    const navDropdownRef = useRef(null);
 
     // Keep navbar user in sync with auth changes (login/logout)
     useEffect(() => {
@@ -26,7 +27,18 @@ const Navbar = () => {
 
     useEffect(() => {
         setIsMenuOpen(false);
+        setOpenDropdown(null);
     }, [location.pathname]);
+
+    useEffect(() => {
+        const onClickOutside = (e) => {
+            if (navDropdownRef.current && !navDropdownRef.current.contains(e.target)) {
+                setOpenDropdown(null);
+            }
+        };
+        document.addEventListener('mousedown', onClickOutside);
+        return () => document.removeEventListener('mousedown', onClickOutside);
+    }, []);
 
     const toggleLanguage = () => {
         const raw = i18n.resolvedLanguage || i18n.language || 'en';
@@ -53,18 +65,14 @@ const Navbar = () => {
 
     const dropdownItems = {
         '/news': [
-            { label: currentLang === 'ta' ? 'ஆரம்ப வரலாறு' : 'Foundation', to: '/history' },
-            { label: currentLang === 'ta' ? 'மைல் கற்கள்' : 'Milestones', to: '/history' },
-            { label: currentLang === 'ta' ? 'தலைவர் சரிதிரம்' : 'Leadership History', to: '/history' },
-            { label: currentLang === 'ta' ? 'பெரும் செயல்கள்' : 'Achievements', to: '/history' },
+            { label: currentLang === 'ta' ? 'கட்சி அமைப்பு' : 'Party Structure', to: '/sub/party-structure' },
+            { label: currentLang === 'ta' ? 'கட்சி கொள்கைகள்' : 'Party Policies', to: '/sub/party-policies' },
+            { label: currentLang === 'ta' ? 'கட்சியின் புலிப்படைகள்' : 'Party Tiger Forces', to: '/sub/party-tiger-forces' },
+            { label: currentLang === 'ta' ? 'கட்சி நிகழ்வுகள்' : 'Party Events', to: '/sub/party-events' },
         ],
         '/history': [
-            { label: currentLang === 'ta' ? 'விவசாயிகளின் உரிமைகள்' : "Farmers' Rights", to: '/news' },
-            { label: currentLang === 'ta' ? 'மகளிர் பாசையை' : "Women's Empowerment", to: '/news' },
-            { label: currentLang === 'ta' ? 'இளையோர் பாசையை' : 'Youth Programs', to: '/news' },
-            { label: currentLang === 'ta' ? 'முறைக்கொண்டல்பு பாசையை' : 'Education Schemes', to: '/news' },
-            { label: currentLang === 'ta' ? 'குடிசொகொனைப்பு பாசையை' : 'Housing Schemes', to: '/news' },
-            { label: currentLang === 'ta' ? 'சம்புச்சூழும் பாசையை' : 'Social Welfare', to: '/news' },
+            { label: currentLang === 'ta' ? 'மாநில உரிமைகள்' : "State Rights", to: '/sub/state-rights' },
+            { label: currentLang === 'ta' ? 'ஆட்சி கொள்கைகள்' : "Governance Policies", to: '/sub/governance-policies' },
         ],
     };
 
@@ -114,22 +122,26 @@ const Navbar = () => {
                                 )}
                             </p>
                             <p className={`hidden lg:block text-xs tracking-wide text-yellow-100 truncate ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {currentLang === 'ta' ? 'சமநிலையும் சமூகநீதியும்' : 'Equality and Social Justice'}
+                                {currentLang === 'ta' ? 'சமூக சமநிலையும் சமூகநீதியும்' : 'Equality and Social Justice'}
                             </p>
                         </div>
                     </Link>
 
-                    <div className={`hidden xl:flex items-center ${desktopNavGap} relative flex-1 xl:ml-6 2xl:ml-8`}>
+                    <div ref={navDropdownRef} className={`hidden xl:flex items-center ${desktopNavGap} relative flex-1 xl:ml-6 2xl:ml-8`}>
                         <NavLink to="/" className={desktopItemClass}><Home size={15} />{t('nav.home', { lng: currentLang })}</NavLink>
                         
                         <div className="relative">
-                            <button className={desktopItemClass} onMouseEnter={() => setOpenDropdown('/news')} onMouseLeave={() => setOpenDropdown(null)}>
+                            <button
+                                className={desktopItemClass}
+                                type="button"
+                                onClick={() => setOpenDropdown((prev) => (prev === '/news' ? null : '/news'))}
+                            >
                                 {t('nav.news_events', { lng: currentLang })}<ChevronDown size={13} />
                             </button>
                             {openDropdown === '/news' && (
-                                <div onMouseEnter={() => setOpenDropdown('/news')} onMouseLeave={() => setOpenDropdown(null)} className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
+                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
                                     {dropdownItems['/news'].map((item, idx) => (
-                                        <Link key={idx} to={item.to} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                             {item.label}
                                         </Link>
                                     ))}
@@ -138,13 +150,17 @@ const Navbar = () => {
                         </div>
 
                         <div className="relative">
-                            <button className={desktopItemClass} onMouseEnter={() => setOpenDropdown('/history')} onMouseLeave={() => setOpenDropdown(null)}>
+                            <button
+                                className={desktopItemClass}
+                                type="button"
+                                onClick={() => setOpenDropdown((prev) => (prev === '/history' ? null : '/history'))}
+                            >
                                 {t('nav.party_history', { lng: currentLang })}<ChevronDown size={13} />
                             </button>
                             {openDropdown === '/history' && (
-                                <div onMouseEnter={() => setOpenDropdown('/history')} onMouseLeave={() => setOpenDropdown(null)} className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
+                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
                                     {dropdownItems['/history'].map((item, idx) => (
-                                        <Link key={idx} to={item.to} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                             {item.label}
                                         </Link>
                                     ))}

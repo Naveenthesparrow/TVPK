@@ -20,49 +20,52 @@ const Admin = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
 
-  React.useEffect(() => {
-    const loadApplicants = async () => {
-      try {
-        setError('');
-        const token = localStorage.getItem('tvpk_token');
-        if (!token) {
-          setApplicants([]);
-          setLoading(false);
-          return;
-        }
-
-        const r = await fetch(`${api}/admin/applicants`, { headers: { Authorization: `Bearer ${token}` } });
-        if (!r.ok) {
-          setApplicants([]);
-          setError('Failed to load member applications.');
-          setLoading(false);
-          return;
-        }
-
-        const j = await readJsonSafe(r);
-        if (!j) {
-          setApplicants([]);
-          setError('Server returned invalid response.');
-          setLoading(false);
-          return;
-        }
-
-        setApplicants(Array.isArray(j.applicants) ? j.applicants : []);
-      } catch {
+  const loadApplicants = React.useCallback(async () => {
+    try {
+      setError('');
+      const token = localStorage.getItem('tvpk_token');
+      if (!token) {
         setApplicants([]);
-        setError('Network error while loading applications.');
-      } finally {
         setLoading(false);
+        return;
       }
-    };
 
+      const r = await fetch(`${api}/admin/applicants?ts=${Date.now()}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      });
+      if (!r.ok) {
+        setApplicants([]);
+        setError('Failed to load member applications.');
+        setLoading(false);
+        return;
+      }
+
+      const j = await readJsonSafe(r);
+      if (!j) {
+        setApplicants([]);
+        setError('Server returned invalid response.');
+        setLoading(false);
+        return;
+      }
+
+      setApplicants(Array.isArray(j.applicants) ? j.applicants : []);
+    } catch {
+      setApplicants([]);
+      setError('Network error while loading applications.');
+    } finally {
+      setLoading(false);
+    }
+  }, [api]);
+
+  React.useEffect(() => {
     loadApplicants();
     const onUpdate = () => loadApplicants();
     const onAuth = () => loadApplicants();
     window.addEventListener('tvpk-content-updated', onUpdate);
     window.addEventListener('tvpk-auth-change', onAuth);
     return () => { window.removeEventListener('tvpk-content-updated', onUpdate); window.removeEventListener('tvpk-auth-change', onAuth); };
-  }, []);
+  }, [loadApplicants]);
 
   const updateStatus = async (id, status, role) => {
     const token = localStorage.getItem('tvpk_token');
@@ -74,7 +77,9 @@ const Admin = () => {
       });
       const j = await readJsonSafe(r);
       if (!r.ok) return alert(j?.error || 'Update failed');
-      window.dispatchEvent(new CustomEvent('tvpk-content-updated'));
+      setApplicants((prev) => prev.map((item) => (item._id === id ? { ...item, status: j?.applicant?.status || status } : item)));
+      if (j?.warning) alert(j.warning);
+      await loadApplicants();
     } catch {
       alert('Update failed');
     }
@@ -140,19 +145,25 @@ const Admin = () => {
                     <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">No Certificate</span>
                   )}
 
-                  <button
-                    onClick={() => updateStatus(a._id, 'approved', 'user')}
-                    className="px-3 py-2 bg-green-600 text-white rounded text-sm"
-                  >
-                    Approve
-                  </button>
+                  {a.status === 'pending' ? (
+                    <>
+                      <button
+                        onClick={() => updateStatus(a._id, 'approved', 'user')}
+                        className="px-3 py-2 bg-green-600 text-white rounded text-sm"
+                      >
+                        Approve
+                      </button>
 
-                  <button
-                    onClick={() => updateStatus(a._id, 'rejected')}
-                    className="px-3 py-2 bg-red-600 text-white rounded text-sm"
-                  >
-                    Reject
-                  </button>
+                      <button
+                        onClick={() => updateStatus(a._id, 'rejected')}
+                        className="px-3 py-2 bg-red-600 text-white rounded text-sm"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  ) : (
+                    <span className="px-3 py-2 text-sm text-slate-500 border rounded bg-slate-50">Finalized</span>
+                  )}
                 </div>
               </div>
             ))}

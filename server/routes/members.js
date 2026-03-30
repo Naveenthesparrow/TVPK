@@ -1,23 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
 const MemberApplicant = require('../models/MemberApplicant');
+const UploadedFile = require('../models/UploadedFile');
 
-// configure multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) { cb(null, path.join(__dirname, '..', 'uploads')); },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const name = `${Date.now()}-${Math.random().toString(36).slice(2,8)}${ext}`;
-    cb(null, name);
-  }
-});
-const upload = multer({ storage, limits: { fileSize: 10 * 1024 * 1024 } });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 const uploadMemberFiles = upload.fields([
   { name: 'aadharImage', maxCount: 1 },
   { name: 'casteCertificate', maxCount: 1 },
 ]);
+
+const saveFileToDb = async (file, kind) => {
+  if (!file) return undefined;
+  const created = await UploadedFile.create({
+    originalName: file.originalname || 'document',
+    mimeType: file.mimetype || 'application/octet-stream',
+    size: file.size || (file.buffer ? file.buffer.length : 0),
+    data: file.buffer,
+    kind,
+  });
+  return `/files/${created._id}`;
+};
 
 // Public endpoint to apply for membership
 router.post('/apply', (req, res, next) => {
@@ -42,6 +45,9 @@ router.post('/apply', (req, res, next) => {
     const aadharFile = req.files?.aadharImage?.[0];
     const casteFile = req.files?.casteCertificate?.[0];
 
+    const aadharImage = await saveFileToDb(aadharFile, 'aadhar');
+    const casteCertificate = await saveFileToDb(casteFile, 'caste');
+
     const applicant = new MemberApplicant({
       name,
       email,
@@ -52,8 +58,8 @@ router.post('/apply', (req, res, next) => {
       additionalInfo,
       bornTamilOrKudi: born,
       agreeRules: agree,
-      aadharImage: aadharFile ? `/uploads/${aadharFile.filename}` : undefined,
-      casteCertificate: casteFile ? `/uploads/${casteFile.filename}` : undefined,
+      aadharImage,
+      casteCertificate,
     });
 
     await applicant.save();

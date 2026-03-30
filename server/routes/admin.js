@@ -26,16 +26,20 @@ const authenticateAdmin = async (req, res, next) => {
 
 // Multer for admin uploads (re-use same storage as members route)
 const multer = require('multer');
-const path = require('path');
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) { cb(null, path.join(__dirname, '..', 'uploads')); },
-  filename: function (req, file, cb) {
-    const ext = path.extname(file.originalname);
-    const name = `${Date.now()}-${Math.random().toString(36).slice(2,8)}${ext}`;
-    cb(null, name);
-  }
-});
-const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 } });
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
+const UploadedFile = require('../models/UploadedFile');
+
+const saveFileToDb = async (file, kind) => {
+  if (!file) return undefined;
+  const created = await UploadedFile.create({
+    originalName: file.originalname || 'document',
+    mimeType: file.mimetype || 'application/octet-stream',
+    size: file.size || (file.buffer ? file.buffer.length : 0),
+    data: file.buffer,
+    kind,
+  });
+  return `/files/${created._id}`;
+};
 
 // Applicants management
 const MemberApplicant = require('../models/MemberApplicant');
@@ -56,22 +60,49 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, role } = req.body;
+    const validStatuses = ['pending', 'approved', 'rejected'];
+    if (status && !validStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Invalid status' });
+    }
+
     const applicant = await MemberApplicant.findById(id);
     if (!applicant) return res.status(404).json({ error: 'Applicant not found' });
-    if (status) applicant.status = status;
-    await applicant.save();
 
+    // Final decision lock: once approved/rejected, do not allow switching status.
+    if (status && applicant.status !== 'pending' && status !== applicant.status) {
+      return res.status(409).json({ error: 'Finalized applications cannot be changed.' });
+    }
+
+    if (status) {
+      applicant.status = status;
+      await applicant.save();
+    }
+
+    // Status update should succeed even if role mapping fails.
+    let warning = null;
     if (role && applicant.email) {
-      let user = await User.findOne({ email: applicant.email });
-      if (!user) {
-        user = await User.create({ email: applicant.email, name: applicant.name, role });
-      } else {
-        user.role = role;
-        await user.save();
+      try {
+        const normalizedEmail = String(applicant.email).trim().toLowerCase();
+        let user = await User.findOne({ email: normalizedEmail });
+        if (!user && normalizedEmail !== applicant.email) {
+          user = await User.findOne({ email: applicant.email });
+        }
+
+        if (!user) {
+          user = await User.create({ email: normalizedEmail, name: applicant.name, role });
+        } else {
+          user.email = normalizedEmail;
+          user.role = role;
+          if (!user.name && applicant.name) user.name = applicant.name;
+          await user.save();
+        }
+      } catch (roleErr) {
+        console.error('Role update warning for applicant', id, roleErr);
+        warning = 'Applicant status updated, but user role sync failed.';
       }
     }
 
-    res.json({ success: true, applicant });
+    res.json({ success: true, applicant, warning });
   } catch (err) {
     console.error('Failed to update applicant status', err);
     res.status(500).json({ error: 'Failed to update status' });
@@ -84,7 +115,10 @@ router.post('/applicants/:id/caste', authenticateAdmin, upload.single('casteCert
     const { id } = req.params;
     const applicant = await MemberApplicant.findById(id);
     if (!applicant) return res.status(404).json({ error: 'Applicant not found' });
-    if (req.file) applicant.casteCertificate = `/uploads/${req.file.filename}`;
+    if (req.file) {
+      const casteCertificate = await saveFileToDb(req.file, 'caste');
+      applicant.casteCertificate = casteCertificate;
+    }
     await applicant.save();
     res.json({ success: true, applicant });
   } catch (err) {

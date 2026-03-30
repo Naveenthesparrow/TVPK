@@ -33,6 +33,9 @@ const PolicyCard = ({ icon: Icon, title, desc, readMoreText, language, index }) 
 
 const Manifesto = () => {
     const { t, i18n } = useTranslation();
+    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const representativeText = t('manifesto.representative_text', { lng: currentLang });
+    const hasRepresentativeText = representativeText && representativeText !== 'manifesto.representative_text';
     const [editorOpen, setEditorOpen] = React.useState(false);
     const [editingItem, setEditingItem] = React.useState(null);
     const [editingIndex, setEditingIndex] = React.useState(null);
@@ -168,16 +171,22 @@ const Manifesto = () => {
                         <span className="w-12 h-1 bg-primary rounded-full"></span>
                         {t('manifesto.summary_title')}
                     </h2>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 text-base leading-relaxed text-slate-500 font-medium relative">
-                        <div className="space-y-8">
-                            <p className="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:float-left first-letter:mr-3 first-letter:mt-1">{t('manifesto.summary_text_1')}</p>
-                            <p>{t('manifesto.summary_text_2')}</p>
+                    {hasRepresentativeText ? (
+                        <div className={`relative text-base leading-relaxed text-slate-700 whitespace-pre-line ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                            {representativeText}
                         </div>
-                        <div className="space-y-8 lg:border-l lg:border-slate-100 lg:pl-16">
-                            <p><span className={`block font-black text-slate-900 mb-3 text-sm uppercase tracking-[0.2em] font-header`}>{t('manifesto.key_pillars_title')}</span> {t('manifesto.key_pillars_text')}</p>
-                            <p className="italic text-slate-400 border-l-4 border-slate-100 pl-6 py-2">{t('manifesto.environment_text')}</p>
+                    ) : (
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 text-base leading-relaxed text-slate-500 font-medium relative">
+                            <div className="space-y-8">
+                                <p className="first-letter:text-5xl first-letter:font-black first-letter:text-primary first-letter:float-left first-letter:mr-3 first-letter:mt-1">{t('manifesto.summary_text_1')}</p>
+                                <p>{t('manifesto.summary_text_2')}</p>
+                            </div>
+                            <div className="space-y-8 lg:border-l lg:border-slate-100 lg:pl-16">
+                                <p><span className={`block font-black text-slate-900 mb-3 text-sm uppercase tracking-[0.2em] font-header`}>{t('manifesto.key_pillars_title')}</span> {t('manifesto.key_pillars_text')}</p>
+                                <p className="italic text-slate-400 border-l-4 border-slate-100 pl-6 py-2">{t('manifesto.environment_text')}</p>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
                 {/* Download Section */}

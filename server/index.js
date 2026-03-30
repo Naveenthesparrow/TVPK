@@ -82,9 +82,18 @@ app.use('/admin', adminRouter);
 const membersRouter = require('./routes/members');
 app.use('/members', membersRouter);
 
+// DB-backed file serving route
+const filesRouter = require('./routes/files');
+app.use('/files', filesRouter);
+
 // serve uploaded files
 const path = require('path');
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const serverUploadsDir = path.join(__dirname, 'uploads');
+const legacyUploadsDir = path.join(__dirname, '..', 'uploads');
+
+// Serve both current and legacy upload locations so older links keep working.
+app.use('/uploads', express.static(serverUploadsDir));
+app.use('/uploads', express.static(legacyUploadsDir));
 
 // Health Check
 app.get('/health', (req, res) => {
