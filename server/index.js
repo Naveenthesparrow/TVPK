@@ -41,11 +41,13 @@ const allowedOrigins = new Set([
   ...normalizeOrigins(process.env.CLIENT_URL),
 ]);
 
+const isLocalOrigin = (origin) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+
 app.use(cors({
   origin(origin, callback) {
     // Allow tools like curl/Postman that may not send Origin.
     if (!origin) return callback(null, true);
-    if (allowedOrigins.has(origin)) return callback(null, true);
+    if (allowedOrigins.has(origin) || isLocalOrigin(origin)) return callback(null, true);
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -64,10 +66,16 @@ const cspDirectives = {
     fontSrc: ["'self'", 'https:', 'data:'],
     frameAncestors: ["'self'"],
     objectSrc: ["'none'"],
-    ...(process.env.NODE_ENV === 'production' ? { upgradeInsecureRequests: [] } : {}),
+    ...(process.env.NODE_ENV === 'production' && process.env.ENABLE_HTTPS_HEADERS === 'true'
+      ? { upgradeInsecureRequests: [] }
+      : {}),
   }
 };
-app.use(helmet({ contentSecurityPolicy: cspDirectives }));
+app.use(helmet({
+  contentSecurityPolicy: cspDirectives,
+  // Keep strict transport headers opt-in to avoid localhost fetch failures during local development.
+  hsts: process.env.ENABLE_HTTPS_HEADERS === 'true',
+}));
 app.use(morgan('dev'));
 
 // Auth routes

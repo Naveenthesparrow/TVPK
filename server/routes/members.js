@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
+const mongoose = require('mongoose');
 const MemberApplicant = require('../models/MemberApplicant');
 const UploadedFile = require('../models/UploadedFile');
 
@@ -8,6 +9,7 @@ const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 
 const uploadMemberFiles = upload.fields([
   { name: 'aadharImage', maxCount: 1 },
   { name: 'casteCertificate', maxCount: 1 },
+  { name: 'professionalPhoto', maxCount: 1 },
 ]);
 
 const saveFileToDb = async (file, kind) => {
@@ -27,13 +29,40 @@ router.post('/apply', (req, res, next) => {
   uploadMemberFiles(req, res, (err) => {
     if (!err) return next();
     if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        const fieldLabels = {
+          aadharImage: 'Aadhaar card photo',
+          casteCertificate: 'Community certificate',
+          professionalPhoto: 'Professional photo',
+        };
+        const label = fieldLabels[err.field] || 'Uploaded file';
+        return res.status(400).json({ error: `Upload failed: ${label} is too large (max 10MB)` });
+      }
       return res.status(400).json({ error: `Upload failed: ${err.message}` });
     }
     return res.status(400).json({ error: 'Upload failed' });
   });
 }, async (req, res) => {
   try {
-    const { name, email, phone, dob, address, aadharNumber, additionalInfo, bornTamilOrKudi, agreeRules } = req.body;
+    if (mongoose.connection.readyState !== 1) {
+      return res.status(503).json({ error: 'Database is temporarily unavailable. Please try again in a moment.' });
+    }
+
+    const {
+      name,
+      email,
+      phone,
+      dob,
+      address,
+      aadharNumber,
+      boothNumber,
+      assemblyConstituency,
+      district,
+      stateName,
+      additionalInfo,
+      bornTamilOrKudi,
+      agreeRules,
+    } = req.body;
 
     // Basic validation
     if (!name) return res.status(400).json({ error: 'Name is required' });
@@ -44,9 +73,11 @@ router.post('/apply', (req, res, next) => {
 
     const aadharFile = req.files?.aadharImage?.[0];
     const casteFile = req.files?.casteCertificate?.[0];
+    const professionalFile = req.files?.professionalPhoto?.[0];
 
     const aadharImage = await saveFileToDb(aadharFile, 'aadhar');
     const casteCertificate = await saveFileToDb(casteFile, 'caste');
+    const professionalPhoto = await saveFileToDb(professionalFile, 'professional');
 
     const applicant = new MemberApplicant({
       name,
@@ -55,18 +86,24 @@ router.post('/apply', (req, res, next) => {
       dob: dob ? new Date(dob) : undefined,
       address,
       aadharNumber,
+      boothNumber,
+      assemblyConstituency,
+      district,
+      stateName,
       additionalInfo,
       bornTamilOrKudi: born,
       agreeRules: agree,
       aadharImage,
       casteCertificate,
+      professionalPhoto,
     });
 
     await applicant.save();
     res.json({ success: true, applicantId: applicant._id });
   } catch (err) {
     console.error('Member apply error', err);
-    res.status(500).json({ error: 'Failed to submit application' });
+    const reason = err?.message || 'Unknown server error';
+    res.status(500).json({ error: `Failed to submit application: ${reason}` });
   }
 });
 

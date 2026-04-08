@@ -132,6 +132,18 @@ const Admin = () => {
                       View Aadhar
                     </a>
                   )}
+                  {a.professionalPhoto ? (
+                    <a
+                      target="_blank"
+                      rel="noreferrer"
+                      href={`${api}${a.professionalPhoto}`}
+                      className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50"
+                    >
+                      View Professional Photo
+                    </a>
+                  ) : (
+                    <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">No Professional Photo</span>
+                  )}
                   {a.casteCertificate ? (
                     <a
                       target="_blank"

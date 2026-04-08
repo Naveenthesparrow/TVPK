@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Users, Building2, Network, UserSquare2, ShieldCheck, ArrowRight, Landmark, Scale, Leaf, Target, Handshake, ClipboardList, Database, AudioLines, Edit3 } from 'lucide-react';
+import { Users, Network, ShieldCheck, ArrowRight, Landmark, Scale, Target, Handshake, ClipboardList, Database, AudioLines, Edit3 } from 'lucide-react';
 import { isAdmin } from '../utils/adminHelpers';
 import heroImg from '../assets/hero.jpeg';
 import tamilannaiImg from '../assets/tamilannai.jpeg';
@@ -16,7 +16,7 @@ const slugToKey = {
   'party-structure': 'party_structure',
   'party-policies': 'party_policies',
   'party-tiger-forces': 'party_tiger_forces',
-  'party-events': 'party_events',
+  'about-party': 'about_party',
   'state-rights': 'state_rights',
   'governance-policies': 'governance_policies',
 };
@@ -40,11 +40,11 @@ const pageVisuals = {
     badgeTa: 'களப்பணி',
     badgeEn: 'Field Wing',
   },
-  'party-events': {
+  'about-party': {
     hero: flagImg,
     gallery: [heroImg, partyFlagImg, kImg],
-    badgeTa: 'நிகழ்வுகள்',
-    badgeEn: 'Events',
+    badgeTa: 'அறிமுகம்',
+    badgeEn: 'About',
   },
   'state-rights': {
     hero: leaderImg,
@@ -73,6 +73,10 @@ function cleanBullet(line) {
   return line.replace(/^\s*[•.-]\s*/, '').trim();
 }
 
+function isDivider(line) {
+  return /^[-]{3,}$/.test(line.trim());
+}
+
 function slugifyHeading(value) {
   return value
     .toLowerCase()
@@ -81,120 +85,59 @@ function slugifyHeading(value) {
     .replace(/\s+/g, '-');
 }
 
-const partyStructureLevels = [
-  {
-    key: 'state_leadership',
-    icon: Building2,
-    taTitle: 'மாநில தலைமை நிலை கட்டமைப்பாளர்கள்',
-    enTitle: 'State Leadership Architects',
-    taDesc: 'கட்சியின் மொத்த திசையை வடிவமைக்கும் தலைமை நிலை',
-    enDesc: 'Top-level leadership that shapes the party direction',
-  },
-  {
-    key: 'state_people',
-    icon: Network,
-    taTitle: 'மாநில நிலை மக்கள் கட்டமைப்பாளர்கள்',
-    enTitle: 'State People Architects',
-    taDesc: 'மக்கள் தேவையை கொள்கை மற்றும் செயல் திட்டமாக மாற்றும் நிலை',
-    enDesc: 'Converts public needs into policy and action plans',
-  },
-  {
-    key: 'district',
-    icon: Users,
-    taTitle: 'மாவட்ட நிலை மக்கள் தொகுப்பாளர்கள்',
-    enTitle: 'District People Consolidators',
-    taDesc: 'தொகுதி தகவல்களை ஒருங்கிணைத்து மாவட்டத் திட்டமாக மாற்றும் நிலை',
-    enDesc: 'Consolidates constituency inputs at district level',
-  },
-  {
-    key: 'constituency',
-    icon: UserSquare2,
-    taTitle: 'தொகுதிநிலை மக்கள் தொடர்பாளர்கள்',
-    enTitle: 'Constituency Public Connectors',
-    taDesc: 'மக்களுடன் நேரடி களத் தொடர்பு மற்றும் தரவு சேகரிப்பு',
-    enDesc: 'Direct field engagement and public data collection',
-  },
-  {
-    key: 'branch',
-    icon: ShieldCheck,
-    taTitle: 'கிளைநிலை மக்கள் தொடர்பாளர்கள்',
-    enTitle: 'Branch Public Connectors',
-    taDesc: 'ஊர்/பகுதி அடிப்படையில் அடித்தள இயக்கத்தை கட்டமைக்கும் களப்பணி',
-    enDesc: 'Grassroots organizing at local branch level',
-  },
-];
-
 const primaryPolicies = [
   {
     key: 'arya_dravidian_abolition',
     icon: Scale,
     taTitle: 'ஆரிய-திராவிட ஒழிப்பு',
     enTitle: 'Abolition of Aryan-Dravidian Division',
-    taDesc: 'இன அடையாளங்களை முரண்பாட்டாக பயன்படுத்தும் அரசியல் முறைகளை எதிர்த்து, ஒரே தமிழ் மக்கள் அடையாளத்தை வலுப்படுத்துதல்.',
-    enDesc: 'Reject divisive identity politics and strengthen a unified Tamil people identity.',
+    taDesc: 'ஆரிய-திராவிட பிரிவினை அரசியலை ஒழித்து, தமிழ் சமூகத்தின் வரலாற்று ஒற்றுமையை நிலைநிறுத்துதல்.',
+    enDesc: 'Eliminate Aryan-Dravidian division politics and re-establish historical Tamil social unity.',
     taDetails: [
-      'பிரிவினை சார்ந்த வரலாற்றுப் புரளிகளை ஆய்வு அடிப்படையில் மறுபரிசீலனை செய்து மக்களிடம் சரியான புரிதலை கொண்டு செல்வது.',
-      'மொழி, நிலம், பண்பாடு ஆகியவற்றை இணைக்கும் ஒருங்கிணைந்த சமூக உரையாடல் மையங்களை உருவாக்குவது.',
-      'பொதுவுடைமை உணர்வை வளர்க்க கல்வி மற்றும் இளைஞர் பயிற்சி முயற்சிகளை முன்னெடுத்து தலைமுறை ஒற்றுமையை கட்டியெழுப்புவது.',
+      'தமிழர் அடையாளத்தை பிரிக்கும் சிந்தனை மற்றும் அரசியல் நடைமுறைகளுக்கு எதிராக செயல்படுதல்.',
+      'தமிழ்மொழி, நிலம், பண்பாடு ஆகியவற்றை ஒன்றிணைக்கும் அரசியல் அணுகுமுறையை முன்னெடுத்தல்.',
+      'பிரிவினை அரசியலுக்கு பதிலாக தமிழர் ஒற்றுமையை அடிப்படையாக கொண்ட சமூக உரையாடலை உருவாக்குதல்.',
     ],
     enDetails: [
-      'Reframe divisive historical narratives through evidence-based public discourse.',
-      'Build community dialogue platforms connecting language, land, and shared culture.',
-      'Drive youth-focused civic education to create intergenerational unity.',
+      'Actively oppose ideologies and political methods that divide Tamil identity.',
+      'Promote a united political framework rooted in Tamil language, land, and culture.',
+      'Replace divisive politics with sustained public dialogue centered on Tamil unity.',
     ],
   },
   {
-    key: 'social_balance',
+    key: 'social_balance_liberation',
     icon: Landmark,
-    taTitle: 'வரலாற்றில் ஒடுக்கப்பட்ட தமிழ் குடிகளுக்கு சமூக சமநிலை',
-    enTitle: 'Social Equity for Historically Oppressed Tamil Communities',
-    taDesc: 'வரலாற்று அநீதி சந்தித்த குடிகளுக்கு சம வாய்ப்பு, உரிமை அணுகல் மற்றும் மரியாதைமிக்க வாழ்வாதாரத்தை உறுதி செய்தல்.',
-    enDesc: 'Ensure dignity, access, and equitable opportunities for historically marginalized Tamil communities.',
+    taTitle: 'ஒடுக்கப்பட்ட தமிழ்குடிகளுக்கு சமூக சமநிலை மற்றும் தமிழ்த்தேசிய இன விடுதலை',
+    enTitle: 'Social Equality for Oppressed Tamil Communities and Liberation of Tamil National Identity',
+    taDesc: 'வரலாற்றில் ஒடுக்கப்பட்ட தமிழ்குடிகளுக்கு சமூக சமநிலை ஏற்படுத்தி, தமிழ்த்தேசிய இனத்தின் விடுதலையை நோக்கமாகக் கொண்ட கொள்கை.',
+    enDesc: 'Establish social equality for historically oppressed Tamil communities while advancing the liberation of Tamil national identity.',
     taDetails: [
-      'கல்வி, திறன் மேம்பாடு மற்றும் வேலை வாய்ப்பில் முன்னுரிமை வாய்ந்த சமூக நீதி திட்டங்களை உருவாக்குவது.',
-      'நிலம், வீடு, அடிப்படை சேவைகள் போன்ற உரிமை அணுகல்களில் தடைகளை நீக்க தனிப்பட்ட நிர்வாக கண்காணிப்பு அமைப்பு உருவாக்குவது.',
-      'சமூக அவமதிப்பு மற்றும் ஒடுக்குமுறைக்கு எதிரான சட்ட உதவி மற்றும் விரைவு தீர்வு அமைப்புகளை ஏற்படுத்துவது.',
+      'வரலாற்றில் ஒடுக்கப்பட்ட தமிழ்குடிகளின் சமூக உரிமைகள், மரியாதை மற்றும் சம வாழ்வாதாரத்தை உறுதி செய்தல்.',
+      'சாதி அடிப்படையிலான ஒடுக்குமுறையை நீக்கும் சமூக-அரசியல் நடவடிக்கைகளை முன்னெடுத்தல்.',
+      'தமிழ்த்தேசிய அடையாளத்தை சமூக நீதி மற்றும் விடுதலை நோக்குடன் இணைத்து அரசியல் செயல்திட்டமாக மாற்றுதல்.',
     ],
     enDetails: [
-      'Create targeted justice programs for education, skill development, and employment access.',
-      'Track and remove barriers to housing, land, and basic welfare entitlements.',
-      'Establish legal support and rapid grievance systems against discrimination.',
-    ],
-  },
-  {
-    key: 'national_liberation',
-    icon: Target,
-    taTitle: 'தமிழ்த்தேசிய இனத்தின் விடுதலை',
-    enTitle: 'Liberation of Tamil National Identity',
-    taDesc: 'தமிழர் அரசியல் உரிமை, தன்னாட்சி குரல் மற்றும் கலாச்சார சுயமரியாதையை வலுப்படுத்தும் விடுதலைக் கொள்கை.',
-    enDesc: 'Advance political rights, self-representation, and cultural dignity of Tamil national identity.',
-    taDetails: [
-      'தமிழர் வாழ்வுரிமை, மொழியுரிமை, நில உரிமை தொடர்பான கொள்கை ஆய்வுகளை ஒருங்கிணைத்து சட்டமன்ற நிலைக்கு கொண்டு செல்வது.',
-      'இந்திய ஒன்றிய அமைப்பில் மாநில உரிமை மற்றும் பிராந்திய தன்னாட்சியை வலியுறுத்தும் அரசியல் திட்டங்களை முன்னெடுப்பது.',
-      'தமிழர் பன்னாட்டு உறவுகள், அறிவியல், கலை, கல்வி தளங்களில் தன்னம்பிக்கை அடையாளத்தை வளர்க்க உலகத் தமிழ் இணைப்பை மேம்படுத்துவது.',
-    ],
-    enDetails: [
-      'Translate Tamil rights research into legislative and policy action on language, land, and livelihood.',
-      'Strengthen state rights and regional autonomy within federal frameworks.',
-      'Build global Tamil collaboration in culture, education, innovation, and civic leadership.',
+      'Secure rights, dignity, and equal social participation for historically oppressed Tamil communities.',
+      'Advance social and political measures to dismantle caste-based oppression.',
+      'Convert Tamil national liberation into a justice-led political program rooted in equality.',
     ],
   },
   {
     key: 'unity_life',
-    icon: Leaf,
+    icon: Target,
     taTitle: 'அனைத்து தமிழர்களும் தமிழ் குடிகளாக ஒன்றிணைந்த வாழ்வு',
-    enTitle: 'Unified Life as One Tamil Community',
-    taDesc: 'பிரிவு மற்றும் பாகுபாட்டை மீறி அனைத்து தமிழர்களும் ஒரே குடி உணர்வில் இணைந்து சமூக வளர்ச்சியை உருவாக்குதல்.',
-    enDesc: 'Build a shared Tamil civic life beyond internal divisions and social fragmentation.',
+    enTitle: 'A Unified Life Where All Tamils Stand Together as Tamil Communities',
+    taDesc: 'அனைத்து தமிழர்களும் தங்களின் குடி அடையாள மரியாதையுடன் ஒன்றிணைந்து சமத்துவமான தமிழர் சமூக வாழ்வை உருவாக்குதல்.',
+    enDesc: 'Build an equal Tamil social life where all Tamils unite with dignity in their community identities.',
     taDetails: [
-      'ஊர், மாவட்டம், தலைமுறை கடந்து தமிழர் ஒன்றிணைவு மையங்கள் மற்றும் குடும்ப-சமூக கூட்டமைப்புகளை உருவாக்குவது.',
-      'கலாச்சார விழாக்கள், பொது நினைவு நாள்கள், மக்கள் உரையாடல் நிகழ்ச்சிகள் மூலம் ஒற்றுமை மனப்பாங்கை வலுப்படுத்துவது.',
-      'அனைவரும் பங்கெடுக்கும் உள்ளூர் நிர்வாக மற்றும் மக்கள் பங்களிப்பு வடிவமைப்புகளை ஊக்குவித்து செயல்படுத்துவது.',
+      'தமிழ்குடிகளுக்கு இடையிலான பிளவுகளை குறைத்து, உறவுமுறை அடிப்படையிலான மக்கள் ஒற்றுமை அமைப்புகளை உருவாக்குதல்.',
+      'பண்பாடு, மொழி, உரிமை, சமூக நீதி ஆகிய அடிப்படைகளில் ஒருங்கிணைந்த வாழ்வை வளர்த்தல்.',
+      'தமிழர் சமூகத்தில் சம மரியாதை, சம வாய்ப்பு மற்றும் கூட்டு அரசியல் பங்கேற்பை உறுதி செய்தல்.',
     ],
     enDetails: [
-      'Create cross-region and cross-generation Tamil community platforms.',
-      'Use public festivals, remembrance events, and civic dialogue to deepen social cohesion.',
-      'Promote participatory local governance where every community has representation.',
+      'Reduce divisions across Tamil communities and create relationship-based social unity.',
+      'Promote integrated civic life through shared commitments to language, culture, rights, and justice.',
+      'Ensure equal dignity, equal opportunity, and collective political participation for all Tamils.',
     ],
   },
 ];
@@ -400,7 +343,6 @@ export default function SubPageDetail() {
   const { t, i18n } = useTranslation();
   const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
   const pageKey = slugToKey[slug || ''];
-  const visual = pageVisuals[slug || ''] || pageVisuals['party-structure'];
   const [isAdminUser, setIsAdminUser] = useState(isAdmin());
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -442,10 +384,10 @@ export default function SubPageDetail() {
     // Set data based on page type
     if (pageKey === 'party_structure') {
       initialData = {
-        title: 'Organizational Spine',
-        description: 'Party structure with hierarchical levels from state leadership to branch connectors',
-        content: 'Contains 5 organizational levels for effective governance',
-        details: 'State Leadership → State People → District → Constituency → Branch',
+        title: 'Party Structure',
+        description: 'Foundational organizational principles and party constitutional flow',
+        content: 'Tamil Nadu Viduthalaip Puli Katchi structure, policy leadership, and operating rules',
+        details: 'Leadership, discipline, role eligibility, political flow, and core commitments',
         month: '',
         day: '',
       };
@@ -467,12 +409,12 @@ export default function SubPageDetail() {
         month: '',
         day: '',
       };
-    } else if (pageKey === 'party_events') {
+    } else if (pageKey === 'about_party') {
       initialData = {
-        title: 'Party Event Governance',
-        description: 'Campaigns, public meetings, and demonstrations governance',
-        content: 'Joint control by 5 Tamil Community Group and State Coordinators',
-        details: 'Mandatory prior approval from party leader required',
+        title: 'About Party',
+        description: 'Introduction to the party vision, structure, and people-centered direction',
+        content: 'Core identity, people-first political approach, and guiding principles',
+        details: 'High-level overview of ideology, organization, and public commitment',
         month: '',
         day: '',
       };
@@ -664,89 +606,14 @@ export default function SubPageDetail() {
   }
 
   const title = t(`subpages.${pageKey}.title`, { lng: currentLang });
-  const content = t(`subpages.${pageKey}.content`, { lng: currentLang });
+  const rawContent = t(`subpages.${pageKey}.content`, { lng: currentLang });
+  const content = rawContent;
   const blocks = String(content)
     .split('\n\n')
     .map((s) => s.trim())
     .filter(Boolean);
 
-  if (pageKey === 'party_structure') {
-    return (
-      <div className="min-h-screen bg-[#eaf0fb] py-8 md:py-12">
-        {renderEditModal()}
-
-        {/* Admin Status Display */}
-        {isAdminUser && (
-          <div className="fixed top-4 right-4 z-40 px-3 py-2 rounded-lg bg-green-100 text-green-800 text-xs font-semibold border border-green-300">
-            ✓ {currentLang === 'ta' ? 'நிர்வாக பயனர்' : 'Admin User'}
-          </div>
-        )}
-
-        <div className="max-w-7xl mx-auto px-4 space-y-6">
-          <section className="rounded-3xl overflow-hidden border border-slate-200 shadow-sm bg-white h-[300px] md:h-[420px] grid place-items-center">
-            <p className={`text-slate-400 font-black tracking-wide ${currentLang === 'ta' ? 'font-tamil text-xl' : 'font-header text-lg'}`}>
-              {currentLang === 'ta' ? 'படம் இல்லை' : 'No Image'}
-            </p>
-          </section>
-
-          <section className="rounded-3xl border border-slate-200 bg-white shadow-sm p-5 md:p-8">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-              <h2 className={`text-2xl md:text-3xl font-black text-slate-900 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                {currentLang === 'ta' ? 'Organizational Spine' : 'Organizational Spine'}
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {isAdminUser && (
-                  <>
-                    <button onClick={handleEdit} className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-black hover:shadow-md transition-all" title={currentLang === 'ta' ? 'திருத்து' : 'Edit'}>
-                      <Edit3 size={18} />
-                    </button>
-                  </>
-                )}
-              </div>
-            </div>
-
-            <div className="relative">
-              <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-slate-300 via-slate-200 to-transparent -translate-x-1/2" />
-              <div className="space-y-4 md:space-y-5">
-                {partyStructureLevels.map((level, idx) => {
-                  const Icon = level.icon;
-                  const isLeft = idx % 2 === 0;
-                  return (
-                    <div key={level.key} className="relative md:grid md:grid-cols-2 md:gap-10 items-center">
-                      <div className={`${isLeft ? 'md:pr-8' : 'md:col-start-2 md:pl-8'}`}>
-                        <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 p-4 md:p-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
-                          <div className="flex items-start gap-3">
-                            <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                              <Icon size={19} className="text-primary" />
-                            </div>
-                            <div>
-                              <div className="text-xs font-black tracking-wide text-primary/80">{currentLang === 'ta' ? `நிலை ${idx + 1}` : `LEVEL ${idx + 1}`}</div>
-                              <h3 className={`mt-1 text-lg font-black text-slate-900 leading-snug ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                {currentLang === 'ta' ? level.taTitle : level.enTitle}
-                              </h3>
-                              <p className={`mt-2 text-slate-600 leading-7 ${currentLang === 'ta' ? 'font-tamil text-[15px]' : 'font-header text-sm'}`}>
-                                {currentLang === 'ta' ? level.taDesc : level.enDesc}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                        <div className="w-4 h-4 rounded-full bg-primary border-4 border-white shadow" />
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </section>
-        </div>
-      </div>
-    );
-  }
-
-  if (pageKey === 'party_policies') {
+  if (pageKey === 'party_policies' && false) {
     return (
       <div className="min-h-screen bg-[#f2f5fb] py-8 md:py-12">
         {renderEditModal()}
@@ -842,7 +709,7 @@ export default function SubPageDetail() {
     );
   }
 
-  if (pageKey === 'party_tiger_forces') {
+  if (pageKey === 'party_tiger_forces' && false) {
     return (
       <div className="min-h-screen bg-[#f2f6fb] py-8 md:py-12">
         {renderEditModal()}
@@ -922,7 +789,7 @@ export default function SubPageDetail() {
     );
   }
 
-  if (pageKey === 'party_events') {
+  if (pageKey === 'about_party' && false) {
     return (
       <div className="min-h-screen bg-[#f3f6fb] py-8 md:py-12">
         {renderEditModal()}
@@ -1080,7 +947,7 @@ export default function SubPageDetail() {
     );
   }
 
-  if (pageKey === 'governance_policies') {
+  if (pageKey === 'governance_policies' && false) {
     return (
       <div className="min-h-screen bg-[#eef5f4] py-8 md:py-12">
         {renderEditModal()}
@@ -1160,120 +1027,172 @@ export default function SubPageDetail() {
     );
   }
 
-  const headingBlocks = blocks
-    .filter((block) => {
-      const lines = block.split('\n').map((line) => line.trim()).filter(Boolean);
-      return lines.length <= 2 && (lines[0].endsWith(':') || lines[0].endsWith('?'));
-    })
-    .map((block) => {
-      const first = block.split('\n')[0].trim();
-      return { title: first, id: slugifyHeading(first) };
-    });
-
   return (
-    <div className="min-h-screen bg-[#f4f6fb] py-8 md:py-12">
+    <div className="min-h-screen bg-[radial-gradient(circle_at_8%_10%,_#e2e8f0_0,_transparent_18%),radial-gradient(circle_at_92%_92%,_#dbeafe_0,_transparent_22%),linear-gradient(180deg,_#f8fafc_0%,_#eef2f7_100%)] py-8 md:py-12">
       <div className="max-w-6xl mx-auto px-4">
-        <section className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-          <div className="relative">
-            <img src={visual.hero} alt={title} className="w-full h-56 md:h-72 object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-            <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4">
-              <span className="inline-flex px-3 py-1 rounded-full text-[11px] md:text-xs font-black bg-secondary text-[#5c0d0d]">
-                {currentLang === 'ta' ? visual.badgeTa : visual.badgeEn}
-              </span>
-              <h1 className={`mt-3 text-white text-2xl md:text-4xl font-black leading-tight ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                {title}
-              </h1>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-5 grid grid-cols-3 gap-3">
-          {visual.gallery.map((img, idx) => (
-            <div key={`gallery-${idx}`} className="rounded-xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-              <img src={img} alt={`${title} ${idx + 1}`} className="w-full h-24 md:h-32 object-cover" />
-            </div>
-          ))}
-        </section>
-
-        <section className="mt-6 rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
-          <div className="px-5 md:px-8 py-4 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3 bg-slate-50">
-            <div className="text-sm text-slate-600 font-semibold">
-              {currentLang === 'ta' ? 'கொள்கை விவரங்கள்' : 'Policy Details'}
-            </div>
-            <Link to="/" className="inline-flex px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-semibold text-slate-700">
-              {currentLang === 'ta' ? 'முகப்பிற்கு திரும்ப' : 'Back to Home'}
-            </Link>
-          </div>
-
-          {headingBlocks.length > 0 && (
-            <div className="px-5 md:px-8 pt-5">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                <p className={`text-xs uppercase tracking-wider mb-2 text-slate-500 font-black ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                  {currentLang === 'ta' ? 'உள்ளடக்க பட்டியல்' : 'Quick Sections'}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {headingBlocks.map((item) => (
-                    <a key={item.id} href={`#${item.id}`} className="px-3 py-1.5 rounded-full text-xs md:text-sm border border-slate-300 bg-white hover:bg-slate-100 text-slate-700">
-                      {item.title}
-                    </a>
-                  ))}
+        <section className="rounded-2xl border border-slate-300 bg-white shadow-[0_22px_60px_-40px_rgba(15,23,42,0.55)] overflow-hidden">
+          <div className="px-5 md:px-8 py-5 md:py-6 bg-white border-b border-slate-200">
+            <div className="h-1.5 w-24 rounded-full bg-gradient-to-r from-sky-500 to-cyan-400 mb-4" />
+            <div>
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <h1 className={`mt-1 text-2xl md:text-4xl text-slate-900 font-black leading-tight ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                    {title}
+                  </h1>
                 </div>
+                <Link to="/" className="inline-flex px-4 py-2.5 rounded-lg border border-slate-300 bg-slate-50 hover:bg-slate-100 text-sm font-semibold text-slate-700 transition-colors">
+                  {currentLang === 'ta' ? 'முகப்பிற்கு திரும்ப' : 'Back to Home'}
+                </Link>
               </div>
             </div>
-          )}
+          </div>
 
-          <div className="px-5 md:px-8 py-6 space-y-4 md:space-y-5">
-            {blocks.map((block, idx) => {
-              const lines = block.split('\n').map((line) => line.trim()).filter(Boolean);
-              const numbered = lines.every(isNumbered);
-              const bulleted = lines.every((line) => isBullet(line) || isNumbered(line));
-              const headingLike = lines.length <= 2 && (lines[0].endsWith(':') || lines[0].endsWith('?'));
+          <div className="border-t border-slate-200">
+            <div className="p-4 md:p-6 lg:p-7 space-y-4 md:space-y-5 bg-[linear-gradient(180deg,_#f8fbff_0%,_#fdfefe_100%)]">
+              {blocks.map((block, idx) => {
+                const lines = block
+                  .split('\n')
+                  .map((line) => line.trim())
+                  .filter((line) => line && !isDivider(line));
+                if (lines.length === 0) return null;
+                const numbered = lines.every(isNumbered);
+                const bulleted = lines.every((line) => isBullet(line) || isNumbered(line));
+                const headingWithBody = lines.length > 1 && (lines[0].endsWith('?') || lines[0].endsWith(':'));
+                const headingLike = !headingWithBody && lines.length <= 2 && (lines[0].endsWith(':') || lines[0].endsWith('?'));
+                const emphaticLine = lines.length === 1 && lines[0].toLowerCase() === 'no exceptions.';
 
-              if (headingLike) {
-                const headingText = lines.join(' ');
+                if (headingLike) {
+                  const headingText = lines.join(' ');
+                  return (
+                    <div key={`${idx}-${block.slice(0, 10)}`} id={slugifyHeading(lines[0])} className="rounded-xl border border-slate-200 border-l-4 border-l-sky-500 bg-white px-4 py-4 md:px-5 md:py-5 shadow-sm">
+                      <h2 className={`text-xl md:text-2xl font-black text-slate-900 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {headingText}
+                      </h2>
+                    </div>
+                  );
+                }
+
+                if (emphaticLine) {
+                  return (
+                    <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-xl border border-slate-200 border-l-4 border-l-rose-500 bg-white px-4 py-4 md:px-5 md:py-5 shadow-sm">
+                      <p className={`text-slate-900 font-black ${currentLang === 'ta' ? 'font-tamil text-xl' : 'font-header text-lg'}`}>
+                        {lines[0]}
+                      </p>
+                    </div>
+                  );
+                }
+
+                if (headingWithBody) {
+                  const bodyLines = lines.slice(1);
+                  const bodyNumbered = bodyLines.length > 0 && bodyLines.every(isNumbered);
+                  const bodyBulleted = bodyLines.length > 0 && bodyLines.every((line) => isBullet(line) || isNumbered(line));
+
+                  // Check if there are any bullets in the content (mixed with text)
+                  const hasBullets = bodyLines.some((line) => isBullet(line));
+                  const hasNumbers = bodyLines.some((line) => isNumbered(line));
+
+                  return (
+                    <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-xl border border-slate-200 border-l-4 border-l-sky-500 bg-white p-4 md:p-5 shadow-sm" id={slugifyHeading(lines[0])}>
+                      <h3 className={`text-lg md:text-xl font-black text-slate-900 mb-3 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                        {lines[0]}
+                      </h3>
+
+                      {bodyNumbered && (
+                        <ol className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                          {bodyLines.map((line, i) => (
+                            <li key={`${idx}-qn-${i}`} className="flex items-start gap-3">
+                              <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-black">
+                                {i + 1}
+                              </span>
+                              <span>{line.replace(/^\d+\.\s*/, '').trim()}</span>
+                            </li>
+                          ))}
+                        </ol>
+                      )}
+
+                      {bodyBulleted && !bodyNumbered && (
+                        <ul className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                          {bodyLines.map((line, i) => (
+                            <li key={`${idx}-qb-${i}`} className="flex items-start gap-3">
+                              <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500" />
+                              <span>{isNumbered(line) ? line.replace(/^\d+\.\s*/, '').trim() : cleanBullet(line)}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                      {!bodyNumbered && !bodyBulleted && (hasBullets || hasNumbers) && (
+                        <div className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                          {bodyLines.map((line, i) => 
+                            isBullet(line) ? (
+                              <div key={`${idx}-mb-${i}`} className="flex items-start gap-3">
+                                <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500" />
+                                <span>{cleanBullet(line)}</span>
+                              </div>
+                            ) : isNumbered(line) ? (
+                              <div key={`${idx}-mn-${i}`} className="flex items-start gap-3">
+                                <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-700 text-xs font-black">
+                                  {i + 1}
+                                </span>
+                                <span>{line.replace(/^\d+\.\s*/, '').trim()}</span>
+                              </div>
+                            ) : (
+                              <p key={`${idx}-mt-${i}`}>{line}</p>
+                            )
+                          )}
+                        </div>
+                      )}
+
+                      {!bodyNumbered && !bodyBulleted && !hasBullets && !hasNumbers && (
+                        <p className={`text-slate-700 leading-8 whitespace-pre-line ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                          {bodyLines.join('\n')}
+                        </p>
+                      )}
+                    </div>
+                  );
+                }
+
+                if (numbered) {
+                  return (
+                    <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-xl border border-slate-200 border-l-4 border-l-sky-500 bg-white p-4 md:p-5 shadow-sm">
+                      <ol className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                        {lines.map((line, i) => (
+                          <li key={`${idx}-n-${i}`} className="flex items-start gap-3">
+                            <span className="mt-1 inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sky-100 text-sky-700 text-xs font-black">
+                              {i + 1}
+                            </span>
+                            <span>{line.replace(/^\d+\.\s*/, '').trim()}</span>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  );
+                }
+
+                if (bulleted) {
+                  return (
+                    <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-xl border border-slate-200 border-l-4 border-l-sky-500 bg-white p-4 md:p-5 shadow-sm">
+                      <ul className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                        {lines.map((line, i) => (
+                          <li key={`${idx}-b-${i}`} className="flex items-start gap-3">
+                            <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500" />
+                            <span>{isNumbered(line) ? line.replace(/^\d+\.\s*/, '').trim() : cleanBullet(line)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  );
+                }
+
                 return (
-                  <div key={`${idx}-${block.slice(0, 10)}`} id={slugifyHeading(lines[0])} className="pt-2 md:pt-3">
-                    <h2 className={`text-xl md:text-2xl font-black text-slate-900 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                      {headingText}
-                    </h2>
-                    <div className="h-1 w-16 bg-primary/40 rounded mt-2"></div>
+                  <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-xl border border-slate-200 border-l-4 border-l-slate-400 p-4 md:p-5 bg-white shadow-sm">
+                    <p className={`text-slate-700 leading-8 whitespace-pre-line ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
+                      {lines.join('\n')}
+                    </p>
                   </div>
                 );
-              }
-
-              if (numbered) {
-                return (
-                  <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 md:p-5">
-                    <ol className={`list-decimal pl-5 space-y-2 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
-                      {lines.map((line, i) => (
-                        <li key={`${idx}-n-${i}`}>{line.replace(/^\d+\.\s*/, '').trim()}</li>
-                      ))}
-                    </ol>
-                  </div>
-                );
-              }
-
-              if (bulleted) {
-                return (
-                  <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 md:p-5">
-                    <ul className={`list-disc pl-5 space-y-2 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
-                      {lines.map((line, i) => (
-                        <li key={`${idx}-b-${i}`}>{isNumbered(line) ? line.replace(/^\d+\.\s*/, '').trim() : cleanBullet(line)}</li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              }
-
-              return (
-                <div key={`${idx}-${block.slice(0, 10)}`} className="rounded-2xl border border-slate-200 p-4 md:p-5 bg-white">
-                  <p className={`text-slate-700 leading-8 whitespace-pre-line ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
-                    {lines.join('\n')}
-                  </p>
-                </div>
-              );
-            })}
+              })}
+            </div>
           </div>
         </section>
       </div>

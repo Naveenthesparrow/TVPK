@@ -5,7 +5,7 @@ const UploadedFileSchema = new mongoose.Schema({
   mimeType: { type: String, required: true },
   size: { type: Number, required: true },
   data: { type: Buffer, required: true },
-  kind: { type: String, enum: ['aadhar', 'caste', 'other'], default: 'other' },
+  kind: { type: String, enum: ['aadhar', 'caste', 'professional', 'other'], default: 'other' },
   createdAt: { type: Date, default: Date.now }
 });
 

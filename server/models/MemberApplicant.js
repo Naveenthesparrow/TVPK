@@ -7,8 +7,13 @@ const MemberApplicantSchema = new mongoose.Schema({
   dob: { type: Date },
   address: { type: String },
   aadharNumber: { type: String },
+  boothNumber: { type: String },
+  assemblyConstituency: { type: String },
+  district: { type: String },
+  stateName: { type: String },
   aadharImage: { type: String }, // stored path to uploaded file
   casteCertificate: { type: String }, // optional caste certificate file path
+  professionalPhoto: { type: String }, // optional professional photo path
   additionalInfo: { type: String },
   bornTamilOrKudi: { type: Boolean, required: true },
   agreeRules: { type: Boolean, required: true },

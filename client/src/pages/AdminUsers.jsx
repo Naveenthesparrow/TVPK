@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import MemberCard from '../components/MemberCard';
 
 const API =
   (import.meta.env.VITE_API_URL || '').replace(/\/$/, '') ||
@@ -20,6 +21,8 @@ export default function AdminUsers() {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [error, setError] = useState('');
   const [savingId, setSavingId] = useState('');
+  const [selectedMember, setSelectedMember] = useState(null);
+  const [leaderPhoto, setLeaderPhoto] = useState(null);
 
   const token = localStorage.getItem('tvpk_token');
 
@@ -187,6 +190,14 @@ export default function AdminUsers() {
                       >
                         {savingId === u._id ? 'Saving...' : (u.role === 'admin' ? 'Set as User' : 'Set as Admin')}
                       </button>
+                      {u.professionalPhoto && (
+                        <button
+                          onClick={() => setSelectedMember(u)}
+                          className="ml-2 px-3 py-1.5 rounded border bg-blue-50 text-blue-600 hover:bg-blue-100"
+                        >
+                          View Card
+                        </button>
+                      )}
                     </td>
                   </tr>
                 );
@@ -195,6 +206,25 @@ export default function AdminUsers() {
           </table>
         </div>
       </div>
+
+      {/* Member Card Modal */}
+      {selectedMember && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-bold">Member ID Card</h2>
+              <button
+                onClick={() => setSelectedMember(null)}
+                className="text-2xl font-bold text-gray-400 hover:text-gray-600"
+              >
+                ✕
+              </button>
+            </div>
+
+            <MemberCard member={selectedMember} leaderPhoto={leaderPhoto} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

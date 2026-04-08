@@ -68,7 +68,7 @@ const Navbar = () => {
             { label: currentLang === 'ta' ? 'கட்சி அமைப்பு' : 'Party Structure', to: '/sub/party-structure' },
             { label: currentLang === 'ta' ? 'கட்சி கொள்கைகள்' : 'Party Policies', to: '/sub/party-policies' },
             { label: currentLang === 'ta' ? 'கட்சியின் புலிப்படைகள்' : 'Party Tiger Forces', to: '/sub/party-tiger-forces' },
-            { label: currentLang === 'ta' ? 'கட்சி நிகழ்வுகள்' : 'Party Events', to: '/sub/party-events' },
+            { label: currentLang === 'ta' ? 'கட்சியை பற்றி' : 'About Party', to: '/sub/about-party' },
         ],
         '/history': [
             { label: currentLang === 'ta' ? 'மாநில உரிமைகள்' : "State Rights", to: '/sub/state-rights' },
