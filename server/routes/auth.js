@@ -26,6 +26,10 @@ function userPayload(user) {
   };
 }
 
+function isDuplicateKeyError(err) {
+  return err && (err.code === 11000 || err.code === 11001);
+}
+
 // ─── POST /auth/signup ───────────────────────────────────────────────────────
 
 router.post('/signup', async (req, res) => {
@@ -101,6 +105,10 @@ router.post('/google', async (req, res) => {
     }
 
     const { sub: googleId, email, name, picture } = payload;
+    if (!googleId || !email) {
+      return res.status(400).json({ error: 'Google account did not return the required profile information.' });
+    }
+
     const normalizedEmail = normalizeEmail(email);
 
     // Find by googleId first, then by email (merge accounts)
@@ -108,7 +116,18 @@ router.post('/google', async (req, res) => {
     if (!user) user = await findUserByEmail(User, normalizedEmail);
 
     if (!user) {
-      user = await User.create({ googleId, email: normalizedEmail, name, picture, role: 'user' });
+      try {
+        user = await User.create({ googleId, email: normalizedEmail, name, picture, role: 'user' });
+      } catch (err) {
+        if (!isDuplicateKeyError(err)) throw err;
+
+        user = await User.findOne({ $or: [{ googleId }, { email: normalizedEmail }] });
+        if (!user) {
+          return res.status(409).json({
+            error: 'This Google account appears to already be linked, but the existing user record could not be loaded. Please try again.',
+          });
+        }
+      }
       console.log('[auth] Google signup:', email);
     } else {
       // Update Google fields; preserve role (admin stays admin)
@@ -116,15 +135,30 @@ router.post('/google', async (req, res) => {
       user.name = name;
       user.picture = picture;
       user.email = normalizedEmail;
-      await user.save();
+      try {
+        await user.save();
+      } catch (err) {
+        if (!isDuplicateKeyError(err)) throw err;
+
+        const mergedUser = await User.findOne({ $or: [{ googleId }, { email: normalizedEmail }] });
+        if (!mergedUser) {
+          return res.status(409).json({
+            error: 'This Google account is already linked to another user record. Please contact support to merge the duplicate account.',
+          });
+        }
+        user = mergedUser;
+      }
       console.log('[auth] Google login:', email, 'role:', user.role);
     }
 
     const token = makeToken(user._id);
     return res.json({ token, user: userPayload(user) });
   } catch (err) {
-    console.error('[auth] Google error:', err.message);
-    return res.status(500).json({ error: 'Google sign-in failed. Please try again.' });
+    console.error('[auth] Google error:', err);
+    return res.status(500).json({
+      error: 'Google sign-in failed. Please try again.',
+      details: process.env.NODE_ENV === 'production' ? undefined : err.message,
+    });
   }
 });
 

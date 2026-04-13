@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', function (next) {
   if (this.email) this.email = String(this.email).trim().toLowerCase();
-  next();
+  if (typeof next === 'function') next();
 });
 
 module.exports = mongoose.model('User', userSchema);

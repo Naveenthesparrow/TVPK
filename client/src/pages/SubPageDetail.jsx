@@ -6,7 +6,7 @@ import { isAdmin } from '../utils/adminHelpers';
 import heroImg from '../assets/hero.jpeg';
 import tamilannaiImg from '../assets/tamilannai.jpeg';
 import partyFlagImg from '../assets/party-flag.png';
-import leaderImg from '../assets/leader.png';
+import partyBannerImg from '../assets/party banner.png';
 import flagImg from '../assets/flag.jpeg';
 import logoImg from '../assets/logo.png';
 import kImg from '../assets/k.jpeg';
@@ -47,7 +47,7 @@ const pageVisuals = {
     badgeEn: 'About',
   },
   'state-rights': {
-    hero: leaderImg,
+    hero: partyBannerImg,
     gallery: [partyFlagImg, flagImg, heroImg],
     badgeTa: 'உரிமைகள்',
     badgeEn: 'Rights',
@@ -723,8 +723,12 @@ export default function SubPageDetail() {
 
         <div className="max-w-6xl mx-auto px-4 space-y-6">
           <section className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-            <div className="w-full h-96 bg-slate-100 rounded-t-3xl flex items-center justify-center border-b border-slate-200">
-              <p className="text-slate-400 text-lg font-semibold">{currentLang === 'ta' ? 'படம் சேர்க்கவும்' : 'Add Image Here'}</p>
+            <div className="w-full h-96 bg-slate-100 rounded-t-3xl border-b border-slate-200 overflow-hidden">
+              <img
+                src={partyBannerImg}
+                alt={currentLang === 'ta' ? 'கட்சியின் பேனர்' : 'Party banner'}
+                className="w-full h-full object-cover object-center"
+              />
             </div>
           </section>
 
@@ -803,8 +807,12 @@ export default function SubPageDetail() {
 
         <div className="max-w-6xl mx-auto px-4 space-y-6">
           <section className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-            <div className="w-full h-96 bg-slate-100 rounded-t-3xl flex items-center justify-center border-b border-slate-200">
-              <p className="text-slate-400 text-lg font-semibold">{currentLang === 'ta' ? 'படம் சேர்க்கவும்' : 'Add Image Here'}</p>
+            <div className="w-full h-96 bg-slate-100 rounded-t-3xl border-b border-slate-200 overflow-hidden">
+              <img
+                src={partyBannerImg}
+                alt={currentLang === 'ta' ? 'கட்சியின் பேனர்' : 'Party banner'}
+                className="w-full h-full object-cover object-center"
+              />
             </div>
           </section>
 
@@ -882,8 +890,12 @@ export default function SubPageDetail() {
 
         <div className="max-w-6xl mx-auto px-4 space-y-6">
           <section className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-            <div className="w-full h-96 bg-slate-100 rounded-t-3xl flex items-center justify-center border-b border-slate-200">
-              <p className="text-slate-400 text-lg font-semibold">{currentLang === 'ta' ? 'படம் சேர்க்கவும்' : 'Add Image Here'}</p>
+            <div className="w-full h-96 bg-slate-100 rounded-t-3xl border-b border-slate-200 overflow-hidden">
+              <img
+                src={partyBannerImg}
+                alt={currentLang === 'ta' ? 'கட்சியின் பேனர்' : 'Party banner'}
+                className="w-full h-full object-cover object-center"
+              />
             </div>
           </section>
 

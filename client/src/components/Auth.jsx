@@ -135,7 +135,11 @@ const Auth = () => {
       });
       const data = await readJsonSafe(res);
       if (!data) { alert('Server returned invalid response.'); return; }
-      if (!res.ok) { alert(data.error || 'Google sign-in failed.'); return; }
+      if (!res.ok) {
+        const message = data.details ? `${data.error || 'Google sign-in failed.'} ${data.details}` : (data.error || 'Google sign-in failed.');
+        alert(message);
+        return;
+      }
       saveSession(data.token, data.user);
       setUser(data.user);
       broadcast(data.user);
