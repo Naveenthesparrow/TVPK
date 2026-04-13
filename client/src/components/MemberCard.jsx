@@ -88,7 +88,7 @@ const MemberCard = ({ member, leaderPhoto }) => {
               <img
                 src={partyFlagImg}
                 alt="கட்சி கொடி"
-                className="w-[56px] h-[56px] rounded-lg object-cover border-2 border-yellow-300 shadow-md"
+                className="w-[56px] h-[56px] rounded-lg object-contain bg-white border-2 border-yellow-300 shadow-md p-[2px]"
               />
               <h2 className="font-tamil min-w-0 text-[clamp(20px,2.7vw,28px)] leading-[1.05] font-black tracking-[0] text-center whitespace-nowrap drop-shadow-[0_1px_0_rgba(0,0,0,0.18)]">
                 தமிழ்நாடு விடுதலைப்புலி கட்சி

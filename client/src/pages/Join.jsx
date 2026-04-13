@@ -286,14 +286,14 @@ export default function Join() {
                     <div className="text-sm text-slate-500">{new Date(a.createdAt).toLocaleString()}</div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className={`px-3 py-1 rounded-full text-sm font-black ${a.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : a.status === 'approved' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>{a.status}</div>
+                    <div className={`px-3 py-1 rounded-full text-sm font-black ${a.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : a.status === 'approved' ? 'bg-green-100 text-green-800' : a.status === 'removed' ? 'bg-slate-200 text-slate-700' : 'bg-red-100 text-red-800'}`}>{a.status}</div>
                     {a.aadharImage && <a target="_blank" rel="noreferrer" href={`${api}${a.aadharImage}`} className="text-sm underline">View Aadhar</a>}
                     {a.casteCertificate && <a target="_blank" rel="noreferrer" href={`${api}${a.casteCertificate}`} className="text-sm underline">View Certificate</a>}
                     {a.professionalPhoto && <a target="_blank" rel="noreferrer" href={`${api}${a.professionalPhoto}`} className="text-sm underline">View Professional Photo</a>}
                     {a.status === 'approved' && a.professionalPhoto && (
                       <button
                         type="button"
-                        onClick={() => setSelectedApplication({ ...a, memberSequence: index + 1 })}
+                        onClick={() => setSelectedApplication(a)}
                         className="text-sm px-3 py-1.5 rounded border bg-blue-50 text-blue-700 hover:bg-blue-100"
                       >
                         Download ID PDF

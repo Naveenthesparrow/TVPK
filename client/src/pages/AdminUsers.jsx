@@ -192,7 +192,7 @@ export default function AdminUsers() {
                       </button>
                       {u.professionalPhoto && (
                         <button
-                          onClick={() => setSelectedMember({ ...u, memberSequence: index + 1 })}
+                          onClick={() => setSelectedMember(u)}
                           className="ml-2 px-3 py-1.5 rounded border bg-blue-50 text-blue-600 hover:bg-blue-100"
                         >
                           View Card

@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const SiteContent = require('../models/SiteContent');
 const User = require('../models/User');
+const Counter = require('../models/Counter');
 const { normalizeEmail, findUserByEmail } = require('../utils/email');
 
 // middleware: verify JWT and require admin role
@@ -45,11 +46,41 @@ const saveFileToDb = async (file, kind) => {
 // Applicants management
 const MemberApplicant = require('../models/MemberApplicant');
 
+const nextMemberSequence = async () => {
+  const counter = await Counter.findOneAndUpdate(
+    { key: 'memberSequence' },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true, setDefaultsOnInsert: true }
+  ).lean();
+  return counter.seq;
+};
+
+const ensureApplicantSequence = async (applicant) => {
+  if (Number.isFinite(applicant.memberSequence) && applicant.memberSequence > 0) return applicant.memberSequence;
+  let attempts = 0;
+  while (attempts < 5) {
+    attempts += 1;
+    try {
+      applicant.memberSequence = await nextMemberSequence();
+      await applicant.save();
+      return applicant.memberSequence;
+    } catch (err) {
+      if (!(err && (err.code === 11000 || err.code === 11001))) throw err;
+    }
+  }
+  throw new Error('Failed to allocate member sequence');
+};
+
 // List all member applicants (admin only)
 router.get('/applicants', authenticateAdmin, async (req, res) => {
   try {
-    const list = await MemberApplicant.find().sort({ createdAt: -1 }).lean();
-    res.json({ applicants: list });
+    const list = await MemberApplicant.find().sort({ createdAt: -1 });
+    for (const applicant of list) {
+      if (!applicant.memberSequence) {
+        await ensureApplicantSequence(applicant);
+      }
+    }
+    res.json({ applicants: list.map((item) => item.toObject()) });
   } catch (err) {
     console.error('Failed to list applicants', err);
     res.status(500).json({ error: 'Failed to list applicants' });
@@ -61,7 +92,7 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
   try {
     const { id } = req.params;
     const { status, role } = req.body;
-    const validStatuses = ['pending', 'approved', 'rejected'];
+    const validStatuses = ['pending', 'approved', 'rejected', 'removed'];
     if (status && !validStatuses.includes(status)) {
       return res.status(400).json({ error: 'Invalid status' });
     }
@@ -69,9 +100,19 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
     const applicant = await MemberApplicant.findById(id);
     if (!applicant) return res.status(404).json({ error: 'Applicant not found' });
 
-    // Final decision lock: once approved/rejected, do not allow switching status.
-    if (status && applicant.status !== 'pending' && status !== applicant.status) {
-      return res.status(409).json({ error: 'Finalized applications cannot be changed.' });
+    // Status transitions:
+    // - pending -> approved/rejected/removed
+    // - approved/rejected -> removed
+    // - removed is terminal
+    if (status) {
+      const current = applicant.status;
+      const isNoop = status === current;
+      const fromPending = current === 'pending' && ['approved', 'rejected', 'removed'].includes(status);
+      const toRemoved = current !== 'removed' && status === 'removed';
+      const allowed = isNoop || fromPending || toRemoved;
+      if (!allowed) {
+        return res.status(409).json({ error: 'Invalid status transition. Removed memberships cannot be reactivated.' });
+      }
     }
 
     if (status) {

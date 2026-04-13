@@ -17,7 +17,8 @@ const MemberApplicantSchema = new mongoose.Schema({
   additionalInfo: { type: String },
   bornTamilOrKudi: { type: Boolean, required: true },
   agreeRules: { type: Boolean, required: true },
-  status: { type: String, enum: ['pending','approved','rejected'], default: 'pending' },
+  memberSequence: { type: Number, unique: true, sparse: true },
+  status: { type: String, enum: ['pending','approved','rejected','removed'], default: 'pending' },
   createdAt: { type: Date, default: Date.now }
 });
 

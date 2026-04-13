@@ -4,6 +4,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const MemberApplicant = require('../models/MemberApplicant');
 const UploadedFile = require('../models/UploadedFile');
+const Counter = require('../models/Counter');
 const { normalizeEmail } = require('../utils/email');
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
@@ -23,6 +24,31 @@ const saveFileToDb = async (file, kind) => {
     kind,
   });
   return `/files/${created._id}`;
+};
+
+const nextMemberSequence = async () => {
+  const counter = await Counter.findOneAndUpdate(
+    { key: 'memberSequence' },
+    { $inc: { seq: 1 } },
+    { new: true, upsert: true, setDefaultsOnInsert: true }
+  ).lean();
+  return counter.seq;
+};
+
+const ensureSequence = async (applicant) => {
+  if (Number.isFinite(applicant.memberSequence) && applicant.memberSequence > 0) return applicant.memberSequence;
+  let attempts = 0;
+  while (attempts < 5) {
+    attempts += 1;
+    try {
+      applicant.memberSequence = await nextMemberSequence();
+      await applicant.save();
+      return applicant.memberSequence;
+    } catch (err) {
+      if (!(err && (err.code === 11000 || err.code === 11001))) throw err;
+    }
+  }
+  throw new Error('Failed to allocate member sequence');
 };
 
 // Public endpoint to apply for membership
@@ -98,6 +124,7 @@ router.post('/apply', (req, res, next) => {
       aadharImage,
       casteCertificate,
       professionalPhoto,
+      memberSequence: await nextMemberSequence(),
     });
 
     await applicant.save();
@@ -114,8 +141,13 @@ router.get('/', async (req, res) => {
   try {
     const { email } = req.query;
     if (!email) return res.json({ applicants: [] });
-    const list = await MemberApplicant.find({ email: normalizeEmail(email) }).sort({ createdAt: -1 }).lean();
-    res.json({ applicants: list });
+    const list = await MemberApplicant.find({ email: normalizeEmail(email) }).sort({ createdAt: -1 });
+    for (const applicant of list) {
+      if (!applicant.memberSequence) {
+        await ensureSequence(applicant);
+      }
+    }
+    res.json({ applicants: list.map((item) => item.toObject()) });
   } catch (err) {
     console.error('Failed to list member applicants', err);
     res.status(500).json({ error: 'Failed to list applicants' });
