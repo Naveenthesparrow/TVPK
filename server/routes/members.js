@@ -4,6 +4,7 @@ const multer = require('multer');
 const mongoose = require('mongoose');
 const MemberApplicant = require('../models/MemberApplicant');
 const UploadedFile = require('../models/UploadedFile');
+const { normalizeEmail } = require('../utils/email');
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
 const uploadMemberFiles = upload.fields([
@@ -66,6 +67,7 @@ router.post('/apply', (req, res, next) => {
 
     // Basic validation
     if (!name) return res.status(400).json({ error: 'Name is required' });
+    const normalizedEmail = normalizeEmail(email);
     const born = (bornTamilOrKudi === 'true' || bornTamilOrKudi === true || bornTamilOrKudi === 'on');
     const agree = (agreeRules === 'true' || agreeRules === true || agreeRules === 'on');
     if (!born) return res.status(403).json({ error: 'Only applicants born in Tamil caste / Tamil kudi may join' });
@@ -81,7 +83,7 @@ router.post('/apply', (req, res, next) => {
 
     const applicant = new MemberApplicant({
       name,
-      email,
+      email: normalizedEmail,
       phone,
       dob: dob ? new Date(dob) : undefined,
       address,
@@ -112,7 +114,7 @@ router.get('/', async (req, res) => {
   try {
     const { email } = req.query;
     if (!email) return res.json({ applicants: [] });
-    const list = await MemberApplicant.find({ email: String(email) }).sort({ createdAt: -1 }).lean();
+    const list = await MemberApplicant.find({ email: normalizeEmail(email) }).sort({ createdAt: -1 }).lean();
     res.json({ applicants: list });
   } catch (err) {
     console.error('Failed to list member applicants', err);

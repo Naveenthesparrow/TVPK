@@ -54,19 +54,19 @@
     "upcoming_events": {
         "title": "Upcoming Events",
         "event1": {
-            "title": "Farmers Conference",
-            "day": "12",
-            "month": "NOV"
+            "title": "We will update you soon",
+            "day": "01",
+            "month": "UPD"
         },
         "event2": {
-            "title": "Youth Rally",
-            "day": "24",
-            "month": "NOV"
+            "title": "New event details coming soon",
+            "day": "02",
+            "month": "UPD"
         },
         "event3": {
-            "title": "Party Anniversary Celebration",
-            "day": "15",
-            "month": "DEC"
+            "title": "Stay tuned for our next announcement",
+            "day": "03",
+            "month": "UPD"
         }
     },
     "quick_links": {
@@ -106,7 +106,7 @@
         "contact": "Contact Us",
         "desc": "Serving the people of Tamil Nadu with integrity and progress. Together we build a better future.",
         "address": "Five Road Junction, Paramakudi, Tamil Nadu 623707",
-        "phone": "+91 98765 43210",
+        "phone": "",
         "email": "info@tvpk.org",
         "privacy": "Privacy Policy",
         "terms": "Terms of Service",
@@ -415,7 +415,7 @@
             "email": "Email Address",
             "email_placeholder": "your.email@example.com",
             "phone": "Phone Number (Optional)",
-            "phone_placeholder": "+91 98765 43210",
+            "phone_placeholder": "",
             "subject": "Subject (Optional)",
             "subject_placeholder": "Regarding party manifesto, event query, etc.",
             "message": "Your Message",

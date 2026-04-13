@@ -172,7 +172,7 @@ export default function AdminUsers() {
                   <td className="p-4 text-sm text-slate-500" colSpan={5}>No users found.</td>
                 </tr>
               )}
-              {!loadingUsers && users.map((u) => {
+              {!loadingUsers && users.map((u, index) => {
                 const isSelf = getStoredUser()?.id === u._id;
                 const nextRole = u.role === 'admin' ? 'user' : 'admin';
                 return (
@@ -192,7 +192,7 @@ export default function AdminUsers() {
                       </button>
                       {u.professionalPhoto && (
                         <button
-                          onClick={() => setSelectedMember(u)}
+                          onClick={() => setSelectedMember({ ...u, memberSequence: index + 1 })}
                           className="ml-2 px-3 py-1.5 rounded border bg-blue-50 text-blue-600 hover:bg-blue-100"
                         >
                           View Card

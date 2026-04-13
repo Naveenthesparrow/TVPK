@@ -67,9 +67,6 @@ const Hero = () => {
 
                             <div className="w-full flex flex-wrap items-center justify-center gap-2 md:gap-3">
                                 <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
-                                    <Link to="/history" className={`px-3 md:px-4 py-1.5 md:py-2 bg-white text-emerald-700 rounded-lg font-black text-sm md:text-base hover:brightness-95 transition ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                                        {t('hero.cta_learn_more', { lng: currentLang })}
-                                    </Link>
                                     <Link to="/join" className={`px-3 md:px-4 py-1.5 md:py-2 bg-yellow-400 text-emerald-800 rounded-lg font-black text-sm md:text-base hover:brightness-95 transition ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                         {t('hero.cta_join', { lng: currentLang })}
                                     </Link>

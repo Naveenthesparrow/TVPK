@@ -6,15 +6,17 @@ import { isAdmin } from '../utils/adminHelpers';
 import EventEditorModal from './EventEditorModal';
 import React from 'react';
 
-const EventItem = ({ title, date, month, index }) => {
+const EventItem = ({ title, date, month, index, to }) => {
     const admin = isAdmin();
-    return (
-    <Link to="/news" className="block">
-        <div className="relative flex items-center justify-between p-5 border-b border-slate-100 hover:bg-slate-50 transition-colors group cursor-pointer">
+    const isClickable = Boolean(to);
+    const rowClass = `relative flex items-center justify-between p-5 border-b border-slate-100 transition-colors group ${isClickable ? 'hover:bg-slate-50 cursor-pointer' : 'cursor-default'}`;
+
+    const content = (
+        <div className={rowClass}>
             {admin && (
                 <div className="absolute top-2 right-3 z-40 flex gap-2">
-                    <button onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('tvpk-admin-edit', { detail: { section: 'events', index, item: { title, date, month } } })); }} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit event"><Pencil size={14} className="text-slate-700"/></button>
-                    <button onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('tvpk-admin-delete', { detail: { section: 'events', index } })); }} className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition" title="Delete event"><Trash2 size={14} className="text-rose-600"/></button>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.dispatchEvent(new CustomEvent('tvpk-admin-edit', { detail: { section: 'events', index, item: { title, date, month } } })); }} className="bg-white rounded-full p-2 shadow hover:bg-primary/5 transition" title="Edit event"><Pencil size={14} className="text-slate-700"/></button>
+                    <button onClick={(e) => { e.preventDefault(); e.stopPropagation(); window.dispatchEvent(new CustomEvent('tvpk-admin-delete', { detail: { section: 'events', index } })); }} className="bg-white rounded-full p-2 shadow hover:bg-red-50 transition" title="Delete event"><Trash2 size={14} className="text-rose-600"/></button>
                 </div>
             )}
             <div className="flex items-center gap-6">
@@ -22,10 +24,19 @@ const EventItem = ({ title, date, month, index }) => {
                     <span className="text-[10px] font-black uppercase tracking-widest font-header">{month}</span>
                     <span className="text-2xl font-black leading-none font-header">{date}</span>
                 </div>
-                <h4 className="font-header font-black text-lg text-slate-800 group-hover:text-primary transition-colors tracking-tight">{title}</h4>
+                <h4 className="font-header font-black text-lg text-slate-800 transition-colors tracking-tight">{title}</h4>
             </div>
-            <ChevronRight className="text-slate-300 group-hover:text-primary transition-colors shrink-0" />
+            <ChevronRight className={`transition-colors shrink-0 ${isClickable ? 'text-slate-300 group-hover:text-primary' : 'text-slate-200'}`} />
         </div>
+    );
+
+    if (!isClickable) {
+        return <div className="block">{content}</div>;
+    }
+
+    return (
+    <Link to={to} className="block">
+        {content}
     </Link>
     );
 };
@@ -39,6 +50,44 @@ const EventsSection = () => {
     const [events, setEvents] = React.useState(() => {
         try { const arr = t('upcoming_events.items', { returnObjects: true, lng: currentLang }); return Array.isArray(arr) ? arr : []; } catch { return []; }
     });
+
+    const normalizeTitle = (value) => {
+        if (typeof value === 'string') return value.toLowerCase().trim();
+        if (value && typeof value === 'object') {
+            const merged = `${value.en || ''} ${value.ta || ''}`;
+            return merged.toLowerCase().trim();
+        }
+        return '';
+    };
+
+    const sanitizeEvents = (arr) => {
+        if (!Array.isArray(arr)) return [];
+        return arr.filter((ev) => {
+            const title = normalizeTitle(ev?.title);
+            return !title.includes('farmers conference') && !title.includes('விவசாயிகள் மாநாடு');
+        });
+    };
+
+    const fallbackEvents = [
+        {
+            title: t('upcoming_events.event1.title', { lng: currentLang }),
+            day: t('upcoming_events.event1.day', { lng: currentLang }),
+            month: t('upcoming_events.event1.month', { lng: currentLang }),
+            to: '',
+        },
+        {
+            title: t('upcoming_events.event2.title', { lng: currentLang }),
+            day: t('upcoming_events.event2.day', { lng: currentLang }),
+            month: t('upcoming_events.event2.month', { lng: currentLang }),
+            to: '',
+        },
+        {
+            title: t('upcoming_events.event3.title', { lng: currentLang }),
+            day: t('upcoming_events.event3.day', { lng: currentLang }),
+            month: t('upcoming_events.event3.month', { lng: currentLang }),
+            to: '',
+        },
+    ];
 
     React.useEffect(() => {
         const onOpen = (e) => {
@@ -63,11 +112,11 @@ const EventsSection = () => {
                 const j = await r.json();
                 if (!mounted) return;
                 const doc = j.content || {};
-                if (Array.isArray(doc.events)) setEvents(doc.events);
+                if (Array.isArray(doc.events)) setEvents(sanitizeEvents(doc.events));
             } catch (e) {}
         })();
 
-        const onUpdate = (e) => { if (!e?.detail) return; const { section, content } = e.detail; if (section === 'events') setEvents(Array.isArray(content) ? content : []); };
+        const onUpdate = (e) => { if (!e?.detail) return; const { section, content } = e.detail; if (section === 'events') setEvents(sanitizeEvents(Array.isArray(content) ? content : [])); };
         window.addEventListener('tvpk-content-updated', onUpdate);
         return () => { mounted = false; window.removeEventListener('tvpk-content-updated', onUpdate); };
     }, []);
@@ -121,9 +170,11 @@ const EventsSection = () => {
                 </div>
                 <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100">
                     {events.length ? events.map((ev, i) => (
-                        <EventItem key={i} title={(typeof ev.title === 'object' && ev.title) ? (ev.title[currentLang] || ev.title.en || ev.title.ta) : ev.title} date={ev.date} month={ev.month} index={i} />
+                        <EventItem key={i} title={(typeof ev.title === 'object' && ev.title) ? (ev.title[currentLang] || ev.title.en || ev.title.ta) : ev.title} date={ev.date} month={ev.month} index={i} to={ev.to || ''} />
                     )) : (
-                        <EventItem title={t('upcoming_events.event1.title', { lng: currentLang })} date={t('upcoming_events.event1.day', { lng: currentLang })} month={t('upcoming_events.event1.month', { lng: currentLang })} />
+                        fallbackEvents.map((ev, i) => (
+                            <EventItem key={`fallback-${i}`} title={ev.title} date={ev.day} month={ev.month} index={i} to={ev.to} />
+                        ))
                     )}
                 </div>
             </div>

@@ -1,7 +1,7 @@
 ﻿import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
 import { Download, CreditCard } from 'lucide-react';
-import leaderDefaultImg from '../assets/leader.png';
+import partyFlagImg from '../assets/party-flag.png';
 import tamilAnnaiImg from '../assets/tamilannai.jpeg';
 import leaderSignImg from '../assets/sign-cutout.png';
 
@@ -11,7 +11,7 @@ const API =
 
 const MemberCard = ({ member, leaderPhoto }) => {
   const cardRef = useRef(null);
-  const resolvedLeaderPhoto = leaderPhoto || leaderDefaultImg;
+  const [photoError, setPhotoError] = React.useState(false);
 
   const toAbsoluteUrl = (value) => {
     if (!value) return '';
@@ -38,13 +38,39 @@ const MemberCard = ({ member, leaderPhoto }) => {
     html2pdf().set(opt).from(element).save();
   };
 
-  // Generate member ID (can be customized)
-  const memberId = `TVK-${member._id?.slice(-6).toUpperCase() || 'XXXX'}`;
+  const readSequence = () => {
+    const candidates = [
+      member.memberSequence,
+      member.memberNumber,
+      member.memberNo,
+      member.serialNumber,
+      member.sequenceNumber,
+    ];
+
+    for (const value of candidates) {
+      if (typeof value === 'number' && Number.isFinite(value) && value > 0) {
+        return Math.floor(value);
+      }
+      if (typeof value === 'string') {
+        const digits = value.replace(/\D/g, '');
+        if (digits) {
+          const parsed = Number.parseInt(digits, 10);
+          if (Number.isFinite(parsed) && parsed > 0) return parsed;
+        }
+      }
+    }
+
+    return 1;
+  };
+
+  const memberId = `TVPK${String(readSequence()).padStart(8, '0')}`;
   const joinDate = new Date(member.createdAt).toLocaleDateString('ta-IN');
   const displayBoothNumber = member.boothNumber || '-';
   const displayAssembly = member.assemblyConstituency || '-';
   const displayDistrict = member.district || (member.address ? String(member.address).split(',')[0] : '-');
   const displayState = member.stateName || 'தமிழ்நாடு';
+  const memberPhoto = member.professionalPhoto || member.profilePhoto || member.photo || member.picture || '';
+  const showPhoto = Boolean(memberPhoto) && !photoError;
 
   return (
     <div className="space-y-4">
@@ -60,8 +86,8 @@ const MemberCard = ({ member, leaderPhoto }) => {
           <div className="bg-gradient-to-r from-red-900 via-red-800 to-red-900 px-4 py-2 text-yellow-300">
             <div className="grid grid-cols-[56px_1fr_56px] items-center gap-2.5">
               <img
-                src={toAbsoluteUrl(resolvedLeaderPhoto)}
-                alt="கட்சி தலைவர்"
+                src={partyFlagImg}
+                alt="கட்சி கொடி"
                 className="w-[56px] h-[56px] rounded-lg object-cover border-2 border-yellow-300 shadow-md"
               />
               <h2 className="font-tamil min-w-0 text-[clamp(20px,2.7vw,28px)] leading-[1.05] font-black tracking-[0] text-center whitespace-nowrap drop-shadow-[0_1px_0_rgba(0,0,0,0.18)]">
@@ -79,11 +105,12 @@ const MemberCard = ({ member, leaderPhoto }) => {
             <div className="text-base font-black text-red-700 mb-3 font-tamil text-center">உறுப்பினர் அட்டை</div>
             <div className="max-w-[780px] mx-auto grid grid-cols-[190px_1fr] gap-10 h-full items-center">
               <div className="h-full flex flex-col items-center justify-center py-1">
-                {member.professionalPhoto ? (
+                {showPhoto ? (
                   <img
-                    src={toAbsoluteUrl(member.professionalPhoto)}
+                    src={toAbsoluteUrl(memberPhoto)}
                     alt={member.name}
-                    className="w-36 h-48 rounded-md object-cover object-center border-2 border-slate-300 shadow-sm"
+                    onError={() => setPhotoError(true)}
+                    className="w-36 h-48 rounded-md object-cover object-center border-2 border-slate-300 shadow-sm bg-white"
                   />
                 ) : (
                   <div className="w-36 h-48 rounded-md bg-slate-100 flex items-center justify-center border-2 border-slate-300">
@@ -130,16 +157,16 @@ const MemberCard = ({ member, leaderPhoto }) => {
             <div className="absolute right-4 bottom-2 w-52 flex flex-col items-center text-center">
               <img
                 src={leaderSignImg}
-                alt="கட்சி தலைவர் கையொப்பம்"
+                alt="கட்சி நிறுவனர் கையொப்பம்"
                 className="w-48 h-12 object-contain"
               />
-              <p className="mt-0.5 text-[12px] font-tamil font-black text-slate-900">கட்சி தலைவர் கையொப்பம்</p>
+              <p className="mt-0.5 text-[12px] font-tamil font-black text-slate-900">கட்சி நிறுவனர் கையொப்பம்</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Download Button */}
+      {/* 28 Download Button */}
       <button
         onClick={handleDownloadPDF}
         className="inline-flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-semibold transition-colors"

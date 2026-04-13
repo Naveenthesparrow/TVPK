@@ -279,7 +279,7 @@ export default function Join() {
           <h2 className="font-bold">Member Applications</h2>
           <div className="mt-4">
             <div className="space-y-3">
-              {applications.map((a) => (
+              {applications.map((a, index) => (
                 <div key={a._id} className="p-3 border rounded flex items-center justify-between">
                   <div>
                     <div className="font-semibold">{a.name || a.email}</div>
@@ -293,7 +293,7 @@ export default function Join() {
                     {a.status === 'approved' && a.professionalPhoto && (
                       <button
                         type="button"
-                        onClick={() => setSelectedApplication(a)}
+                        onClick={() => setSelectedApplication({ ...a, memberSequence: index + 1 })}
                         className="text-sm px-3 py-1.5 rounded border bg-blue-50 text-blue-700 hover:bg-blue-100"
                       >
                         Download ID PDF

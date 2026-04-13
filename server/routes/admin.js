@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const SiteContent = require('../models/SiteContent');
 const User = require('../models/User');
+const { normalizeEmail, findUserByEmail } = require('../utils/email');
 
 // middleware: verify JWT and require admin role
 const authenticateAdmin = async (req, res, next) => {
@@ -82,11 +83,8 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
     let warning = null;
     if (role && applicant.email) {
       try {
-        const normalizedEmail = String(applicant.email).trim().toLowerCase();
-        let user = await User.findOne({ email: normalizedEmail });
-        if (!user && normalizedEmail !== applicant.email) {
-          user = await User.findOne({ email: applicant.email });
-        }
+        const normalizedEmail = normalizeEmail(applicant.email);
+        let user = await findUserByEmail(User, normalizedEmail);
 
         if (!user) {
           user = await User.create({ email: normalizedEmail, name: applicant.name, role });

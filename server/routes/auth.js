@@ -4,6 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const { normalizeEmail, findUserByEmail } = require('../utils/email');
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID || process.env.VITE_GOOGLE_CLIENT_ID || '';
 if (!googleClientId) console.warn('[auth] WARNING: GOOGLE_CLIENT_ID not set — Google sign-in will fail.');
@@ -32,7 +33,9 @@ router.post('/signup', async (req, res) => {
     const { email, password, name } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
 
-    const existing = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
+
+    const existing = await findUserByEmail(User, normalizedEmail);
     if (existing) {
       if (existing.googleId && !existing.passwordHash) {
         return res.status(400).json({ error: 'This email is linked to Google sign-in. Use Google to log in.' });
@@ -41,7 +44,7 @@ router.post('/signup', async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    const user = await User.create({ email, name: name || '', passwordHash, role: 'user' });
+    const user = await User.create({ email: normalizedEmail, name: name || '', passwordHash, role: 'user' });
     const token = makeToken(user._id);
 
     console.log('[auth] signup:', email);
@@ -59,7 +62,9 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ error: 'Email and password are required.' });
 
-    const user = await User.findOne({ email });
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await findUserByEmail(User, normalizedEmail);
     if (!user) return res.status(401).json({ error: 'Invalid email or password.' });
 
     if (!user.passwordHash) {
@@ -96,20 +101,21 @@ router.post('/google', async (req, res) => {
     }
 
     const { sub: googleId, email, name, picture } = payload;
+    const normalizedEmail = normalizeEmail(email);
 
     // Find by googleId first, then by email (merge accounts)
     let user = await User.findOne({ googleId });
-    if (!user) user = await User.findOne({ email });
+    if (!user) user = await findUserByEmail(User, normalizedEmail);
 
     if (!user) {
-      user = await User.create({ googleId, email, name, picture, role: 'user' });
+      user = await User.create({ googleId, email: normalizedEmail, name, picture, role: 'user' });
       console.log('[auth] Google signup:', email);
     } else {
       // Update Google fields; preserve role (admin stays admin)
       user.googleId = user.googleId || googleId;
       user.name = name;
       user.picture = picture;
-      user.email = email;
+      user.email = normalizedEmail;
       await user.save();
       console.log('[auth] Google login:', email, 'role:', user.role);
     }
