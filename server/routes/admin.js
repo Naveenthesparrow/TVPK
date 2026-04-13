@@ -90,7 +90,12 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
           user = await User.create({ email: normalizedEmail, name: applicant.name, role });
         } else {
           user.email = normalizedEmail;
-          user.role = role;
+          // Do not silently downgrade existing admins during applicant approval role sync.
+          if (!(user.role === 'admin' && role === 'user')) {
+            user.role = role;
+          } else {
+            warning = warning || 'Applicant status updated, but admin role was preserved for an existing admin account.';
+          }
           if (!user.name && applicant.name) user.name = applicant.name;
           await user.save();
         }

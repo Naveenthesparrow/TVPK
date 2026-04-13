@@ -1,7 +1,7 @@
 ﻿import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
 import { Download, CreditCard } from 'lucide-react';
-import partyFlagImg from '../assets/party-flag.png';
+import partyFlagImg from '../assets/flag.jpeg';
 import tamilAnnaiImg from '../assets/tamilannai.jpeg';
 import leaderSignImg from '../assets/sign-cutout.png';
 

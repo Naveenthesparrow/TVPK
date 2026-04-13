@@ -73,6 +73,7 @@ const cspDirectives = {
 };
 app.use(helmet({
   contentSecurityPolicy: cspDirectives,
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
   // Keep strict transport headers opt-in to avoid localhost fetch failures during local development.
   hsts: process.env.ENABLE_HTTPS_HEADERS === 'true',
 }));
@@ -100,8 +101,14 @@ const serverUploadsDir = path.join(__dirname, 'uploads');
 const legacyUploadsDir = path.join(__dirname, '..', 'uploads');
 
 // Serve both current and legacy upload locations so older links keep working.
-app.use('/uploads', express.static(serverUploadsDir));
-app.use('/uploads', express.static(legacyUploadsDir));
+const uploadStaticOptions = {
+  setHeaders: (res) => {
+    // Allow frontend on a different origin (e.g. localhost:5173) to embed images/PDFs.
+    res.setHeader('Cross-Origin-Resource-Policy', 'cross-origin');
+  },
+};
+app.use('/uploads', express.static(serverUploadsDir, uploadStaticOptions));
+app.use('/uploads', express.static(legacyUploadsDir, uploadStaticOptions));
 
 // Health Check
 app.get('/health', (req, res) => {

@@ -23,9 +23,17 @@ const Admin = () => {
   const loadApplicants = React.useCallback(async () => {
     try {
       setError('');
+      if (!isAdmin()) {
+        setApplicants([]);
+        setError('Admin access required.');
+        setLoading(false);
+        return;
+      }
+
       const token = localStorage.getItem('tvpk_token');
       if (!token) {
         setApplicants([]);
+        setError('Please log in again.');
         setLoading(false);
         return;
       }
@@ -35,8 +43,18 @@ const Admin = () => {
         cache: 'no-store',
       });
       if (!r.ok) {
+        const j = await readJsonSafe(r);
         setApplicants([]);
-        setError('Failed to load member applications.');
+        if (r.status === 401) {
+          localStorage.removeItem('tvpk_token');
+          localStorage.removeItem('tvpk_user');
+          window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: null }));
+          setError('Session expired. Please log in again.');
+        } else if (r.status === 403) {
+          setError('Admin access required.');
+        } else {
+          setError(j?.error || 'Failed to load member applications.');
+        }
         setLoading(false);
         return;
       }
