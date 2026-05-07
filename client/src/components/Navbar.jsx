@@ -55,10 +55,6 @@ const Navbar = () => {
     const menuItems = [
         { to: '/', label: t('nav.home', { lng: currentLang }) },
         { to: '/history', label: t('nav.party_history', { lng: currentLang }), hasDropdown: true },
-        { to: '/leader', label: t('nav.leadership', { lng: currentLang }) },
-        { to: '/manifesto', label: t('nav.manifesto', { lng: currentLang }) },
-        { to: '/news', label: t('nav.news_events', { lng: currentLang }), hasDropdown: true },
-        { to: '/gallery', label: t('nav.gallery', { lng: currentLang }) },
         { to: '/contact', label: t('nav.contact', { lng: currentLang }) },
         { to: '/join', label: t('nav.join', { lng: currentLang }) },
     ];

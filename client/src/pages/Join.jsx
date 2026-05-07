@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import MemberCard from '../components/MemberCard';
-import leaderImg from '../assets/leader.png';
 
 const JOIN_HISTORY_EMAIL_KEY = 'tvpk_join_history_email';
 
@@ -320,7 +319,7 @@ export default function Join() {
                 Close
               </button>
             </div>
-            <MemberCard member={selectedApplication} leaderPhoto={leaderImg} />
+            <MemberCard member={selectedApplication} />
           </div>
         </div>
       )}

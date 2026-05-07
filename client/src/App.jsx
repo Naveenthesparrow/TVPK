@@ -4,13 +4,7 @@ import Navbar from './components/Navbar';
 import ScrollToTop from './components/ScrollToTop';
 import Hero from './components/Hero';
 import EventsSection from './components/EventsSection';
-import PartyHistory from './components/PartyHistory';
-import LeaderProfile from './components/LeaderProfile';
-import Manifesto from './components/Manifesto';
-import NewsUpdates from './components/NewsUpdates';
-import NewsDetail from './components/NewsDetail';
 import DocDetail from './components/DocDetail';
-import Gallery from './components/Gallery';
 import Donation from './components/Donation';
 import Contact from './components/Contact';
 import Login from './pages/Login';
@@ -39,15 +33,10 @@ function AppContent() {
       <main>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/history" element={<PartyHistory />} />
-          <Route path="/leader" element={<LeaderProfile />} />
-          <Route path="/manifesto" element={<Manifesto />} />
-          <Route path="/news" element={<NewsUpdates />} />
-          <Route path="/news/:index" element={<NewsDetail />} />
+          
           <Route path="/docs/:docId" element={<DocDetail />} />
           <Route path="/speeches" element={<DocDetail presetKey={'speeches'} />} />
           <Route path="/stats" element={<DocDetail presetKey={'stats'} />} />
-          <Route path="/gallery" element={<Gallery />} />
           <Route path="/donate" element={<Donation />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join" element={<Join />} />

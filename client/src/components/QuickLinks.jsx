@@ -35,10 +35,7 @@ const QuickLinks = () => {
         // fallback to static mapping (wrap values into bilingual shape)
         const base = [
             { icon: Users, title: t('quick_links.history.title', { lng: currentLang }), desc: t('quick_links.history.desc', { lng: currentLang }), to: '/history' },
-            { icon: BookOpen, title: t('quick_links.leadership.title', { lng: currentLang }), desc: t('quick_links.leadership.desc', { lng: currentLang }), to: '/leader' },
-            { icon: Volume2, title: t('quick_links.manifesto.title', { lng: currentLang }), desc: t('quick_links.manifesto.desc', { lng: currentLang }), to: '/manifesto' },
             { icon: LinkIcon, title: t('quick_links.news.title', { lng: currentLang }), desc: t('quick_links.news.desc', { lng: currentLang }), to: '/news' },
-            { icon: Camera, title: t('quick_links.gallery.title', { lng: currentLang }), desc: t('quick_links.gallery.desc', { lng: currentLang }), to: '/gallery' },
             { icon: Phone, title: t('quick_links.contact.title', { lng: currentLang }), desc: t('quick_links.contact.desc', { lng: currentLang }), to: '/contact' },
             { icon: Heart, title: t('quick_links.donate.title', { lng: currentLang }), desc: t('quick_links.donate.desc', { lng: currentLang }), to: '/donate' },
         ];
@@ -85,10 +82,7 @@ const QuickLinks = () => {
                     // normalize incoming links to bilingual shape
                     const mapping = {
                         '/history': 'history',
-                        '/leader': 'leadership',
-                        '/manifesto': 'manifesto',
                         '/news': 'news',
-                        '/gallery': 'gallery',
                         '/contact': 'contact',
                         '/donate': 'donate'
                     };
