@@ -25,7 +25,6 @@ const Home = () => (
 );
 function AppContent() {
   const location = useLocation();
-  const hideFooter = location.pathname === '/login' || location.pathname === '/admin';
 
   return (
     <div className="min-h-screen bg-light font-inter">

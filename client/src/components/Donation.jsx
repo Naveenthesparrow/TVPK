@@ -17,10 +17,10 @@ const Donation = () => {
     const presetAmounts = [100, 250, 500, 1000, 2500, 5000];
 
     return (
-        <div className="bg-slate-50/50 py-24 min-h-screen relative group">
+        <div className="bg-slate-50/50 py-16 md:py-24 min-h-screen relative group">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-                <div className="text-center mb-20">
+            <div className="text-center mb-12 md:mb-20">
                     <h1 className={`text-3xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                         {t('donation.title', { lng: currentLang })}
                     </h1>
@@ -52,10 +52,10 @@ const Donation = () => {
                     <div className="h-1.5 w-24 bg-primary mx-auto rounded-full"></div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-10">
 
                     {/* Column 1: Info */}
-                    <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
+                    <div className="bg-white rounded-[1.75rem] md:rounded-[2.5rem] p-5 sm:p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50">
                         <div className="flex flex-col items-center text-center mb-10">
                             <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center text-white mb-6 shadow-2xl shadow-primary/30 transform -rotate-6 hover:rotate-0 transition-transform">
                                 <div className="border-4 border-white/30 rounded-full p-3">
@@ -106,12 +106,12 @@ const Donation = () => {
                     <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex flex-col">
                         <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.title', { lng: currentLang })}</h3>
 
-                        <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
                             {presetAmounts.map((amt) => (
                                 <button
                                     key={amt}
                                     onClick={() => { setAmount(amt); setCustomAmount(''); }}
-                                    className={`py-4 rounded-2xl text-sm font-black transition-all border-2 uppercase tracking-wider font-header ${amount === amt && !customAmount
+                                    className={`py-3.5 sm:py-4 rounded-2xl text-sm font-black transition-all border-2 uppercase tracking-wider font-header ${amount === amt && !customAmount
                                         ? 'bg-primary border-primary text-white shadow-xl shadow-primary/30 transform -translate-y-1'
                                         : 'bg-white border-slate-100 text-slate-600 hover:border-primary/30 hover:text-primary hover:bg-primary/5'
                                         }`}
@@ -140,7 +140,7 @@ const Donation = () => {
                         </div>
 
                         <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.contribution.payment_method_title', { lng: currentLang })}</h3>
-                        <div className="grid grid-cols-4 gap-2 mb-10 bg-slate-50 p-1.5 rounded-[1.5rem]">
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-10 bg-slate-50 p-1.5 rounded-[1.5rem]">
                                 {[
                                 { id: 'card', icon: CreditCard, label: t('donation.contribution.methods.card', { lng: currentLang }) },
                                 { id: 'upi', icon: Smartphone, label: t('donation.contribution.methods.upi', { lng: currentLang }) },
@@ -162,12 +162,12 @@ const Donation = () => {
                         </div>
 
                         {paymentMethod === 'card' && (
-                            <div className="space-y-5 p-6 bg-slate-50 rounded-[2rem] border border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                            <div className="space-y-5 p-4 sm:p-6 bg-slate-50 rounded-[2rem] border border-slate-100 animate-in fade-in slide-in-from-bottom-4 duration-500">
                                 <div>
                                     <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.card_number', { lng: currentLang })}</label>
                                     <input type="text" placeholder="XXXX XXXX XXXX XXXX" className="w-full px-5 py-4 bg-white border-2 border-white rounded-xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-primary/10 transition-all" />
                                 </div>
-                                <div className="grid grid-cols-2 gap-5">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
                                     <div>
                                         <label className="block text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-2 font-header">{t('donation.contribution.expiry', { lng: currentLang })}</label>
                                         <input type="text" placeholder="MM/YY" className="w-full px-5 py-4 bg-white border-2 border-white rounded-xl text-sm font-bold text-slate-900 focus:ring-4 focus:ring-primary/10 transition-all" />
@@ -183,7 +183,7 @@ const Donation = () => {
 
                     {/* Column 3: Summary & Personal Details */}
                     <div className="flex flex-col gap-10">
-                        <div className="bg-white rounded-[2.5rem] p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex-grow">
+                        <div className="bg-white rounded-[1.75rem] md:rounded-[2.5rem] p-5 sm:p-6 md:p-10 border border-slate-100 shadow-xl shadow-slate-200/50 flex-grow">
                             <h3 className={`text-xl font-black text-slate-900 mb-8 tracking-tight uppercase ${i18n.language === 'ta' ? 'font-tamil' : 'font-header'}`}>{t('donation.summary.title')}</h3>
 
                             <div className="space-y-6 mb-10">
@@ -209,13 +209,13 @@ const Donation = () => {
                                 </label>
                             </div>
 
-                            <div className="bg-primary/5 rounded-[2rem] p-8 mb-10 border border-primary/10 relative overflow-hidden group">
+                            <div className="bg-primary/5 rounded-[2rem] p-5 sm:p-8 mb-10 border border-primary/10 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-primary/10 transition-colors"></div>
                                 <h4 className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-6 font-header">{t('donation.summary.box_title', { lng: currentLang })}</h4>
                                 <div className="space-y-4 relative">
                                     <div className="flex justify-between items-end">
                                         <span className="text-slate-500 font-bold text-sm">{t('donation.summary.amount', { lng: currentLang })}</span>
-                                        <span className="font-black text-slate-900 text-3xl font-header tracking-tight">₹{amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
+                                        <span className="font-black text-slate-900 text-2xl sm:text-3xl font-header tracking-tight">₹{amount.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</span>
                                     </div>
                                     <div className="flex justify-between text-sm pt-2 border-t border-primary/10">
                                         <span className="text-slate-500 font-medium">{t('donation.summary.method', { lng: currentLang })}</span>

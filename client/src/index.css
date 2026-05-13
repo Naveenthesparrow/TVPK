@@ -1,6 +1,23 @@
 @import "tailwindcss";
 @config "../tailwind.config.js";
 
+:root,
+html,
+body,
+#root {
+  width: 100%;
+}
+
+:root {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 :root {
   font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.5;
@@ -11,10 +28,26 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
   background-color: #F8FAFC;
   color: #1E293B;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
 h1,

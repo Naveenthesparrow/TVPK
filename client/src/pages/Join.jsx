@@ -154,11 +154,11 @@ export default function Join() {
   }, [form.email]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <div className="bg-white rounded shadow p-6">
+    <div className="max-w-4xl mx-auto p-4 sm:p-6">
+      <div className="bg-white rounded-2xl shadow p-5 sm:p-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-black">{t('join.title')}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black">{t('join.title')}</h1>
             <p className="text-sm text-slate-600 mt-2">{t('join.desc')}</p>
           </div>
         </div>
@@ -166,7 +166,7 @@ export default function Join() {
         <form onSubmit={submit} className="mt-6 space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <input required placeholder={t('join.name')} value={form.name} onChange={handleChange('name')} className="w-full border rounded px-3 py-2" />
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <input placeholder={t('join.email')} value={form.email} onChange={handleChange('email')} className="w-full border rounded px-3 py-2" />
               <input placeholder={t('join.phone')} value={form.phone} onChange={handleChange('phone')} className="w-full border rounded px-3 py-2" />
             </div>
@@ -254,7 +254,7 @@ export default function Join() {
             <label className="inline-flex items-center gap-2 text-sm"><input type="checkbox" checked={form.agree} onChange={handleChange('agree')} required className="w-4 h-4" /> <span>{t('join.agreeRules')}</span></label>
           </div>
 
-          <div className="flex items-center gap-3 mt-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 mt-4">
             <button type="submit" className="px-4 py-2 rounded bg-red-600 text-white font-black">{t('join.submit')}</button>
             <button type="button" onClick={() => { setForm({ name: '', email: '', phone: '', dob: '', aadharNumber: '', boothNumber: '', assemblyConstituency: '', district: '', stateName: 'தமிழ்நாடு', address: '', born: false, agree: false }); setFile(null); setCommunityFile(null); setProfessionalFile(null); setStatus(null); if (fileInputRef.current) fileInputRef.current.value = ''; if (communityFileRef.current) communityFileRef.current.value = ''; if (professionalFileRef.current) professionalFileRef.current.value = ''; }} className="px-4 py-2 rounded border">{t('join.reset')}</button>
             {status === 'success' && <div className="text-sm text-green-600">{t('join.success')}</div>}

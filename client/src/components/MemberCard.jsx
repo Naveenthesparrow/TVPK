@@ -73,7 +73,7 @@ const MemberCard = ({ member, leaderPhoto }) => {
   const showPhoto = Boolean(memberPhoto) && !photoError;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-full max-w-full overflow-x-hidden">
       {/* Card Preview */}
       <div
         ref={cardRef}
@@ -83,45 +83,45 @@ const MemberCard = ({ member, leaderPhoto }) => {
         }}
       >
         <div className="h-full flex flex-col">
-          <div className="bg-gradient-to-r from-red-900 via-red-800 to-red-900 px-4 py-2 text-yellow-300">
-            <div className="grid grid-cols-[56px_1fr_56px] items-center gap-2.5">
+          <div className="bg-gradient-to-r from-red-900 via-red-800 to-red-900 px-3 sm:px-4 py-2 text-yellow-300">
+            <div className="grid grid-cols-[42px_1fr_42px] sm:grid-cols-[56px_1fr_56px] items-center gap-2 sm:gap-2.5">
               <img
                 src={partyFlagImg}
                 alt="கட்சி கொடி"
-                className="w-[56px] h-[56px] rounded-lg object-contain bg-white border-2 border-yellow-300 shadow-md p-[2px]"
+                className="w-[42px] h-[42px] sm:w-[56px] sm:h-[56px] rounded-lg object-contain bg-white border-2 border-yellow-300 shadow-md p-[2px]"
               />
-              <h2 className="font-tamil min-w-0 text-[clamp(20px,2.7vw,28px)] leading-[1.05] font-black tracking-[0] text-center whitespace-nowrap drop-shadow-[0_1px_0_rgba(0,0,0,0.18)]">
+              <h2 className="font-tamil min-w-0 text-[clamp(16px,4.8vw,28px)] leading-[1.05] font-black tracking-[0] text-center whitespace-normal sm:whitespace-nowrap drop-shadow-[0_1px_0_rgba(0,0,0,0.18)]">
                 தமிழ்நாடு விடுதலைப்புலி கட்சி
               </h2>
               <img
                 src={tamilAnnaiImg}
                 alt="தமிழ்அன்னை"
-                className="w-[56px] h-[56px] rounded-lg object-cover border-2 border-yellow-300 justify-self-end shadow-md"
+                className="w-[42px] h-[42px] sm:w-[56px] sm:h-[56px] rounded-lg object-cover border-2 border-yellow-300 justify-self-end shadow-md"
               />
             </div>
           </div>
 
-          <div className="flex-1 px-6 py-4 bg-[linear-gradient(180deg,_#fff_0%,_#fff7f7_100%)] relative">
-            <div className="text-base font-black text-red-700 mb-3 font-tamil text-center">உறுப்பினர் அட்டை</div>
-            <div className="max-w-[780px] mx-auto grid grid-cols-[190px_1fr] gap-10 h-full items-center">
-              <div className="h-full flex flex-col items-center justify-center py-1">
+          <div className="flex-1 px-4 sm:px-6 py-4 bg-[linear-gradient(180deg,_#fff_0%,_#fff7f7_100%)] relative">
+            <div className="text-sm sm:text-base font-black text-red-700 mb-3 font-tamil text-center">உறுப்பினர் அட்டை</div>
+            <div className="max-w-[780px] mx-auto grid grid-cols-1 md:grid-cols-[190px_1fr] gap-6 md:gap-10 h-full items-start md:items-center">
+              <div className="h-full flex flex-col items-center justify-center py-1 order-2 md:order-1">
                 {showPhoto ? (
                   <img
                     src={toAbsoluteUrl(memberPhoto)}
                     alt={member.name}
                     onError={() => setPhotoError(true)}
-                    className="w-36 h-48 rounded-md object-cover object-center border-2 border-slate-300 shadow-sm bg-white"
+                    className="w-28 h-36 sm:w-36 sm:h-48 rounded-md object-cover object-center border-2 border-slate-300 shadow-sm bg-white"
                   />
                 ) : (
-                  <div className="w-36 h-48 rounded-md bg-slate-100 flex items-center justify-center border-2 border-slate-300">
+                  <div className="w-28 h-36 sm:w-36 sm:h-48 rounded-md bg-slate-100 flex items-center justify-center border-2 border-slate-300">
                     <CreditCard size={28} className="text-slate-400" />
                   </div>
                 )}
-                <p className="mt-2 text-lg font-black text-slate-800 text-center font-tamil leading-tight">{member.name || '-'}</p>
+                <p className="mt-2 text-base sm:text-lg font-black text-slate-800 text-center font-tamil leading-tight">{member.name || '-'}</p>
               </div>
 
-              <div className="flex flex-col justify-center pt-1">
-                <div className="grid grid-cols-[130px_12px_minmax(170px,260px)] gap-y-2.5 text-slate-800">
+              <div className="flex flex-col justify-center pt-1 order-1 md:order-2">
+                <div className="grid grid-cols-1 sm:grid-cols-[130px_12px_minmax(170px,260px)] gap-y-2 sm:gap-y-2.5 text-slate-800 text-sm sm:text-base">
                   <div className="font-semibold">பெயர்</div>
                   <div>:</div>
                   <div className="font-semibold">{member.name || '-'}</div>
@@ -154,11 +154,11 @@ const MemberCard = ({ member, leaderPhoto }) => {
               </div>
             </div>
 
-            <div className="absolute right-4 bottom-2 w-52 flex flex-col items-center text-center">
+            <div className="mt-4 md:mt-0 md:absolute right-4 bottom-2 w-full md:w-52 flex flex-col items-center text-center">
               <img
                 src={leaderSignImg}
                 alt="கட்சி நிறுவனர் கையொப்பம்"
-                className="w-48 h-12 object-contain"
+                className="w-40 sm:w-48 h-12 object-contain"
               />
               <p className="mt-0.5 text-[12px] font-tamil font-black text-slate-900">கட்சி நிறுவனர் கையொப்பம்</p>
             </div>
