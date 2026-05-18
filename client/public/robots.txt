@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 # Prevent indexing of admin pages
 Disallow: /admin
-# Sitemap for https://www.tamilnaduviduthalaippulikatchi.com
-Sitemap: https://www.tamilnaduviduthalaippulikatchi.com/sitemap.xml
+# Sitemap for https://www.tamilnaduviduthalaippuligalkatchi.com
+Sitemap: https://www.tamilnaduviduthalaippuligalkatchi.com/sitemap.xml

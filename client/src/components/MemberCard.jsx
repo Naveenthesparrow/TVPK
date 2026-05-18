@@ -91,7 +91,7 @@ const MemberCard = ({ member, leaderPhoto }) => {
                 className="w-[42px] h-[42px] sm:w-[56px] sm:h-[56px] rounded-lg object-contain bg-white border-2 border-yellow-300 shadow-md p-[2px]"
               />
               <h2 className="font-tamil min-w-0 text-[clamp(16px,4.8vw,28px)] leading-[1.05] font-black tracking-[0] text-center whitespace-normal sm:whitespace-nowrap drop-shadow-[0_1px_0_rgba(0,0,0,0.18)]">
-                தமிழ்நாடு விடுதலைப்புலி கட்சி
+                தமிழ்நாடு விடுதலைப்புலிகள் கட்சி
               </h2>
               <img
                 src={tamilAnnaiImg}

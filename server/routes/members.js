@@ -7,7 +7,21 @@ const UploadedFile = require('../models/UploadedFile');
 const Counter = require('../models/Counter');
 const { normalizeEmail } = require('../utils/email');
 
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } });
+const isPdfFile = (file) => Boolean(file) && (file.mimetype === 'application/pdf' || /\.pdf$/i.test(file.originalname || ''));
+
+const pdfOnlyFileFilter = (req, file, cb) => {
+  if (isPdfFile(file)) return cb(null, true);
+  const error = new Error('Only PDF files are allowed');
+  error.code = 'INVALID_FILE_TYPE';
+  error.field = file.fieldname;
+  cb(error);
+};
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+  fileFilter: pdfOnlyFileFilter,
+});
 const uploadMemberFiles = upload.fields([
   { name: 'aadharImage', maxCount: 1 },
   { name: 'casteCertificate', maxCount: 1 },
@@ -16,6 +30,12 @@ const uploadMemberFiles = upload.fields([
 
 const saveFileToDb = async (file, kind) => {
   if (!file) return undefined;
+  if (!isPdfFile(file)) {
+    const error = new Error('Only PDF files are allowed');
+    error.code = 'INVALID_FILE_TYPE';
+    error.field = kind;
+    throw error;
+  }
   const created = await UploadedFile.create({
     originalName: file.originalname || 'document',
     mimeType: file.mimetype || 'application/octet-stream',
@@ -66,6 +86,15 @@ router.post('/apply', (req, res, next) => {
         return res.status(400).json({ error: `Upload failed: ${label} is too large (max 10MB)` });
       }
       return res.status(400).json({ error: `Upload failed: ${err.message}` });
+    }
+    if (err && err.code === 'INVALID_FILE_TYPE') {
+      const fieldLabels = {
+        aadharImage: 'Aadhaar card photo',
+        casteCertificate: 'Community certificate',
+        professionalPhoto: 'Professional photo',
+      };
+      const label = fieldLabels[err.field] || 'Uploaded file';
+      return res.status(400).json({ error: `Upload failed: ${label} must be a PDF file` });
     }
     return res.status(400).json({ error: 'Upload failed' });
   });

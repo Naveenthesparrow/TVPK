@@ -42,6 +42,26 @@ export default function Join() {
   const communityFileRef = useRef(null);
   const professionalFileRef = useRef(null);
 
+  const isPdfFile = (file) => Boolean(file) && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || ''));
+
+  const handlePdfSelection = (setter, inputRef, label) => (e) => {
+    const selected = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+    if (!selected) {
+      setter(null);
+      return;
+    }
+
+    if (!isPdfFile(selected)) {
+      setter(null);
+      if (inputRef.current) inputRef.current.value = ''; 
+      setStatus(`${label} must be a PDF file.`);
+      return;
+    }
+
+    setStatus(null);
+    setter(selected);
+  };
+
   const handleChange = (k) => (e) => setForm(f => ({ ...f, [k]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }));
 
   const submit = async (e) => {
@@ -188,7 +208,7 @@ export default function Join() {
             <div className="space-y-2">
               <span className="block text-sm text-slate-700">{t('join.uploadAadhar')}</span>
               <div className="flex flex-wrap items-center gap-3">
-                <input ref={fileInputRef} id="aadhar" type="file" accept="image/*,application/pdf" onChange={e => setFile(e.target.files && e.target.files[0])} className="hidden" />
+                <input ref={fileInputRef} id="aadhar" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setFile, fileInputRef, 'Aadhaar card file')} className="hidden" />
                 <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
                 {file && (
                   <button
@@ -209,7 +229,7 @@ export default function Join() {
             <div className="space-y-2">
               <span className="block text-sm text-slate-700">{t('join.uploadCommunityCertificate')}</span>
               <div className="flex flex-wrap items-center gap-3">
-                <input ref={communityFileRef} id="community" type="file" accept="image/*,application/pdf" onChange={e => setCommunityFile(e.target.files && e.target.files[0])} className="hidden" />
+                <input ref={communityFileRef} id="community" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setCommunityFile, communityFileRef, 'Community certificate file')} className="hidden" />
                 <button type="button" onClick={() => communityFileRef.current && communityFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
                 {communityFile && (
                   <button
@@ -230,7 +250,7 @@ export default function Join() {
             <div className="space-y-2">
               <span className="block text-sm text-slate-700">{t('join.uploadProfessionalPhoto')}</span>
               <div className="flex flex-wrap items-center gap-3">
-                <input ref={professionalFileRef} id="professional" type="file" accept="image/*,application/pdf" onChange={e => setProfessionalFile(e.target.files && e.target.files[0])} className="hidden" />
+                <input ref={professionalFileRef} id="professional" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setProfessionalFile, professionalFileRef, 'Professional photo file')} className="hidden" />
                 <button type="button" onClick={() => professionalFileRef.current && professionalFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
                 {professionalFile && (
                   <button

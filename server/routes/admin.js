@@ -28,11 +28,31 @@ const authenticateAdmin = async (req, res, next) => {
 
 // Multer for admin uploads (re-use same storage as members route)
 const multer = require('multer');
-const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
+const isPdfFile = (file) => Boolean(file) && (file.mimetype === 'application/pdf' || /\.pdf$/i.test(file.originalname || ''));
+
+const pdfOnlyFileFilter = (req, file, cb) => {
+  if (isPdfFile(file)) return cb(null, true);
+  const error = new Error('Only PDF files are allowed');
+  error.code = 'INVALID_FILE_TYPE';
+  error.field = file.fieldname;
+  cb(error);
+};
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: pdfOnlyFileFilter,
+});
 const UploadedFile = require('../models/UploadedFile');
 
 const saveFileToDb = async (file, kind) => {
   if (!file) return undefined;
+  if (!isPdfFile(file)) {
+    const error = new Error('Only PDF files are allowed');
+    error.code = 'INVALID_FILE_TYPE';
+    error.field = kind;
+    throw error;
+  }
   const created = await UploadedFile.create({
     originalName: file.originalname || 'document',
     mimeType: file.mimetype || 'application/octet-stream',
@@ -154,7 +174,21 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
 });
 
 // Upload caste certificate for an applicant
-router.post('/applicants/:id/caste', authenticateAdmin, upload.single('casteCertificate'), async (req, res) => {
+router.post('/applicants/:id/caste', authenticateAdmin, (req, res, next) => {
+  upload.single('casteCertificate')(req, res, (err) => {
+    if (!err) return next();
+    if (err instanceof multer.MulterError) {
+      if (err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({ error: 'Upload failed: Community certificate is too large (max 15MB)' });
+      }
+      return res.status(400).json({ error: `Upload failed: ${err.message}` });
+    }
+    if (err && err.code === 'INVALID_FILE_TYPE') {
+      return res.status(400).json({ error: 'Upload failed: Community certificate must be a PDF file' });
+    }
+    return res.status(400).json({ error: 'Upload failed' });
+  });
+}, async (req, res) => {
   try {
     const { id } = req.params;
     const applicant = await MemberApplicant.findById(id);
