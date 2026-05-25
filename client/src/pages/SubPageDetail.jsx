@@ -21,6 +21,26 @@ const slugToKey = {
   'governance-policies': 'governance_policies',
 };
 
+const tamilSubpageFallbacks = {
+  governance_policies: {
+    title: 'ஆட்சி கொள்கைகள்',
+    content: `தமிழ் தேசிய ஆட்சி கட்டமைப்பு:
+ஆண்டு அடிப்படையிலான சுழற்சி சமூகத் தலைமை:
+• திட்டமிட்ட சுழற்சி மூலம் பிரதிநிதித்துவம் உறுதி செய்யப்படும்
+• பார்தி, வன்னியர், வேளாளர், தேவேந்திர குல வேளாளர்கள், கோனார் சமூகங்கள்
+
+சமூகத் தலைவர்களுடன் சமூக வழிநடத்தல்:
+• குரவர் சமூக பிரதிநிதி ஆட்சி கவுன்சிலின் தலைவராக இருப்பார்
+• சிற்பி, குயவர், கொல்லர், வைத்தியர் சமூகங்கள் மூத்த அமைச்சர்களாக இருப்பார்கள்
+• தமிழ் தலைமையிலான சிறுபான்மை சமூக பிரதிநிதித்துவ அமைச்சரவை
+
+முக்கிய கொள்கைகள்:
+• மொழி சிறுபான்மைகளுக்கான சமூக நீதி, கல்வி, பொருளாதார வளர்ச்சி, வேலை வாய்ப்புகள் மற்றும் பாதுகாப்பு
+• தாய்மொழி அடையாள மீட்பு
+• தன்னிறைவு பொருளாதாரம், பசுமை மாற்றம், தரமான கல்வி, சமூக ஒழுங்கு, நலன், நீர் அமைப்புகள், வேலைவாய்ப்பு, போக்குவரத்து, ஆன்மீக மற்றும் பண்பாட்டு மீட்பு`,
+  },
+};
+
 const pageVisuals = {
   'party-structure': {
     hero: kImg,
@@ -605,8 +625,9 @@ export default function SubPageDetail() {
     );
   }
 
-  const title = t(`subpages.${pageKey}.title`, { lng: currentLang });
-  const rawContent = t(`subpages.${pageKey}.content`, { lng: currentLang });
+  const subpageFallback = currentLang === 'ta' ? tamilSubpageFallbacks[pageKey] : undefined;
+  const title = t(`subpages.${pageKey}.title`, { lng: currentLang, defaultValue: subpageFallback?.title || '' });
+  const rawContent = t(`subpages.${pageKey}.content`, { lng: currentLang, defaultValue: subpageFallback?.content || '' });
   const content = rawContent;
   const blocks = String(content)
     .split('\n\n')

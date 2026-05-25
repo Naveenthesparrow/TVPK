@@ -32,6 +32,11 @@ const Login = () => {
   const [name, setName]       = useState('');
   const [error, setError]     = useState('');
   const [loading, setLoading] = useState(false);
+  const loadingLabel = t('login.loading', { defaultValue: 'Please wait' });
+  const requestFailedLabel = t('login.error_request_failed', { defaultValue: 'Request failed' });
+  const invalidResponseLabel = t('login.error_invalid_response', { defaultValue: 'Server returned invalid response. Check API URL/server.' });
+  const incompleteResponseLabel = t('login.error_incomplete_response', { defaultValue: 'Server returned incomplete login response.' });
+  const networkErrorLabel = t('login.error_network_request', { defaultValue: 'Network error. Check your connection and try again.' });
 
   // If already logged in with a valid token, go home immediately
   useEffect(() => {
@@ -54,12 +59,12 @@ const Login = () => {
       });
       const data = await readJsonSafe(res);
       if (!data) {
-        setError('Server returned invalid response. Check API URL/server.');
+        setError(invalidResponseLabel);
         return;
       }
-      if (!res.ok) { setError(data.error || `Request failed (HTTP ${res.status}).`); return; }
+      if (!res.ok) { setError(data.error || requestFailedLabel); return; }
       if (!data.token || !data.user) {
-        setError('Server returned incomplete login response.');
+        setError(incompleteResponseLabel);
         return;
       }
 
@@ -68,7 +73,7 @@ const Login = () => {
       window.dispatchEvent(new CustomEvent('tvpk-auth-change', { detail: data.user }));
       window.location.href = '/';
     } catch {
-      setError('Network error. Check your connection and try again.');
+      setError(networkErrorLabel);
     } finally {
       setLoading(false);
     }
@@ -127,7 +132,7 @@ const Login = () => {
           <div className="flex gap-4 pt-1">
             <button type="submit" disabled={loading}
               className="flex-1 bg-[#d21d1d] hover:bg-[#b81818] disabled:opacity-60 text-white px-6 py-3 rounded-md font-semibold transition">
-              {loading ? 'Please wait' : mode === 'login' ? t('login.btn_login', 'Login') : t('login.btn_signup', 'Sign Up')}
+              {loading ? loadingLabel : mode === 'login' ? t('login.btn_login', 'Login') : t('login.btn_signup', 'Sign Up')}
             </button>
             <button type="button" onClick={() => { setMode(m => m === 'login' ? 'signup' : 'login'); setError(''); }}
               className="flex-1 border border-slate-300 hover:bg-slate-50 px-6 py-3 rounded-md font-semibold transition">

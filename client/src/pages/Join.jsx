@@ -41,6 +41,15 @@ export default function Join() {
   const fileInputRef = useRef(null);
   const communityFileRef = useRef(null);
   const professionalFileRef = useRef(null);
+  const submittingTitle = t('join.submitting_title', { defaultValue: 'Submitting...' });
+  const submittingSubtitle = t('join.submitting_subtitle', { defaultValue: 'Please wait while we upload your application.' });
+  const applicationsTitle = t('join.applications_title', { defaultValue: 'Member Applications' });
+  const memberIdTitle = t('join.member_id_title', { defaultValue: 'Member ID Card' });
+  const closeLabel = t('join.close', { defaultValue: 'Close' });
+  const viewAadharLabel = t('join.view_aadhar', { defaultValue: 'View Aadhar' });
+  const viewCertificateLabel = t('join.view_certificate', { defaultValue: 'View Certificate' });
+  const viewProfessionalPhotoLabel = t('join.view_professional_photo', { defaultValue: 'View Professional Photo' });
+  const downloadIdLabel = t('join.download_id_pdf', { defaultValue: 'Download ID PDF' });
 
   const isPdfFile = (file) => Boolean(file) && (file.type === 'application/pdf' || /\.pdf$/i.test(file.name || ''));
 
@@ -54,7 +63,7 @@ export default function Join() {
     if (!isPdfFile(selected)) {
       setter(null);
       if (inputRef.current) inputRef.current.value = ''; 
-      setStatus(`${label} must be a PDF file.`);
+      setStatus(t('join.pdfOnlyError', { defaultValue: `${label} must be a PDF file.` }));
       return;
     }
 
@@ -94,12 +103,12 @@ export default function Join() {
       }
 
       if (!res.ok) {
-        const serverMessage = j?.error || j?.message || raw || 'Unknown server error';
-        throw new Error(`Submit failed (${res.status}): ${serverMessage}`);
+        const serverMessage = j?.error || j?.message || raw || t('join.submitFailedUnknown', { defaultValue: 'Unknown server error' });
+        throw new Error(t('join.submitFailedPrefix', { defaultValue: 'Submit failed' }) + ` (${res.status}): ${serverMessage}`);
       }
 
       if (!j) {
-        throw new Error('Submit failed: Server returned non-JSON response.');
+        throw new Error(t('join.submitFailedNonJson', { defaultValue: 'Submit failed: Server returned non-JSON response.' }));
       }
 
       setStatus('success');
@@ -126,9 +135,9 @@ export default function Join() {
       // reload applications for the submitted email
       if (submittedEmail) fetchApplications(submittedEmail);
     } catch (err) {
-      const fallback = 'Submit failed: Unknown error';
+      const fallback = t('join.submitFailedUnknownError', { defaultValue: 'Submit failed: Unknown error' });
       if (err?.name === 'TypeError' && /fetch/i.test(String(err?.message || ''))) {
-        setStatus('Submit failed: Cannot reach server. Please check backend is running on http://localhost:5000');
+        setStatus(t('join.submitFailedReachServer', { defaultValue: 'Submit failed: Cannot reach server. Please check backend is running on http://localhost:5000' }));
       } else {
         setStatus(err?.message || fallback);
       }
@@ -204,12 +213,12 @@ export default function Join() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            <div className="space-y-2">
-              <span className="block text-sm text-slate-700">{t('join.uploadAadhar')}</span>
-              <div className="flex flex-wrap items-center gap-3">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 xl:gap-6">
+            <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 min-w-0">
+              <span className="block text-sm font-semibold leading-snug text-slate-700 break-words">{t('join.uploadAadhar')}</span>
+              <div className="space-y-3 min-w-0">
                 <input ref={fileInputRef} id="aadhar" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setFile, fileInputRef, 'Aadhaar card file')} className="hidden" />
-                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
+                <button type="button" onClick={() => fileInputRef.current && fileInputRef.current.click()} className="w-full px-3 py-2 border rounded text-sm bg-white whitespace-normal leading-snug text-left shrink-0">{t('join.chooseFile')}</button>
                 {file && (
                   <button
                     type="button"
@@ -222,15 +231,15 @@ export default function Join() {
                     {t('join.remove')}
                   </button>
                 )}
-                <div className="text-sm text-slate-500 min-w-0 break-all">{file ? file.name : t('join.noFileChosen')}</div>
+                <div className="text-sm text-slate-500 min-w-0 break-words">{file ? file.name : t('join.noFileChosen')}</div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <span className="block text-sm text-slate-700">{t('join.uploadCommunityCertificate')}</span>
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 min-w-0">
+              <span className="block text-sm font-semibold leading-snug text-slate-700 break-words">{t('join.uploadCommunityCertificate')}</span>
+              <div className="space-y-3 min-w-0">
                 <input ref={communityFileRef} id="community" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setCommunityFile, communityFileRef, 'Community certificate file')} className="hidden" />
-                <button type="button" onClick={() => communityFileRef.current && communityFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
+                <button type="button" onClick={() => communityFileRef.current && communityFileRef.current.click()} className="w-full px-3 py-2 border rounded text-sm bg-white whitespace-normal leading-snug text-left shrink-0">{t('join.chooseFile')}</button>
                 {communityFile && (
                   <button
                     type="button"
@@ -243,15 +252,15 @@ export default function Join() {
                     {t('join.remove')}
                   </button>
                 )}
-                <div className="text-sm text-slate-500 min-w-0 break-all">{communityFile ? communityFile.name : t('join.noFileChosen')}</div>
+                <div className="text-sm text-slate-500 min-w-0 break-words">{communityFile ? communityFile.name : t('join.noFileChosen')}</div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <span className="block text-sm text-slate-700">{t('join.uploadProfessionalPhoto')}</span>
-              <div className="flex flex-wrap items-center gap-3">
+            <div className="space-y-3 rounded-2xl border border-slate-100 bg-slate-50/70 p-4 min-w-0">
+              <span className="block text-sm font-semibold leading-snug text-slate-700 break-words">{t('join.uploadProfessionalPhoto')}</span>
+              <div className="space-y-3 min-w-0">
                 <input ref={professionalFileRef} id="professional" type="file" accept="application/pdf,.pdf" onChange={handlePdfSelection(setProfessionalFile, professionalFileRef, 'Professional photo file')} className="hidden" />
-                <button type="button" onClick={() => professionalFileRef.current && professionalFileRef.current.click()} className="px-3 py-2 border rounded text-sm bg-white shrink-0">{t('join.chooseFile')}</button>
+                <button type="button" onClick={() => professionalFileRef.current && professionalFileRef.current.click()} className="w-full px-3 py-2 border rounded text-sm bg-white whitespace-normal leading-snug text-left shrink-0">{t('join.chooseFile')}</button>
                 {professionalFile && (
                   <button
                     type="button"
@@ -264,7 +273,7 @@ export default function Join() {
                     {t('join.remove')}
                   </button>
                 )}
-                <div className="text-sm text-slate-500 min-w-0 break-all">{professionalFile ? professionalFile.name : t('join.noFileChosen')}</div>
+                <div className="text-sm text-slate-500 min-w-0 break-words">{professionalFile ? professionalFile.name : t('join.noFileChosen')}</div>
               </div>
             </div>
           </div>
@@ -287,15 +296,15 @@ export default function Join() {
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-xl px-6 py-5 min-w-[260px] text-center">
             <div className="mx-auto mb-3 h-6 w-6 rounded-full border-2 border-slate-300 border-t-red-600 animate-spin" />
-            <div className="text-base font-semibold text-slate-800">Submitting...</div>
-            <div className="text-sm text-slate-500 mt-1">Please wait while we upload your application.</div>
+            <div className="text-base font-semibold text-slate-800">{submittingTitle}</div>
+            <div className="text-sm text-slate-500 mt-1">{submittingSubtitle}</div>
           </div>
         </div>
       )}
 
       {applications.length > 0 && (
         <div className="mt-6 bg-white rounded shadow p-4">
-          <h2 className="font-bold">Member Applications</h2>
+          <h2 className="font-bold">{applicationsTitle}</h2>
           <div className="mt-4">
             <div className="space-y-3">
               {applications.map((a, index) => (
@@ -306,16 +315,16 @@ export default function Join() {
                   </div>
                   <div className="flex items-center gap-3">
                     <div className={`px-3 py-1 rounded-full text-sm font-black ${a.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : a.status === 'approved' ? 'bg-green-100 text-green-800' : a.status === 'removed' ? 'bg-slate-200 text-slate-700' : 'bg-red-100 text-red-800'}`}>{a.status}</div>
-                    {a.aadharImage && <a target="_blank" rel="noreferrer" href={`${api}${a.aadharImage}`} className="text-sm underline">View Aadhar</a>}
-                    {a.casteCertificate && <a target="_blank" rel="noreferrer" href={`${api}${a.casteCertificate}`} className="text-sm underline">View Certificate</a>}
-                    {a.professionalPhoto && <a target="_blank" rel="noreferrer" href={`${api}${a.professionalPhoto}`} className="text-sm underline">View Professional Photo</a>}
+                    {a.aadharImage && <a target="_blank" rel="noreferrer" href={`${api}${a.aadharImage}`} className="text-sm underline">{viewAadharLabel}</a>}
+                    {a.casteCertificate && <a target="_blank" rel="noreferrer" href={`${api}${a.casteCertificate}`} className="text-sm underline">{viewCertificateLabel}</a>}
+                    {a.professionalPhoto && <a target="_blank" rel="noreferrer" href={`${api}${a.professionalPhoto}`} className="text-sm underline">{viewProfessionalPhotoLabel}</a>}
                     {a.status === 'approved' && a.professionalPhoto && (
                       <button
                         type="button"
                         onClick={() => setSelectedApplication(a)}
                         className="text-sm px-3 py-1.5 rounded border bg-blue-50 text-blue-700 hover:bg-blue-100"
                       >
-                        Download ID PDF
+                        {downloadIdLabel}
                       </button>
                     )}
                   </div>
@@ -330,13 +339,13 @@ export default function Join() {
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto p-5">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-black">Member ID Card</h3>
+              <h3 className="text-xl font-black">{memberIdTitle}</h3>
               <button
                 type="button"
                 onClick={() => setSelectedApplication(null)}
                 className="px-3 py-1.5 border rounded bg-white hover:bg-slate-50"
               >
-                Close
+                {closeLabel}
               </button>
             </div>
             <MemberCard member={selectedApplication} />
