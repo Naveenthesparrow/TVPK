@@ -446,7 +446,7 @@
     "join": {
         "title": "Party Member Joining Portal",
         "desc": "Fill your details and upload PDF copies of the required documents only. Only applicants born in Tamil caste / Tamil kudi are eligible. Leaders reserve the right to remove members found to belong to other parties.",
-        "name": "Full name *",
+        "name": "Full name",
         "email": "Email",
         "phone": "Phone",
         "dob": "Date of birth",
@@ -467,7 +467,16 @@
         "requiredName": "Name is required",
         "confirmBornError": "You must confirm you were born in Tamil caste / Tamil kudi to apply",
         "agreeRulesError": "You must agree to the rules to apply",
-        "pdfOnlyError": "Only PDF files are allowed"
+        "pdfOnlyError": "Only PDF files are allowed",
+        "name_placeholder": "Enter your full name",
+        "email_placeholder": "Enter your email address",
+        "phone_placeholder": "Enter your number",
+        "aadhar_placeholder": "Enter Voter ID or Aadhaar",
+        "booth_placeholder": "Booth number",
+        "aadharRequired": "Please upload your Aadhar card PDF.",
+        "photoRequired": "Please upload your professional photo PDF.",
+        "invalidPhone": "Please enter a valid 10-digit Indian phone number.",
+        "invalidPhonePattern": "This phone number looks invalid or temporary. Please enter a genuine phone number."
     },
     "login": {
         "title_login": "Login",

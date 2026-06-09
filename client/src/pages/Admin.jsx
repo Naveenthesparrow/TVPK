@@ -23,6 +23,7 @@ const Admin = () => {
   const [view, setView] = React.useState('all');
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
+  const [expandedId, setExpandedId] = React.useState(null);
 
   const visibleApplicants = React.useMemo(() => {
     if (view === 'removed') return applicants.filter((item) => item.status === 'removed');
@@ -165,98 +166,156 @@ const Admin = () => {
         {isAdmin() && !loading && !error && visibleApplicants.length > 0 && (
           <div className="space-y-4">
             {visibleApplicants.map((a) => (
-              <div key={a._id} className={`flex items-center justify-between p-4 border rounded-lg gap-4 ${a.status === 'removed' ? 'bg-slate-50' : 'bg-white'}`}>
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className="w-14 h-14 bg-slate-50 rounded overflow-hidden shrink-0 border border-slate-200">
-                    {a.aadharImage ? (
-                      <img src={`${api}${a.aadharImage}`} alt="aadhar" className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full grid place-items-center text-xs text-slate-400">No image</div>
-                    )}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-bold truncate">{a.name}</div>
-                    <div className="text-sm text-slate-500 truncate">{a.email || a.phone}</div>
-                    <div className="text-xs text-slate-400">
-                      Status: <span className="font-semibold uppercase tracking-wide">{a.status}</span>
-                      {a.memberSequence ? ` • TVPK${String(a.memberSequence).padStart(8, '0')}` : ''}
+              <div key={a._id} className={`border rounded-lg p-4 ${a.status === 'removed' ? 'bg-slate-50/70 border-slate-200' : 'bg-white border-slate-200'} shadow-sm hover:shadow-md transition-shadow`}>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
+                    <div className="w-14 h-14 bg-slate-100 rounded overflow-hidden shrink-0 border border-slate-200">
+                      {a.aadharImage ? (
+                        <img src={`${api}${a.aadharImage}`} alt="aadhar" className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full grid place-items-center text-xs text-slate-400">No image</div>
+                      )}
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-bold truncate text-base text-slate-900">{a.name}</div>
+                      <div className="text-sm text-slate-600 truncate">{a.email || a.phone}</div>
+                      <div className="text-xs text-slate-500 mt-0.5">
+                        Status: <span className="font-semibold uppercase tracking-wide text-red-600">{a.status}</span>
+                        {a.memberSequence ? ` • TVPK${String(a.memberSequence).padStart(8, '0')}` : ''}
+                      </div>
                     </div>
                   </div>
+
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                    <button
+                      onClick={() => setExpandedId(expandedId === a._id ? null : a._id)}
+                      className="px-3 py-2 border rounded text-sm bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold transition-colors"
+                    >
+                      {expandedId === a._id
+                        ? (currentLang === 'ta' ? 'விவரங்களை மறைக்கவும்' : 'Hide Details')
+                        : (currentLang === 'ta' ? 'விவரங்களைக் காட்டவும்' : 'Show Details')}
+                    </button>
+                    {a.aadharImage && (
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`${api}${a.aadharImage}`}
+                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                      >
+                        {currentLang === 'ta' ? 'ஆதாரைப் பார்க்கவும்' : 'View Aadhar'}
+                      </a>
+                    )}
+                    {a.professionalPhoto ? (
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`${api}${a.professionalPhoto}`}
+                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                      >
+                        {currentLang === 'ta' ? 'தொழில்முறை புகைப்படம்' : 'View Photo'}
+                      </a>
+                    ) : (
+                      <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'புகைப்படம் இல்லை' : 'No Photo'}</span>
+                    )}
+                    {a.casteCertificate ? (
+                      <a
+                        target="_blank"
+                        rel="noreferrer"
+                        href={`${api}${a.casteCertificate}`}
+                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                      >
+                        {currentLang === 'ta' ? 'சான்றிதழைப் பார்க்கவும்' : 'View Certificate'}
+                      </a>
+                    ) : (
+                      <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'சான்றிதழ் இல்லை' : 'No Certificate'}</span>
+                    )}
+
+                    {a.status === 'pending' ? (
+                      <>
+                        <button
+                          onClick={() => updateStatus(a._id, 'approved', 'user')}
+                          className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm font-semibold transition-colors"
+                        >
+                          {currentLang === 'ta' ? 'ஒப்புதல்' : 'Approve'}
+                        </button>
+                        <button
+                          onClick={() => updateStatus(a._id, 'rejected')}
+                          className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-semibold transition-colors"
+                        >
+                          {currentLang === 'ta' ? 'மறுப்பு' : 'Reject'}
+                        </button>
+                      </>
+                    ) : a.status === 'approved' && view !== 'removed' ? (
+                      <>
+                        <span className="px-3 py-2 text-sm text-emerald-700 border border-emerald-200 rounded bg-emerald-50 font-medium">{currentLang === 'ta' ? 'செயலில் உள்ள உறுப்பினர்' : 'Active Member'}</span>
+                        <button
+                          onClick={() => updateStatus(a._id, 'removed')}
+                          className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded text-sm font-semibold transition-colors"
+                        >
+                          {currentLang === 'ta' ? 'உறுப்பினரை நீக்கவும்' : 'Remove Member'}
+                        </button>
+                      </>
+                    ) : a.status === 'approved' ? (
+                      <span className="px-3 py-2 text-sm text-emerald-700 border border-emerald-200 rounded bg-emerald-50 font-medium">{currentLang === 'ta' ? 'ஒப்புதல் பெற்றது' : 'Approved'}</span>
+                    ) : a.status === 'removed' ? (
+                      <>
+                        <span className="px-3 py-2 text-sm text-slate-600 border border-slate-200 rounded bg-slate-100">{currentLang === 'ta' ? 'நீக்கப்பட்டது' : 'Removed'}</span>
+                        <span className="px-3 py-2 text-sm text-slate-500 border border-slate-200 rounded bg-white">{currentLang === 'ta' ? 'எண் ஒதுக்கப்படவில்லை' : 'Number retired'}</span>
+                      </>
+                    ) : (
+                      <span className="px-3 py-2 text-sm text-slate-500 border border-slate-200 rounded bg-slate-50">{currentLang === 'ta' ? 'இறுதியாக்கப்பட்டது' : 'Finalized'}</span>
+                    )}
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3 flex-wrap justify-end">
-                  {a.aadharImage && (
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={`${api}${a.aadharImage}`}
-                      className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50"
-                    >
-                      {currentLang === 'ta' ? 'ஆதாரைப் பார்க்கவும்' : 'View Aadhar'}
-                    </a>
-                  )}
-                  {a.professionalPhoto ? (
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={`${api}${a.professionalPhoto}`}
-                      className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50"
-                    >
-                      {currentLang === 'ta' ? 'தொழில்முறை புகைப்படத்தைப் பார்க்கவும்' : 'View Professional Photo'}
-                    </a>
-                  ) : (
-                    <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'தொழில்முறை புகைப்படம் இல்லை' : 'No Professional Photo'}</span>
-                  )}
-                  {a.casteCertificate ? (
-                    <a
-                      target="_blank"
-                      rel="noreferrer"
-                      href={`${api}${a.casteCertificate}`}
-                      className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50"
-                    >
-                      {currentLang === 'ta' ? 'சான்றிதழைப் பார்க்கவும்' : 'View Certificate'}
-                    </a>
-                  ) : (
-                    <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'சான்றிதழ் இல்லை' : 'No Certificate'}</span>
-                  )}
-
-                  {a.status === 'pending' ? (
-                    <>
-                      <button
-                        onClick={() => updateStatus(a._id, 'approved', 'user')}
-                        className="px-3 py-2 bg-green-600 text-white rounded text-sm"
-                      >
-                        {currentLang === 'ta' ? 'ஒப்புதல்' : 'Approve'}
-                      </button>
-
-                      <button
-                        onClick={() => updateStatus(a._id, 'rejected')}
-                        className="px-3 py-2 bg-red-600 text-white rounded text-sm"
-                      >
-                        {currentLang === 'ta' ? 'மறுப்பு' : 'Reject'}
-                      </button>
-                    </>
-                  ) : a.status === 'approved' && view !== 'removed' ? (
-                    <>
-                      <span className="px-3 py-2 text-sm text-emerald-700 border rounded bg-emerald-50">{currentLang === 'ta' ? 'செயலில் உள்ள உறுப்பினர்' : 'Active Member'}</span>
-                      <button
-                        onClick={() => updateStatus(a._id, 'removed')}
-                        className="px-3 py-2 bg-rose-600 text-white rounded text-sm"
-                      >
-                        {currentLang === 'ta' ? 'உறுப்பினரை நீக்கவும்' : 'Remove Member'}
-                      </button>
-                    </>
-                  ) : a.status === 'approved' ? (
-                    <span className="px-3 py-2 text-sm text-emerald-700 border rounded bg-emerald-50">{currentLang === 'ta' ? 'ஒப்புதல் பெற்றது' : 'Approved'}</span>
-                  ) : a.status === 'removed' ? (
-                    <>
-                      <span className="px-3 py-2 text-sm text-slate-600 border rounded bg-slate-100">{currentLang === 'ta' ? 'நீக்கப்பட்டது' : 'Removed'}</span>
-                      <span className="px-3 py-2 text-sm text-slate-500 border rounded bg-white">{currentLang === 'ta' ? 'எண் ஒதுக்கப்படவில்லை' : 'Number retired'}</span>
-                    </>
-                  ) : (
-                    <span className="px-3 py-2 text-sm text-slate-500 border rounded bg-slate-50">{currentLang === 'ta' ? 'இறுதியாக்கப்பட்டது' : 'Finalized'}</span>
-                  )}
-                </div>
+                {expandedId === a._id && (
+                  <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-700 bg-slate-50/50 p-3 rounded-lg">
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'முழு பெயர்:' : 'Full Name:'}</span>
+                      <span>{a.name || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'மின்னஞ்சல்:' : 'Email Address:'}</span>
+                      <span>{a.email || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'தொலைபேசி:' : 'Phone:'}</span>
+                      <span>{a.phone || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'பிறந்த தேதி:' : 'Date of Birth:'}</span>
+                      <span>{a.dob ? new Date(a.dob).toLocaleDateString() : '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'வாக்காளர் அடையாள அட்டை / ஆதார்:' : 'Voter ID / Aadhaar:'}</span>
+                      <span>{a.aadharNumber || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'பூத் எண்:' : 'Booth Number:'}</span>
+                      <span>{a.boothNumber || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'சட்டமன்றத் தொகுதி:' : 'Assembly Constituency:'}</span>
+                      <span>{a.assemblyConstituency || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'மாவட்டம்:' : 'District:'}</span>
+                      <span>{a.district || '-'}</span>
+                    </div>
+                    <div>
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'தமிழ் சமூகம்:' : 'Tamil Community:'}</span>
+                      <span className="font-semibold text-red-700">{a.tamilCommunity || '-'}</span>
+                    </div>
+                    <div className="md:col-span-2">
+                      <span className="font-bold block text-slate-800">{currentLang === 'ta' ? 'முகவரி:' : 'Address:'}</span>
+                      <span className="whitespace-pre-wrap">{a.address || '-'}</span>
+                    </div>
+                    <div className="md:col-span-2 flex flex-col gap-1 mt-1 text-xs text-slate-500">
+                      <div>• {currentLang === 'ta' ? 'தமிழ் குடி / தமிழ் ஜாதியில் பிறந்தவர்:' : 'Born in Tamil caste/kudi:'} <span className="font-bold text-slate-700">{a.bornTamilOrKudi ? 'Yes / ஆம்' : 'No / இல்லை'}</span></div>
+                      <div>• {currentLang === 'ta' ? 'கட்சி விதிகளுக்கு உடன்பட்டவர்:' : 'Agreed to party rules:'} <span className="font-bold text-slate-700">{a.agreeRules ? 'Yes / ஆம்' : 'No / இல்லை'}</span></div>
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

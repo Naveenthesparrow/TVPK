@@ -114,7 +114,7 @@ router.post('/apply', (req, res, next) => {
       boothNumber,
       assemblyConstituency,
       district,
-      stateName,
+      tamilCommunity,
       additionalInfo,
       bornTamilOrKudi,
       agreeRules,
@@ -122,7 +122,24 @@ router.post('/apply', (req, res, next) => {
 
     // Basic validation
     if (!name) return res.status(400).json({ error: 'Name is required' });
+    if (!/^[ \p{L}.]+$/u.test(name)) {
+      return res.status(400).json({ error: 'Name can only contain letters, spaces, and dots.' });
+    }
+
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email address format' });
+    }
+
     const normalizedEmail = normalizeEmail(email);
+    
+    // Check for duplicate application
+    const existingApplicant = await MemberApplicant.findOne({ email: normalizedEmail });
+    if (existingApplicant) {
+      return res.status(400).json({ error: 'This email is already registered.' });
+    }
+
     const born = (bornTamilOrKudi === 'true' || bornTamilOrKudi === true || bornTamilOrKudi === 'on');
     const agree = (agreeRules === 'true' || agreeRules === true || agreeRules === 'on');
     if (!born) return res.status(403).json({ error: 'Only applicants born in Tamil caste / Tamil kudi may join' });
@@ -146,7 +163,7 @@ router.post('/apply', (req, res, next) => {
       boothNumber,
       assemblyConstituency,
       district,
-      stateName,
+      tamilCommunity,
       additionalInfo,
       bornTamilOrKudi: born,
       agreeRules: agree,

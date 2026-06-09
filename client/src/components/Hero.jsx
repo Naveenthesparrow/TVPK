@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import flagImg from '../assets/flag.jpeg';
+import flagImg from '../assets/flag1.jpg';
 import heroBg from '../assets/hero.jpeg';
 
 const deityImages = [heroBg]; // Placeholder - add more deity images as available

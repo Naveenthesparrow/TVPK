@@ -1,4 +1,4 @@
-﻿import React, { useRef } from 'react';
+import React, { useRef } from 'react';
 import html2pdf from 'html2pdf.js';
 import { Download, CreditCard } from 'lucide-react';
 import partyFlagImg from '../assets/flag.jpeg';
@@ -68,7 +68,6 @@ const MemberCard = ({ member, leaderPhoto }) => {
   const displayBoothNumber = member.boothNumber || '-';
   const displayAssembly = member.assemblyConstituency || '-';
   const displayDistrict = member.district || (member.address ? String(member.address).split(',')[0] : '-');
-  const displayState = member.stateName || 'தமிழ்நாடு';
   const memberPhoto = member.professionalPhoto || member.profilePhoto || member.photo || member.picture || '';
   const showPhoto = Boolean(memberPhoto) && !photoError;
 
@@ -121,7 +120,7 @@ const MemberCard = ({ member, leaderPhoto }) => {
               </div>
 
               <div className="flex flex-col justify-center pt-1 order-1 md:order-2">
-                <div className="grid grid-cols-1 sm:grid-cols-[130px_12px_minmax(170px,260px)] gap-y-2 sm:gap-y-2.5 text-slate-800 text-sm sm:text-base">
+                <div className="grid grid-cols-1 sm:grid-cols-[130px_12px_minmax(170px,260px)] gap-y-1.5 sm:gap-y-2 text-slate-800 text-sm sm:text-base">
                   <div className="font-semibold">பெயர்</div>
                   <div>:</div>
                   <div className="font-semibold">{member.name || '-'}</div>
@@ -141,10 +140,6 @@ const MemberCard = ({ member, leaderPhoto }) => {
                   <div className="font-semibold">மாவட்டம்</div>
                   <div>:</div>
                   <div>{displayDistrict}</div>
-
-                  <div className="font-semibold">மாநிலம்</div>
-                  <div>:</div>
-                  <div>{displayState}</div>
 
                   <div className="font-semibold">சேர்ந்த தேதி</div>
                   <div>:</div>
