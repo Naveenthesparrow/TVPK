@@ -136,14 +136,14 @@ export default function EventsSection() {
           </p>
 
           {/* Filter Tabs */}
-          <div className="flex items-center justify-center gap-2 mt-8 p-1.5 bg-slate-100/80 rounded-2xl max-w-xs mx-auto border border-slate-200/80">
+          <div className="flex items-center justify-center gap-2 mt-8 p-2 bg-slate-100 rounded-2xl max-w-sm mx-auto border-2 border-slate-200/80 shadow-inner">
             <button
               type="button"
               onClick={() => setActiveTab('all')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition-all duration-200 cursor-pointer ${
                 activeTab === 'all'
-                  ? 'bg-white text-red-700 shadow-md shadow-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-red-600 text-white border-2 border-red-600 shadow-md'
+                  : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-slate-300'
               }`}
             >
               {currentLang === 'ta' ? 'அனைத்தும்' : 'All'}
@@ -151,10 +151,10 @@ export default function EventsSection() {
             <button
               type="button"
               onClick={() => setActiveTab('party')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition-all duration-200 cursor-pointer ${
                 activeTab === 'party'
-                  ? 'bg-white text-red-700 shadow-md shadow-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-red-600 text-white border-2 border-red-600 shadow-md'
+                  : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-slate-300'
               }`}
             >
               {currentLang === 'ta' ? 'கட்சி' : 'Party'}
@@ -162,10 +162,10 @@ export default function EventsSection() {
             <button
               type="button"
               onClick={() => setActiveTab('governance')}
-              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-extrabold transition-all duration-200 cursor-pointer ${
+              className={`flex-1 py-2 px-3 rounded-xl text-xs sm:text-sm font-black transition-all duration-200 cursor-pointer ${
                 activeTab === 'governance'
-                  ? 'bg-white text-red-700 shadow-md shadow-slate-200'
-                  : 'text-slate-600 hover:text-slate-900'
+                  ? 'bg-red-600 text-white border-2 border-red-600 shadow-md'
+                  : 'bg-white text-slate-700 border-2 border-slate-200 hover:border-slate-300'
               }`}
             >
               {currentLang === 'ta' ? 'ஆட்சி' : 'Governance'}
@@ -186,20 +186,20 @@ export default function EventsSection() {
             return (
               <div 
                 key={topic.id}
-                className="group relative bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm hover:shadow-2xl hover:border-red-500/30 transform hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+                className="group relative bg-white rounded-3xl p-6 sm:p-7 border-2 border-slate-200 shadow-sm hover:shadow-2xl hover:border-red-500/50 transform hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Top Bar with Icon and Badges */}
                   <div className="flex items-center justify-between mb-5">
-                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-50 to-red-100/60 border border-red-100 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:text-white transition-all duration-300 shadow-xs">
+                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-red-50 to-red-100/60 border-2 border-red-200 flex items-center justify-center text-red-600 group-hover:bg-red-600 group-hover:border-red-600 group-hover:text-white transition-all duration-300 shadow-xs">
                       <Icon size={22} />
                     </div>
                     
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-100 text-slate-500">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 border-2 border-slate-200">
                         {categoryText}
                       </span>
-                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-red-50 text-red-700 border border-red-100">
+                      <span className="text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg bg-red-50 text-red-700 border-2 border-red-200">
                         {badgeText}
                       </span>
                     </div>
@@ -230,7 +230,7 @@ export default function EventsSection() {
                 <div className="pt-2">
                   <Link 
                     to={topic.to}
-                    className="inline-flex items-center justify-between w-full px-4 py-3 rounded-2xl bg-slate-50 group-hover:bg-red-600 text-slate-700 group-hover:text-white font-extrabold text-sm transition-all duration-200 cursor-pointer shadow-2xs"
+                    className="inline-flex items-center justify-between w-full px-4.5 py-3 rounded-2xl bg-red-50/60 border-2 border-red-600/30 text-red-700 group-hover:bg-red-600 group-hover:border-red-600 group-hover:text-white font-black text-sm transition-all duration-200 cursor-pointer shadow-xs group-hover:shadow-md"
                   >
                     <span className="flex items-center gap-2">
                       <BookOpen size={16} />

@@ -541,7 +541,7 @@ export default function SubPageDetail() {
           });
           setTigerForces(merged);
         }
-      } catch (err) {}
+      } catch (err) { }
     })();
   }, []);
 
@@ -613,7 +613,7 @@ export default function SubPageDetail() {
 
   const handleEdit = () => {
     setEditLang('en');
-    
+
     // Load existing data based on page type
     let initialData = {
       title: title || '',
@@ -718,21 +718,19 @@ export default function SubPageDetail() {
           <div className="flex gap-2 mb-6">
             <button
               onClick={() => setEditLang('en')}
-              className={`px-4 py-2 font-bold rounded-lg ${
-                editLang === 'en'
+              className={`px-4 py-2 font-bold rounded-lg ${editLang === 'en'
                   ? 'bg-red-600 text-white'
                   : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-              }`}
+                }`}
             >
               ENGLISH
             </button>
             <button
               onClick={() => setEditLang('ta')}
-              className={`px-4 py-2 font-bold rounded-lg ${
-                editLang === 'ta'
+              className={`px-4 py-2 font-bold rounded-lg ${editLang === 'ta'
                   ? 'bg-red-600 text-white'
                   : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
-              }`}
+                }`}
             >
               தமிழ்
             </button>
@@ -962,7 +960,7 @@ export default function SubPageDetail() {
             <h3 className="text-lg font-black text-slate-900">
               {currentLang === 'ta' ? 'புலிப்படை அமைப்பை திருத்துக' : 'Edit Tiger Force'}
             </h3>
-            <button 
+            <button
               onClick={() => setShowForceModal(false)}
               className="text-slate-400 hover:text-slate-600 font-black text-xl px-2 cursor-pointer"
             >
@@ -975,9 +973,9 @@ export default function SubPageDetail() {
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                 {currentLang === 'ta' ? 'தமிழ் தலைப்பு' : 'Tamil Title'}
               </label>
-              <input 
-                type="text" 
-                value={forceModalData.taTitle} 
+              <input
+                type="text"
+                value={forceModalData.taTitle}
                 onChange={e => setForceModalData(prev => ({ ...prev, taTitle: e.target.value }))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
               />
@@ -987,9 +985,9 @@ export default function SubPageDetail() {
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                 {currentLang === 'ta' ? 'ஆங்கில தலைப்பு' : 'English Title'}
               </label>
-              <input 
-                type="text" 
-                value={forceModalData.enTitle} 
+              <input
+                type="text"
+                value={forceModalData.enTitle}
                 onChange={e => setForceModalData(prev => ({ ...prev, enTitle: e.target.value }))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
               />
@@ -999,9 +997,9 @@ export default function SubPageDetail() {
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                 {currentLang === 'ta' ? 'தமிழ் விளக்கம்' : 'Tamil Description'}
               </label>
-              <textarea 
+              <textarea
                 rows={3}
-                value={forceModalData.descTa} 
+                value={forceModalData.descTa}
                 onChange={e => setForceModalData(prev => ({ ...prev, descTa: e.target.value }))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
               />
@@ -1011,9 +1009,9 @@ export default function SubPageDetail() {
               <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
                 {currentLang === 'ta' ? 'ஆங்கில விளக்கம்' : 'English Description'}
               </label>
-              <textarea 
+              <textarea
                 rows={3}
-                value={forceModalData.descEn} 
+                value={forceModalData.descEn}
                 onChange={e => setForceModalData(prev => ({ ...prev, descEn: e.target.value }))}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
               />
@@ -1024,9 +1022,9 @@ export default function SubPageDetail() {
                 {currentLang === 'ta' ? 'படம் பதிவேற்ற / URL' : 'Force Image (Upload file or URL)'}
               </label>
               <div className="flex gap-2 items-center mb-2">
-                <input 
-                  type="text" 
-                  value={forceModalData.image} 
+                <input
+                  type="text"
+                  value={forceModalData.image}
                   onChange={e => setForceModalData(prev => ({ ...prev, image: e.target.value }))}
                   placeholder="Image URL or Base64"
                   className="flex-1 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-red-500"
@@ -1045,15 +1043,15 @@ export default function SubPageDetail() {
           </div>
 
           <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={() => setShowForceModal(false)}
               className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 cursor-pointer"
             >
               {currentLang === 'ta' ? 'ரத்து' : 'Cancel'}
             </button>
-            <button 
-              type="button" 
+            <button
+              type="button"
               onClick={handleForceSave}
               className="px-5 py-2 rounded-xl bg-red-600 text-white text-xs font-black hover:bg-red-700 shadow-sm cursor-pointer"
             >
@@ -1085,14 +1083,14 @@ export default function SubPageDetail() {
                 {currentLang === 'ta' ? 'கட்சி புலிப்படைகள்' : 'Party Tiger Forces'}
               </h1>
               <p className="text-slate-600 font-medium text-sm sm:text-base mt-2 max-w-2xl">
-                {currentLang === 'ta' 
+                {currentLang === 'ta'
                   ? 'தமிழ்நாட்டின் உரிமை மீட்பு, சுற்றுச்சூழல், கல்வி, மருத்துவம், சட்டம் மற்றும் அனைத்து துறைசார்ந்த மேம்பாட்டிற்கான 12 முதன்மைப் புலிப்படைகள்.'
                   : '12 specialized field wings committed to spiritual restoration, agriculture, environment, IT, student rights, and social justice.'}
               </p>
             </div>
 
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-sm font-extrabold transition-all cursor-pointer shrink-0 shadow-2xs"
             >
               {currentLang === 'ta' ? 'முகப்பிற்கு திரும்ப' : 'Back to Home'}
@@ -1102,21 +1100,21 @@ export default function SubPageDetail() {
           {/* 3 In A Row Card Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {tigerForces.map((force, idx) => (
-              <div 
+              <div
                 key={force.id || idx}
                 className="group bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-2xl hover:border-red-500/30 transform hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
               >
                 <div>
                   {/* Picture */}
                   <div className="relative w-full h-64 sm:h-72 bg-gradient-to-b from-slate-100/90 via-slate-50 to-white overflow-hidden border-b border-slate-100 p-2 flex items-center justify-center">
-                    <img 
-                      src={force.image} 
-                      alt={currentLang === 'ta' ? force.taTitle : force.enTitle} 
+                    <img
+                      src={force.image}
+                      alt={currentLang === 'ta' ? force.taTitle : force.enTitle}
                       className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 drop-shadow-sm"
                     />
 
                     {isAdminUser && (
-                      <button 
+                      <button
                         type="button"
                         onClick={() => openForceEditModal(force, idx)}
                         className="absolute top-3 left-3 bg-white/90 hover:bg-white text-slate-800 px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold"
@@ -1495,7 +1493,7 @@ export default function SubPageDetail() {
 
                       {!bodyNumbered && !bodyBulleted && (hasBullets || hasNumbers) && (
                         <div className={`space-y-3 text-slate-700 leading-8 ${currentLang === 'ta' ? 'font-tamil text-lg' : 'font-header text-base'}`}>
-                          {bodyLines.map((line, i) => 
+                          {bodyLines.map((line, i) =>
                             isBullet(line) ? (
                               <div key={`${idx}-mb-${i}`} className="flex items-start gap-3">
                                 <span className="mt-2 h-2.5 w-2.5 shrink-0 rounded-full bg-sky-500" />

@@ -312,74 +312,63 @@ export default function Join() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 sm:p-6 mb-16">
-      <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-6 sm:p-8">
-        <div className="flex items-start justify-between pb-6 border-b border-slate-100">
+    <div className="max-w-4xl mx-auto p-2.5 sm:p-6 mb-16">
+      <div className="bg-white rounded-3xl shadow-xl border-2 border-slate-200 p-4 sm:p-8">
+        <div className="flex items-start justify-between pb-5 border-b border-slate-100">
           <div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 flex items-center gap-2">
-              <Shield className="text-red-600" size={28} />
-              {t('join.title')}
+            <h1 className="text-xl sm:text-3xl font-black text-slate-900 flex items-center gap-2">
+              <Shield className="text-red-600 shrink-0" size={26} />
+              <span>{t('join.title')}</span>
             </h1>
-            <p className="text-sm text-slate-500 mt-2 font-medium leading-relaxed max-w-2xl">{t('join.desc')}</p>
+            <p className="text-xs sm:text-sm text-slate-500 mt-2 font-medium leading-relaxed max-w-2xl">{t('join.desc')}</p>
           </div>
         </div>
 
-        <form onSubmit={submit} className="mt-8 space-y-6">
+        <form onSubmit={submit} className="mt-6 space-y-6">
           {/* Section 1: Personal Details */}
           <div>
             <h3 className="text-xs font-bold text-red-600 uppercase tracking-wider mb-4 pb-1.5 border-b border-slate-100">
               {i18n.language === 'ta' ? '1. தனிப்பட்ட விவரங்கள்' : '1. Personal Details'}
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {/* Name */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.name')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <User size={18} />
-                  </div>
-                  <input 
-                    required 
-                    placeholder={t('join.name_placeholder', { defaultValue: 'Enter your full name' })} 
-                    value={form.name} 
-                    onChange={handleChange('name')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400" 
-                  />
-                </div>
+                <input 
+                  required 
+                  placeholder={t('join.name_placeholder', { defaultValue: 'Enter your full name' })} 
+                  value={form.name} 
+                  onChange={handleChange('name')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 truncate" 
+                />
               </div>
 
               {/* Email */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.email')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Mail size={18} />
-                  </div>
-                  <input 
-                    required 
-                    type="email" 
-                    placeholder={t('join.email_placeholder', { defaultValue: 'Enter your email address' })} 
-                    value={form.email} 
-                    onChange={handleChange('email')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400" 
-                  />
-                </div>
+                <input 
+                  required 
+                  type="email" 
+                  placeholder={t('join.email_placeholder', { defaultValue: 'Enter your email address' })} 
+                  value={form.email} 
+                  onChange={handleChange('email')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 truncate" 
+                />
               </div>
 
               {/* Phone */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.phone')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm flex items-center bg-slate-50/50 hover:bg-slate-50 border border-slate-200 focus-within:bg-white focus-within:ring-4 focus-within:ring-red-500/10 focus-within:border-red-600 transition-all duration-200">
-                  <div className="pl-3.5 pr-2.5 flex items-center text-slate-400 select-none shrink-0 border-r border-slate-200 my-3">
-                    <Phone size={18} className="mr-2" />
-                    <span className="text-slate-800 font-extrabold text-sm">+91</span>
+                <div className="relative rounded-xl flex items-center bg-white border-2 border-slate-200 focus-within:border-red-600 focus-within:ring-4 focus-within:ring-red-500/10 transition-all duration-200 overflow-hidden">
+                  <div className="pl-3 pr-2.5 py-3 flex items-center text-slate-900 font-black text-xs sm:text-sm select-none shrink-0 border-r-2 border-slate-200 bg-slate-50">
+                    +91
                   </div>
                   <input 
                     required
@@ -389,47 +378,37 @@ export default function Join() {
                     placeholder={t('join.phone_placeholder', { defaultValue: 'Enter your number' })} 
                     value={form.phone} 
                     onChange={handleChange('phone')} 
-                    className="w-full pl-3 pr-4 py-3 bg-transparent rounded-r-xl outline-none text-slate-800 font-medium placeholder-slate-400" 
+                    className="w-full px-3 py-3 bg-transparent outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 truncate" 
                   />
                 </div>
               </div>
 
               {/* Date of Birth */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.dob')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Calendar size={18} />
-                  </div>
-                  <input 
-                    required
-                    type="date" 
-                    value={form.dob} 
-                    onChange={handleChange('dob')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400" 
-                  />
-                </div>
+                <input 
+                  required
+                  type="date" 
+                  value={form.dob} 
+                  onChange={handleChange('dob')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm" 
+                />
               </div>
 
               {/* Voter ID / Aadhaar */}
               <div className="flex flex-col md:col-span-2">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.aadharNumber')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Hash size={18} />
-                  </div>
-                  <input 
-                    required
-                    placeholder={t('join.aadhar_placeholder', { defaultValue: 'Enter Voter ID or Aadhaar' })} 
-                    value={form.aadharNumber} 
-                    onChange={handleChange('aadharNumber')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400" 
-                  />
-                </div>
+                <input 
+                  required
+                  placeholder={t('join.aadhar_placeholder', { defaultValue: 'Enter Voter ID or Aadhaar' })} 
+                  value={form.aadharNumber} 
+                  onChange={handleChange('aadharNumber')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 truncate" 
+                />
               </div>
             </div>
           </div>
@@ -440,98 +419,80 @@ export default function Join() {
               {i18n.language === 'ta' ? '2. தொகுதி மற்றும் வசிப்பிடம்' : '2. Constituency & Location'}
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
               {/* Assembly Constituency */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {i18n.language === 'ta' ? 'சட்டமன்றத் தொகுதி' : 'Assembly Constituency'} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <MapPin size={18} />
-                  </div>
+                <div className="relative rounded-xl">
                   <select 
                     required 
                     value={form.assemblyConstituency} 
                     onChange={handleChange('assemblyConstituency')} 
-                    className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium appearance-none cursor-pointer"
+                    className="w-full pl-3.5 pr-8 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm appearance-none cursor-pointer truncate"
                   >
-                    <option value="">{i18n.language === 'ta' ? 'சட்டமன்றத் தொகுதி தேர்ந்தெடுக்கவும் *' : 'Select Assembly Constituency *'}</option>
+                    <option value="">{i18n.language === 'ta' ? 'தொகுதி தேர்ந்தெடுக்கவும் *' : 'Select Constituency *'}</option>
                     {CONSTITUENCIES.map((c) => (
-                      <option key={c.id} value={c.id}>{i18n.language === 'ta' ? c.ta : c.en}</option>
+                      <option key={c.id} value={c.id} className="text-slate-800 text-xs sm:text-sm font-medium py-1">{i18n.language === 'ta' ? c.ta : c.en}</option>
                     ))}
                   </select>
-                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                  <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
               </div>
 
               {/* District */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {i18n.language === 'ta' ? 'மாவட்டம்' : 'District'} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <MapPin size={18} />
-                  </div>
+                <div className="relative rounded-xl">
                   <select 
                     required 
                     value={form.district} 
                     onChange={handleChange('district')} 
-                    className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium appearance-none cursor-pointer"
+                    className="w-full pl-3.5 pr-8 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm appearance-none cursor-pointer truncate"
                   >
                     <option value="">{i18n.language === 'ta' ? 'மாவட்டம் தேர்ந்தெடுக்கவும் *' : 'Select District *'}</option>
                     {DISTRICTS.map((d) => (
-                      <option key={d.id} value={d.id}>{i18n.language === 'ta' ? d.ta : d.en}</option>
+                      <option key={d.id} value={d.id} className="text-slate-800 text-xs sm:text-sm font-medium py-1">{i18n.language === 'ta' ? d.ta : d.en}</option>
                     ))}
                   </select>
-                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                  <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
               </div>
 
               {/* Booth Number */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {i18n.language === 'ta' ? 'பூத் எண்' : 'Booth Number'} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Hash size={18} />
-                  </div>
-                  <input 
-                    required
-                    placeholder={t('join.booth_placeholder', { defaultValue: 'Booth number' })} 
-                    value={form.boothNumber} 
-                    onChange={handleChange('boothNumber')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400" 
-                  />
-                </div>
+                <input 
+                  required
+                  placeholder={t('join.booth_placeholder', { defaultValue: 'Booth number' })} 
+                  value={form.boothNumber} 
+                  onChange={handleChange('boothNumber')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 truncate" 
+                />
               </div>
-
-
 
               {/* Address */}
               <div className="md:col-span-2 flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {t('join.address')} <span className="text-red-500 font-bold">*</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute top-3.5 left-3.5 pointer-events-none text-slate-400">
-                    <MapPin size={18} />
-                  </div>
-                  <textarea 
-                    required
-                    placeholder={t('join.address')} 
-                    value={form.address} 
-                    onChange={handleChange('address')} 
-                    className="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400 resize-y" 
-                    rows={3} 
-                  />
-                </div>
+                <textarea 
+                  required
+                  placeholder={t('join.address')} 
+                  value={form.address} 
+                  onChange={handleChange('address')} 
+                  className="w-full px-3.5 sm:px-4 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400 resize-y" 
+                  rows={3} 
+                />
               </div>
             </div>
           </div>
@@ -545,31 +506,28 @@ export default function Join() {
             <div className="grid grid-cols-1 gap-5">
               {/* Tamil Community Selection */}
               <div className="flex flex-col">
-                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                   {i18n.language === 'ta' ? 'தமிழ் சமூகம்' : 'Tamil Community'} <span className="text-xs font-normal text-slate-400">({i18n.language === 'ta' ? 'விருப்பத்தேர்வு' : 'Optional'})</span>
                 </label>
-                <div className="relative rounded-xl shadow-sm">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Shield size={18} />
-                  </div>
+                <div className="relative rounded-xl">
                   <select 
                     value={form.tamilCommunity} 
                     onChange={handleChange('tamilCommunity')} 
-                    className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium appearance-none cursor-pointer"
+                    className="w-full pl-3.5 pr-8 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm appearance-none cursor-pointer truncate"
                   >
                     <option value="">{i18n.language === 'ta' ? 'தமிழ் சமூகம் தேர்ந்தெடுக்கவும்' : 'Select Tamil Community'}</option>
                     {TAMIL_COMMUNITIES.map((c) => (
-                      <option key={c.id} value={c.id}>{i18n.language === 'ta' ? c.ta : c.en}</option>
+                      <option key={c.id} value={c.id} className="text-slate-800 text-xs sm:text-sm font-medium py-1">{i18n.language === 'ta' ? c.ta : c.en}</option>
                     ))}
                   </select>
-                  <div className="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-slate-400">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                  <div className="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none text-slate-400">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
 
                 {form.tamilCommunity === 'Other' && (
                   <div className="mt-3 flex flex-col">
-                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                    <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5 ml-1">
                       {i18n.language === 'ta' ? 'சமூகத்தின் பெயரை உள்ளிடவும்' : 'Specify Community Name'}
                     </label>
                     <input 
@@ -577,14 +535,14 @@ export default function Join() {
                       placeholder={i18n.language === 'ta' ? 'உங்கள் சமூகத்தின் பெயரை உள்ளிடவும்' : 'Type your community name'}
                       value={form.otherCommunity}
                       onChange={handleChange('otherCommunity')}
-                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400"
+                      className="w-full px-3.5 py-3 rounded-xl border-2 border-slate-200 bg-white hover:border-slate-300 focus:border-red-600 focus:ring-4 focus:ring-red-500/10 transition-all duration-200 outline-none text-slate-800 font-semibold text-xs sm:text-sm placeholder-slate-400"
                     />
                   </div>
                 )}
               </div>
 
               {/* Uploads Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 mt-2">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 mt-2">
                 <FileUploadZone 
                   id="aadhar"
                   label={t('join.uploadAadhar')}
@@ -619,27 +577,27 @@ export default function Join() {
           </div>
 
           {/* Confirmations & Agreements */}
-          <div className="flex flex-col gap-3 p-4 bg-slate-50 rounded-2xl border border-slate-100 mt-6">
-            <label className="inline-flex items-start gap-3 cursor-pointer select-none group">
+          <div className="flex flex-col gap-3 p-3.5 sm:p-4 bg-slate-50/80 rounded-2xl border-2 border-slate-200 mt-6">
+            <label className="inline-flex items-start gap-2.5 cursor-pointer select-none group">
               <input 
                 type="checkbox" 
                 checked={form.born} 
                 onChange={handleChange('born')} 
                 required 
-                className="mt-1 w-4.5 h-4.5 rounded border-slate-300 text-red-600 focus:ring-red-500/20 cursor-pointer" 
+                className="mt-0.5 w-4 h-4 rounded border-2 border-slate-300 text-red-600 focus:ring-red-500/20 cursor-pointer shrink-0" 
               />
-              <span className="text-sm font-semibold text-slate-700 leading-snug group-hover:text-slate-900 transition-colors">{t('join.confirmBorn')}</span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug group-hover:text-black transition-colors">{t('join.confirmBorn')}</span>
             </label>
             
-            <label className="inline-flex items-start gap-3 cursor-pointer select-none group">
+            <label className="inline-flex items-start gap-2.5 cursor-pointer select-none group">
               <input 
                 type="checkbox" 
                 checked={form.agree} 
                 onChange={handleChange('agree')} 
                 required 
-                className="mt-1 w-4.5 h-4.5 rounded border-slate-300 text-red-600 focus:ring-red-500/20 cursor-pointer" 
+                className="mt-0.5 w-4 h-4 rounded border-2 border-slate-300 text-red-600 focus:ring-red-500/20 cursor-pointer shrink-0" 
               />
-              <span className="text-sm font-semibold text-slate-700 leading-snug group-hover:text-slate-900 transition-colors">{t('join.agreeRules')}</span>
+              <span className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug group-hover:text-black transition-colors">{t('join.agreeRules')}</span>
             </label>
           </div>
 
@@ -648,7 +606,7 @@ export default function Join() {
             <div className="flex flex-col sm:flex-row sm:items-center gap-3">
               <button 
                 type="submit" 
-                className="inline-flex items-center justify-center px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-extrabold rounded-xl shadow-lg shadow-red-500/20 hover:shadow-red-500/30 transform hover:-translate-y-0.5 active:translate-y-0 transition-all duration-150 cursor-pointer min-w-[160px]"
+                className="inline-flex items-center justify-center px-6 py-3.5 bg-red-600 hover:bg-red-700 text-white font-black rounded-xl shadow-md border-2 border-red-600 hover:shadow-lg transform active:scale-98 transition-all duration-150 cursor-pointer min-w-[160px] text-sm sm:text-base"
               >
                 {t('join.submit')}
               </button>
@@ -664,7 +622,7 @@ export default function Join() {
                   if (communityFileRef.current) communityFileRef.current.value = ''; 
                   if (professionalFileRef.current) professionalFileRef.current.value = ''; 
                 }} 
-                className="px-6 py-3.5 border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold rounded-xl transition-all cursor-pointer text-center"
+                className="px-6 py-3.5 border-2 border-slate-300 hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition-all cursor-pointer text-center text-sm sm:text-base"
               >
                 {t('join.reset')}
               </button>

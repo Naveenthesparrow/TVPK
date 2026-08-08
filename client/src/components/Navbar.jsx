@@ -78,8 +78,8 @@ const Navbar = () => {
         : 'inline-flex items-center gap-2 px-4 py-2 text-base font-black transition-colors tracking-wide whitespace-nowrap text-white hover:text-secondary font-header';
 
     const actionBtnClass = currentLang === 'ta'
-        ? 'px-3 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-xs inline-flex items-center justify-center hover:brightness-105 transition whitespace-nowrap'
-        : 'px-4 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm inline-flex items-center justify-center hover:brightness-105 transition whitespace-nowrap';
+        ? 'px-3.5 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-xs inline-flex items-center justify-center hover:brightness-110 active:scale-95 transition shadow-sm border-2 border-amber-300'
+        : 'px-4 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-sm inline-flex items-center justify-center hover:brightness-110 active:scale-95 transition shadow-sm border-2 border-amber-300';
 
     return (
         <nav className="sticky top-0 z-50 shadow-2xl shadow-red-900/30 overflow-x-clip">
@@ -170,12 +170,12 @@ const Navbar = () => {
                         <button
                             onClick={toggleLanguage}
                             aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
-                            className={currentLang === 'ta' ? 'px-3 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-xs hover:brightness-105 transition' : 'px-3.5 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm hover:brightness-105 transition'}
+                            className={currentLang === 'ta' ? 'px-3 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-xs border-2 border-amber-300 hover:brightness-105 transition shadow-sm' : 'px-3.5 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-sm border-2 border-amber-300 hover:brightness-105 transition shadow-sm'}
                         >
                             {currentLang === 'ta' ? 'En' : 'அ'}
                         </button>
                         {!user && (
-                            <Link to="/login" className={actionBtnClass}>
+                            <Link to="/login" className="px-4 h-10 rounded-xl bg-white text-[#8b0000] font-black text-sm inline-flex items-center justify-center hover:bg-slate-100 transition shadow-sm border-2 border-white">
                                 {t('nav.login', { lng: currentLang })}
                             </Link>
                         )}
@@ -187,11 +187,11 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    <div className="flex xl:hidden items-center gap-1.5 shrink-0">
+                    <div className="flex xl:hidden items-center gap-2 shrink-0">
                         <button
                             onClick={toggleLanguage}
                             aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
-                            className="px-2.5 h-10 rounded-lg bg-secondary text-[#5c0d0d] font-black text-sm"
+                            className="px-3 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-sm border-2 border-amber-300 shadow-sm hover:brightness-105 transition cursor-pointer"
                         >
                             {currentLang === 'ta' ? 'En' : 'அ'}
                         </button>
@@ -200,12 +200,12 @@ const Navbar = () => {
                                 <ProfileMenu />
                             </div>
                         ) : (
-                            <Link to="/login" className="hidden sm:inline-flex px-2.5 h-10 rounded-lg border border-secondary/70 text-secondary font-black text-sm items-center">
+                            <Link to="/login" className="hidden sm:inline-flex px-3 h-10 rounded-xl bg-white text-[#8b0000] font-black text-sm items-center border-2 border-white shadow-sm hover:bg-slate-100 transition">
                                 {t('nav.login', { lng: currentLang })}
                             </Link>
                         )}
                         <button
-                            className="p-1.5 rounded-lg border border-secondary/60 text-secondary"
+                            className="p-2 rounded-xl border-2 border-secondary bg-secondary/20 text-secondary hover:bg-secondary hover:text-[#5c0d0d] transition shadow-xs cursor-pointer"
                             onClick={() => setIsMenuOpen(!isMenuOpen)}
                             aria-label="Toggle navigation menu"
                         >
@@ -216,13 +216,13 @@ const Navbar = () => {
             </div>
 
             {isMenuOpen && (
-                <div className="md:hidden bg-[#a10e0e] text-white border-t border-red-800 animate-in slide-in-from-top duration-300 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
-                    <div className="px-4 py-4 space-y-3">
-                        <div className="grid grid-cols-2 gap-2">
+                <div className="md:hidden bg-[#8c0000] text-white border-t-2 border-amber-400/30 animate-in slide-in-from-top duration-300 max-h-[calc(100vh-4.5rem)] overflow-y-auto shadow-2xl">
+                    <div className="px-4 py-5 space-y-4">
+                        <div className="grid grid-cols-2 gap-3">
                             <Link
                                 to="/join"
                                 onClick={() => setIsMenuOpen(false)}
-                                className="flex items-center justify-center rounded-lg bg-secondary text-[#5c0d0d] font-black px-3 py-3"
+                                className="flex items-center justify-center rounded-xl bg-secondary text-[#5c0d0d] font-black px-4 py-3 border-2 border-amber-300 shadow-md hover:brightness-105 active:scale-[0.98] transition cursor-pointer text-sm sm:text-base"
                             >
                                 {t('nav.join', { lng: currentLang })}
                             </Link>
@@ -230,55 +230,83 @@ const Navbar = () => {
                                 <Link
                                     to="/login"
                                     onClick={() => setIsMenuOpen(false)}
-                                    className="flex items-center justify-center rounded-lg border border-white/20 bg-white/10 text-white font-black px-3 py-3"
+                                    className="flex items-center justify-center rounded-xl bg-white text-[#8b0000] font-black px-4 py-3 border-2 border-white shadow-md hover:bg-slate-100 active:scale-[0.98] transition cursor-pointer text-sm sm:text-base"
                                 >
                                     {t('nav.login', { lng: currentLang })}
                                 </Link>
                             ) : (
-                                <div className="rounded-lg bg-white/10 px-3 py-3 flex items-center justify-center">
+                                <div className="rounded-xl bg-white/10 border-2 border-white/30 px-3 py-3 flex items-center justify-center">
                                     <ProfileMenu />
                                 </div>
                             )}
                         </div>
 
-                        {menuItems.map((item, idx) => (
-                            <NavLink
-                                key={item.to}
-                                to={item.to}
-                                onClick={() => setIsMenuOpen(false)}
-                                className={`block px-3 py-2.5 rounded-lg ${idx === 0 ? 'bg-white/10 font-black' : 'hover:bg-white/10'}`}
-                            >
-                                {item.label}
-                            </NavLink>
-                        ))}
-                        <div className="pt-2 border-t border-white/10 space-y-2">
-                            <p className="text-[11px] uppercase tracking-[0.2em] text-white/60 font-black">{t('nav.news_events', { lng: currentLang })}</p>
+                        <div className="space-y-2 pt-1">
+                            {menuItems.map((item) => (
+                                <NavLink
+                                    key={item.to}
+                                    to={item.to}
+                                    onClick={() => setIsMenuOpen(false)}
+                                    className={({ isActive }) => `
+                                        block px-4 py-3 rounded-xl border font-bold transition-all text-sm sm:text-base
+                                        ${isActive
+                                            ? 'bg-white text-[#8b0000] border-2 border-white shadow-md font-black'
+                                            : 'bg-white/10 text-white border-2 border-white/20 hover:bg-white/20 hover:border-white/40 shadow-xs'
+                                        }
+                                        ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}
+                                    `}
+                                >
+                                    {item.label}
+                                </NavLink>
+                            ))}
+                        </div>
+
+                        <div className="pt-3 border-t-2 border-white/15 space-y-2.5">
+                            <p className="text-xs uppercase tracking-[0.2em] text-amber-300 font-black px-1">
+                                {t('nav.news_events', { lng: currentLang })}
+                            </p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 {dropdownItems['/news'].map((item) => (
-                                    <Link
+                                    <NavLink
                                         key={item.to}
                                         to={item.to}
                                         onClick={() => setIsMenuOpen(false)}
-                                        className={`block px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}
+                                        className={({ isActive }) => `
+                                            block px-4 py-2.5 rounded-xl border font-bold transition-all text-sm
+                                            ${isActive
+                                                ? 'bg-white text-[#8b0000] border-2 border-white shadow-md font-black'
+                                                : 'bg-white/10 text-white border-2 border-white/20 hover:bg-white/20 hover:border-white/40 shadow-xs'
+                                            }
+                                            ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}
+                                        `}
                                     >
                                         {item.label}
-                                    </Link>
+                                    </NavLink>
                                 ))}
                             </div>
                         </div>
 
-                        <div className="pt-2 border-t border-white/10 space-y-2">
-                            <p className="text-[11px] uppercase tracking-[0.2em] text-white/60 font-black">{t('nav.party_history', { lng: currentLang })}</p>
+                        <div className="pt-3 border-t-2 border-white/15 space-y-2.5">
+                            <p className="text-xs uppercase tracking-[0.2em] text-amber-300 font-black px-1">
+                                {t('nav.party_history', { lng: currentLang })}
+                            </p>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                 {dropdownItems['/history'].map((item) => (
-                                    <Link
+                                    <NavLink
                                         key={item.to}
                                         to={item.to}
                                         onClick={() => setIsMenuOpen(false)}
-                                        className={`block px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}
+                                        className={({ isActive }) => `
+                                            block px-4 py-2.5 rounded-xl border font-bold transition-all text-sm
+                                            ${isActive
+                                                ? 'bg-white text-[#8b0000] border-2 border-white shadow-md font-black'
+                                                : 'bg-white/10 text-white border-2 border-white/20 hover:bg-white/20 hover:border-white/40 shadow-xs'
+                                            }
+                                            ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}
+                                        `}
                                     >
                                         {item.label}
-                                    </Link>
+                                    </NavLink>
                                 ))}
                             </div>
                         </div>
