@@ -31,6 +31,7 @@ export default function Join() {
     assemblyConstituency: '',
     district: '',
     tamilCommunity: '',
+    otherCommunity: '',
     address: '',
     born: false,
     agree: false,
@@ -145,7 +146,12 @@ export default function Join() {
       fd.append('boothNumber', form.boothNumber);
       fd.append('assemblyConstituency', form.assemblyConstituency);
       fd.append('district', form.district);
-      fd.append('tamilCommunity', form.tamilCommunity);
+
+      const finalCommunity = form.tamilCommunity === 'Other'
+        ? (form.otherCommunity.trim() ? `Other (${form.otherCommunity.trim()})` : 'Other')
+        : form.tamilCommunity;
+      fd.append('tamilCommunity', finalCommunity);
+
       fd.append('address', form.address);
       fd.append('bornTamilOrKudi', form.born ? 'true' : 'false');
       fd.append('agreeRules', form.agree ? 'true' : 'false');
@@ -184,6 +190,7 @@ export default function Join() {
         assemblyConstituency: '',
         district: '',
         tamilCommunity: '',
+        otherCommunity: '',
         address: '',
         born: false,
         agree: false,
@@ -539,19 +546,18 @@ export default function Join() {
               {/* Tamil Community Selection */}
               <div className="flex flex-col">
                 <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
-                  {i18n.language === 'ta' ? 'தமிழ் சமூகம்' : 'Tamil Community'} <span className="text-red-500 font-bold">*</span>
+                  {i18n.language === 'ta' ? 'தமிழ் சமூகம்' : 'Tamil Community'} <span className="text-xs font-normal text-slate-400">({i18n.language === 'ta' ? 'விருப்பத்தேர்வு' : 'Optional'})</span>
                 </label>
                 <div className="relative rounded-xl shadow-sm">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <Shield size={18} />
                   </div>
                   <select 
-                    required 
                     value={form.tamilCommunity} 
                     onChange={handleChange('tamilCommunity')} 
                     className="w-full pl-10 pr-10 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium appearance-none cursor-pointer"
                   >
-                    <option value="">{i18n.language === 'ta' ? 'தமிழ் சமூகம் தேர்ந்தெடுக்கவும் *' : 'Select Tamil Community *'}</option>
+                    <option value="">{i18n.language === 'ta' ? 'தமிழ் சமூகம் தேர்ந்தெடுக்கவும்' : 'Select Tamil Community'}</option>
                     {TAMIL_COMMUNITIES.map((c) => (
                       <option key={c.id} value={c.id}>{i18n.language === 'ta' ? c.ta : c.en}</option>
                     ))}
@@ -560,6 +566,21 @@ export default function Join() {
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
                   </div>
                 </div>
+
+                {form.tamilCommunity === 'Other' && (
+                  <div className="mt-3 flex flex-col">
+                    <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">
+                      {i18n.language === 'ta' ? 'சமூகத்தின் பெயரை உள்ளிடவும்' : 'Specify Community Name'}
+                    </label>
+                    <input 
+                      type="text"
+                      placeholder={i18n.language === 'ta' ? 'உங்கள் சமூகத்தின் பெயரை உள்ளிடவும்' : 'Type your community name'}
+                      value={form.otherCommunity}
+                      onChange={handleChange('otherCommunity')}
+                      className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:ring-4 focus:ring-red-500/10 focus:border-red-600 transition-all duration-200 outline-none text-slate-800 font-medium placeholder-slate-400"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Uploads Grid */}
@@ -634,7 +655,7 @@ export default function Join() {
               <button 
                 type="button" 
                 onClick={() => { 
-                  setForm({ name: '', email: '', phone: '', dob: '', aadharNumber: '', boothNumber: '', assemblyConstituency: '', district: '', tamilCommunity: '', address: '', born: false, agree: false }); 
+                  setForm({ name: '', email: '', phone: '', dob: '', aadharNumber: '', boothNumber: '', assemblyConstituency: '', district: '', tamilCommunity: '', otherCommunity: '', address: '', born: false, agree: false }); 
                   setFile(null); 
                   setCommunityFile(null); 
                   setProfessionalFile(null); 

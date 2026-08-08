@@ -5,7 +5,6 @@ import ScrollToTop from './components/ScrollToTop';
 import Hero from './components/Hero';
 import EventsSection from './components/EventsSection';
 import DocDetail from './components/DocDetail';
-import Donation from './components/Donation';
 import Contact from './components/Contact';
 import Login from './pages/Login';
 import Admin from './pages/Admin';
@@ -36,7 +35,6 @@ function AppContent() {
           <Route path="/docs/:docId" element={<DocDetail />} />
           <Route path="/speeches" element={<DocDetail presetKey={'speeches'} />} />
           <Route path="/stats" element={<DocDetail presetKey={'stats'} />} />
-          <Route path="/donate" element={<Donation />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/join" element={<Join />} />
           <Route path="/sub/:slug" element={<SubPageDetail />} />

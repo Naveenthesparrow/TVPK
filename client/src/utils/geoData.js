@@ -253,5 +253,6 @@ export const TAMIL_COMMUNITIES = [
   { id: 'Paraiyar', en: 'Paraiyar', ta: 'பறையர்' },
   { id: 'Pallar', en: 'Pallar', ta: 'பள்ளர்' },
   { id: 'Arunthathiyar', en: 'Arunthathiyar', ta: 'அருந்ததியர்' },
-  { id: 'Chakkiliyar', en: 'Chakkiliyar', ta: 'சக்கிலியர்' }
+  { id: 'Chakkiliyar', en: 'Chakkiliyar', ta: 'சக்கிலியர்' },
+  { id: 'Other', en: 'Other', ta: 'மற்றவை' }
 ];

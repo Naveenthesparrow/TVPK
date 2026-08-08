@@ -44,8 +44,8 @@ const Hero = () => {
     const heroVisual = heroImage || heroBg;
 
     return (
-        <div className="relative w-full bg-white pt-12 md:pt-16 lg:pt-20 xl:pt-24 px-3 md:px-4 lg:px-5">
-            <div className="relative h-64 md:h-72 lg:h-80 xl:h-96 flex items-center overflow-hidden max-w-[1460px] mx-auto rounded-xl border border-slate-200/70">
+        <div className="relative w-full bg-white pt-6 sm:pt-12 md:pt-16 lg:pt-20 xl:pt-24 px-3 md:px-4 lg:px-5">
+            <div className="relative min-h-[16.5rem] md:h-72 lg:h-80 xl:h-96 flex items-center overflow-hidden max-w-[1460px] mx-auto rounded-xl border border-slate-200/70">
                 <div className="grid w-full h-full gap-0 items-stretch lg:grid-cols-[1fr_1.6fr_1fr]">
                     {/* Left: Flag Image */}
                     <div className="hidden lg:flex items-center justify-center bg-blue-100 px-3 py-4 overflow-hidden">
@@ -55,19 +55,19 @@ const Hero = () => {
                     </div>
 
                     {/* Center: Content on Green Background */}
-                    <div className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 flex flex-col justify-center items-center px-3 md:px-6 py-4 text-center">
+                    <div className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 flex flex-col justify-center items-center px-4 md:px-6 py-6 md:py-4 text-center">
                         <div className="w-full max-w-[560px] mx-auto">
-                            <h2 className={`font-black text-white mb-2 md:mb-3 leading-tight ${currentLang === 'ta' ? 'font-tamil text-2xl md:text-3xl' : 'font-header text-3xl md:text-4xl'}`}>
+                            <h2 className={`font-black text-white mb-2.5 md:mb-3 leading-snug ${currentLang === 'ta' ? 'font-tamil text-xl sm:text-2xl md:text-3xl' : 'font-header text-2xl sm:text-3xl md:text-4xl'}`}>
                                 {localized('title', 'hero.title')}
                             </h2>
 
-                            <p className={`text-emerald-100 mb-3 md:mb-4 max-w-lg mx-auto leading-relaxed ${currentLang === 'ta' ? 'font-tamil text-xs md:text-sm' : 'font-header text-xs md:text-sm'}`}>
+                            <p className={`text-emerald-100 mb-4 max-w-lg mx-auto leading-relaxed ${currentLang === 'ta' ? 'font-tamil text-xs sm:text-sm' : 'font-header text-xs md:text-sm'}`}>
                                 {localized('desc', 'hero.desc')}
                             </p>
 
                             <div className="w-full flex flex-wrap items-center justify-center gap-2 md:gap-3">
                                 <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2">
-                                    <Link to="/join" className={`px-3 md:px-4 py-1.5 md:py-2 bg-yellow-400 text-emerald-800 rounded-lg font-black text-sm md:text-base hover:brightness-95 transition ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                    <Link to="/join" className={`px-4 sm:px-5 py-2 bg-yellow-400 text-emerald-950 rounded-lg font-black text-xs sm:text-sm md:text-base hover:brightness-95 transition shadow-sm ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                         {t('hero.cta_join', { lng: currentLang })}
                                     </Link>
                                 </div>

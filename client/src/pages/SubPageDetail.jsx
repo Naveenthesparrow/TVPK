@@ -12,6 +12,143 @@ import logoImg from '../assets/logo.png';
 import kImg from '../assets/k.jpeg';
 import k4Img from '../assets/k4.png';
 
+// Forces Images
+import forceSpiritual from '../assets/Forces/Tamil Spiritual Restoration Tiger Force.png';
+import forceRegistry from '../assets/Forces/Tamil Registry Creation Tiger Force.png';
+import forceAgriculture from '../assets/Forces/Agriculture and Livestock Development Tiger Force.png';
+import forceWater from '../assets/Forces/Water Bodies Restoration Tiger Force.png';
+import forceEnvironment from '../assets/Forces/Environmental Restoration Tiger Force.png';
+import forceCulture from '../assets/Forces/Tamil Art, Literature, and Cultural Restoration Tiger Force.png';
+import forceIT from '../assets/Forces/Information Technology Tiger Force.png';
+import forceLawyers from '../assets/Forces/Lawyers Tiger Force.png';
+import forceStudents from '../assets/Forces/School and College Students Tiger Force.png';
+import forceWomen from '../assets/Forces/Women\'s Tiger Force.png';
+import forceMedical from '../assets/Forces/Medical Tiger Force.png';
+import forceWorkers from '../assets/Forces/Workers Tiger  Force.png';
+
+const defaultTigerForces = [
+  {
+    id: 'spiritual',
+    enTitle: 'Tamil Spiritual Restoration Tiger Force',
+    taTitle: 'தமிழ் ஆன்மீக மீட்புப் புலிப்படை',
+    image: forceSpiritual,
+    badgeTa: 'ஆன்மீகம்',
+    badgeEn: 'Spiritual',
+    descTa: 'தமிழ் ஆன்மீக மரபு, தாய்மொழி வழிபாடு மற்றும் வரலாற்று வழிபாட்டு முறைமைகளை மீட்டெடுக்கும் புலிப்படை.',
+    descEn: 'Dedicated to restoring Tamil spiritual tradition, mother-tongue worship, and historic sacred practices.'
+  },
+  {
+    id: 'registry',
+    enTitle: 'Tamil Registry Creation Tiger Force',
+    taTitle: 'தமிழ் சுவடி உருவாக்கப் புலிப்படை',
+    image: forceRegistry,
+    badgeTa: 'ஆவணங்கள்',
+    badgeEn: 'Archives',
+    descTa: 'பண்டைய தமிழ் சுவடிகள், நூல்கள் மற்றும் வரலாற்று ஆவணங்களைப் பாதுகாத்து டிஜிட்டல் வடிவில் உருவாக்கும் படை.',
+    descEn: 'Preserving and digitizing ancient Tamil manuscripts, historic records, and literary heritage.'
+  },
+  {
+    id: 'agriculture',
+    enTitle: 'Agriculture and Livestock Development Tiger Force',
+    taTitle: 'வேளாண்மை மற்றும் கால்நடை மேம்பாட்டுப் புலிப்படை',
+    image: forceAgriculture,
+    badgeTa: 'வேளாண்மை',
+    badgeEn: 'Agriculture',
+    descTa: 'இயற்கை விவசாயம், உழவர் உரிமைகள் மற்றும் கால்நடை வளர்ப்பு மேம்பாட்டிற்கான பிரத்யேக களப்படை.',
+    descEn: 'Advancing organic farming, farmers\' rights, and sustainable livestock development.'
+  },
+  {
+    id: 'water',
+    enTitle: 'Water Bodies Restoration Tiger Force',
+    taTitle: 'நீர்நிலைகள் மீட்புப் புலிப்படை',
+    image: forceWater,
+    badgeTa: 'நீர்நிலைகள்',
+    badgeEn: 'Water Bodies',
+    descTa: 'ஏரி, குளம், நதிகள் மற்றும் பாரம்பரிய நீர்நிலைகளைப் தூர்வாரி தூய்மைப்படுத்தும் சூழல் புலிப்படை.',
+    descEn: 'Restoring, desilting, and protecting lakes, ponds, rivers, and traditional water systems.'
+  },
+  {
+    id: 'environment',
+    enTitle: 'Environmental Restoration Tiger Force',
+    taTitle: 'சுற்றுச்சூழல் மீட்புப் புலிப்படை',
+    image: forceEnvironment,
+    badgeTa: 'சுற்றுச்சூழல்',
+    badgeEn: 'Environment',
+    descTa: 'பசுமை மரக்கன்றுகள் நடுதல், பிளாஸ்டிக் ஒழிப்பு மற்றும் சுற்றுச்சூழல் பாதுகாப்பிற்கான மக்கள் இயக்கம்.',
+    descEn: 'Afforestation, tree plantation, anti-plastic campaigns, and ecological preservation.'
+  },
+  {
+    id: 'culture',
+    enTitle: 'Tamil Art, Literature, and Cultural Restoration Tiger Force',
+    taTitle: 'தமிழ் கலை, இலக்கியம் மற்றும் பண்பாட்டு மீட்புப் புலிப்படை',
+    image: forceCulture,
+    badgeTa: 'பண்பாடு',
+    badgeEn: 'Culture',
+    descTa: 'பாரம்பரிய தமிழ் மரபுக்கலைகள், நாட்டார் வழக்கு மற்றும் இலக்கிய செழுமையைக் காக்கும் படை.',
+    descEn: 'Promoting traditional Tamil arts, folk heritage, literature, and cultural renaissance.'
+  },
+  {
+    id: 'it',
+    enTitle: 'Information Technology Tiger Force',
+    taTitle: 'தகவல் தொழில்நுட்பப் புலிப்படை',
+    image: forceIT,
+    badgeTa: 'தொழில்நுட்பம்',
+    badgeEn: 'IT & Digital',
+    descTa: 'டிஜிட்டல் தளங்களில் தமிழ் பரப்புரை, தரவு பகுப்பாய்வு மற்றும் தொழில்நுட்பக் கட்டமைப்புப் படை.',
+    descEn: 'Digital advocacy, data analytics, media outreach, and technology infrastructure for the movement.'
+  },
+  {
+    id: 'lawyers',
+    enTitle: 'Lawyers Tiger Force',
+    taTitle: 'வழக்கறிஞர்கள் புலிப்படை',
+    image: forceLawyers,
+    badgeTa: 'சட்டம்',
+    badgeEn: 'Legal',
+    descTa: 'மக்களுக்கான இலவச சட்ட உதவி, உரிமைகள் பாதுகாப்பு மற்றும் சட்டப்போராட்டங்களுக்கான வழக்கறிஞர் அணி.',
+    descEn: 'Providing free legal aid, protecting civil rights, and fighting legal battles for public justice.'
+  },
+  {
+    id: 'students',
+    enTitle: 'School and College Students Tiger Force',
+    taTitle: 'பள்ளி மற்றும் கல்லூரி மாணவர்கள் புலிப்படை',
+    image: forceStudents,
+    badgeTa: 'மாணவர்கள்',
+    badgeEn: 'Students',
+    descTa: 'மாணவர் நலன், தாய்மொழிக் கல்வி உரிமை மற்றும் இளைய சமுதாய தலைமை உருவாக்கப் புலிப்படை.',
+    descEn: 'Student rights, mother-tongue education advocacy, and building next-gen youth leadership.'
+  },
+  {
+    id: 'women',
+    enTitle: "Women's Tiger Force",
+    taTitle: 'பெண்கள் புலிப்படை',
+    image: forceWomen,
+    badgeTa: 'மகளிர்',
+    badgeEn: "Women's Wing",
+    descTa: 'பெண்கள் பாதுகாப்பு, பொருளாதார தன்னாட்சி மற்றும் சமூக சமத்துவத்திற்கான பெண்கள் பிரத்யேக படை.',
+    descEn: 'Empowering women\'s safety, economic independence, and gender social equality.'
+  },
+  {
+    id: 'medical',
+    enTitle: 'Medical Tiger Force',
+    taTitle: 'மருத்துவப் புலிப்படை',
+    image: forceMedical,
+    badgeTa: 'மருத்துவம்',
+    badgeEn: 'Medical',
+    descTa: 'இலவச மருத்துவ முகாம்கள், பாரம்பரிய தமிழ் மருத்துவம் மற்றும் அவசர முதலுதவி சேவைகள்.',
+    descEn: 'Organizing free health camps, traditional Tamil medicine education, and emergency healthcare assistance.'
+  },
+  {
+    id: 'workers',
+    enTitle: 'Workers Tiger Force',
+    taTitle: 'தொழிலாளர்கள் புலிப்படை',
+    image: forceWorkers,
+    badgeTa: 'தொழிலாளர்',
+    badgeEn: 'Workers',
+    descTa: 'தொழிலாளர் உரிமைகள், 8 மணிநேர வேலைப்பாதுகாப்பு மற்றும் தொழிலாளர் நலனுக்கான களப்படை.',
+    descEn: 'Fighting for labor rights, 8-hour workday safety, fair wages, and worker welfare.'
+  }
+];
+
 const slugToKey = {
   'party-structure': 'party_structure',
   'party-policies': 'party_policies',
@@ -376,6 +513,38 @@ export default function SubPageDetail() {
     day: '',
   });
 
+  const [tigerForces, setTigerForces] = useState(defaultTigerForces);
+  const [editingForceIndex, setEditingForceIndex] = useState(null);
+  const [showForceModal, setShowForceModal] = useState(false);
+  const [forceModalData, setForceModalData] = useState({
+    enTitle: '',
+    taTitle: '',
+    descEn: '',
+    descTa: '',
+    badgeEn: '',
+    badgeTa: '',
+    image: '',
+  });
+
+  // Load database forces content
+  useEffect(() => {
+    const api = import.meta.env.VITE_API_URL || '';
+    (async () => {
+      try {
+        const res = await fetch(`${api}/admin/content`);
+        const json = await res.json();
+        if (json?.content?.tiger_forces && Array.isArray(json.content.tiger_forces)) {
+          const dbForces = json.content.tiger_forces;
+          const merged = defaultTigerForces.map((def, idx) => {
+            const found = dbForces.find(f => f.id === def.id || f.enTitle === def.enTitle) || dbForces[idx];
+            return found ? { ...def, ...found, image: found.image || def.image } : def;
+          });
+          setTigerForces(merged);
+        }
+      } catch (err) {}
+    })();
+  }, []);
+
   // Listen for auth changes
   useEffect(() => {
     const checkAdmin = () => setIsAdminUser(isAdmin());
@@ -387,6 +556,60 @@ export default function SubPageDetail() {
       window.removeEventListener('storage', checkAdmin);
     };
   }, []);
+
+  const openForceEditModal = (force, idx) => {
+    setEditingForceIndex(idx);
+    setForceModalData({
+      enTitle: force.enTitle || '',
+      taTitle: force.taTitle || '',
+      descEn: force.descEn || '',
+      descTa: force.descTa || '',
+      badgeEn: force.badgeEn || '',
+      badgeTa: force.badgeTa || '',
+      image: force.image || '',
+    });
+    setShowForceModal(true);
+  };
+
+  const saveForceToDatabase = async (updatedForces) => {
+    const api = import.meta.env.VITE_API_URL || '';
+    const token = localStorage.getItem('tvpk_token');
+    try {
+      await fetch(`${api}/admin/content`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          content: updatedForces,
+          focus: 'tiger_forces'
+        })
+      });
+    } catch (err) {
+      console.error('Failed to save forces to database', err);
+    }
+  };
+
+  const handleForceSave = () => {
+    if (editingForceIndex === null) return;
+    const updated = tigerForces.map((item, i) => (
+      i === editingForceIndex ? { ...item, ...forceModalData } : item
+    ));
+    setTigerForces(updated);
+    setShowForceModal(false);
+    saveForceToDatabase(updated);
+  };
+
+  const handleForceImageUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      setForceModalData(prev => ({ ...prev, image: reader.result }));
+    };
+    reader.readAsDataURL(file);
+  };
 
   const handleEdit = () => {
     setEditLang('en');
@@ -730,10 +953,122 @@ export default function SubPageDetail() {
     );
   }
 
-  if (pageKey === 'party_tiger_forces' && false) {
+  const renderForceEditModal = () => {
+    if (!showForceModal) return null;
     return (
-      <div className="min-h-screen bg-[#f2f6fb] py-8 md:py-12">
-        {renderEditModal()}
+      <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+        <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-xl w-full shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto border border-slate-100">
+          <div className="flex items-center justify-between border-b pb-4 border-slate-100">
+            <h3 className="text-lg font-black text-slate-900">
+              {currentLang === 'ta' ? 'புலிப்படை அமைப்பை திருத்துக' : 'Edit Tiger Force'}
+            </h3>
+            <button 
+              onClick={() => setShowForceModal(false)}
+              className="text-slate-400 hover:text-slate-600 font-black text-xl px-2 cursor-pointer"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div className="space-y-4 text-left">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                {currentLang === 'ta' ? 'தமிழ் தலைப்பு' : 'Tamil Title'}
+              </label>
+              <input 
+                type="text" 
+                value={forceModalData.taTitle} 
+                onChange={e => setForceModalData(prev => ({ ...prev, taTitle: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                {currentLang === 'ta' ? 'ஆங்கில தலைப்பு' : 'English Title'}
+              </label>
+              <input 
+                type="text" 
+                value={forceModalData.enTitle} 
+                onChange={e => setForceModalData(prev => ({ ...prev, enTitle: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                {currentLang === 'ta' ? 'தமிழ் விளக்கம்' : 'Tamil Description'}
+              </label>
+              <textarea 
+                rows={3}
+                value={forceModalData.descTa} 
+                onChange={e => setForceModalData(prev => ({ ...prev, descTa: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                {currentLang === 'ta' ? 'ஆங்கில விளக்கம்' : 'English Description'}
+              </label>
+              <textarea 
+                rows={3}
+                value={forceModalData.descEn} 
+                onChange={e => setForceModalData(prev => ({ ...prev, descEn: e.target.value }))}
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-red-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                {currentLang === 'ta' ? 'படம் பதிவேற்ற / URL' : 'Force Image (Upload file or URL)'}
+              </label>
+              <div className="flex gap-2 items-center mb-2">
+                <input 
+                  type="text" 
+                  value={forceModalData.image} 
+                  onChange={e => setForceModalData(prev => ({ ...prev, image: e.target.value }))}
+                  placeholder="Image URL or Base64"
+                  className="flex-1 px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-medium focus:outline-none focus:border-red-500"
+                />
+                <label className="cursor-pointer px-3.5 py-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-700 text-xs font-black border border-red-200 shrink-0">
+                  {currentLang === 'ta' ? 'கோப்பு பதிவேற்ற' : 'Upload File'}
+                  <input type="file" accept="image/*" onChange={handleForceImageUpload} className="hidden" />
+                </label>
+              </div>
+              {forceModalData.image && (
+                <div className="h-28 w-full rounded-xl overflow-hidden border border-slate-200 bg-slate-50 mt-2">
+                  <img src={forceModalData.image} alt="Preview" className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-end gap-3 pt-3 border-t border-slate-100">
+            <button 
+              type="button" 
+              onClick={() => setShowForceModal(false)}
+              className="px-4 py-2 rounded-xl border border-slate-200 text-slate-700 text-xs font-bold hover:bg-slate-50 cursor-pointer"
+            >
+              {currentLang === 'ta' ? 'ரத்து' : 'Cancel'}
+            </button>
+            <button 
+              type="button" 
+              onClick={handleForceSave}
+              className="px-5 py-2 rounded-xl bg-red-600 text-white text-xs font-black hover:bg-red-700 shadow-sm cursor-pointer"
+            >
+              {currentLang === 'ta' ? 'சேமி (Database)' : 'Save to Database'}
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (pageKey === 'party_tiger_forces') {
+    return (
+      <div className="min-h-screen bg-slate-50 py-8 md:py-16">
+        {renderForceEditModal()}
 
         {/* Admin Status Display */}
         {isAdminUser && (
@@ -742,73 +1077,77 @@ export default function SubPageDetail() {
           </div>
         )}
 
-        <div className="max-w-6xl mx-auto px-4 space-y-6">
-          <section className="rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-sm">
-            <div className="w-full h-96 bg-slate-100 rounded-t-3xl border-b border-slate-200 overflow-hidden">
-              <img
-                src={partyBannerImg}
-                alt={currentLang === 'ta' ? 'கட்சியின் பேனர்' : 'Party banner'}
-                className="w-full h-full object-cover object-center"
-              />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          {/* Header Card */}
+          <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/90 shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div>
+              <h1 className={`text-3xl sm:text-4xl font-black text-slate-900 leading-tight ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                {currentLang === 'ta' ? 'கட்சி புலிப்படைகள்' : 'Party Tiger Forces'}
+              </h1>
+              <p className="text-slate-600 font-medium text-sm sm:text-base mt-2 max-w-2xl">
+                {currentLang === 'ta' 
+                  ? 'தமிழ்நாட்டின் உரிமை மீட்பு, சுற்றுச்சூழல், கல்வி, மருத்துவம், சட்டம் மற்றும் அனைத்து துறைசார்ந்த மேம்பாட்டிற்கான 12 முதன்மைப் புலிப்படைகள்.'
+                  : '12 specialized field wings committed to spiritual restoration, agriculture, environment, IT, student rights, and social justice.'}
+              </p>
             </div>
-          </section>
 
-          <section className="rounded-3xl border border-slate-200 bg-white shadow-sm p-5 md:p-8">
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-              <h2 className={`text-2xl font-black text-slate-900 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                {currentLang === 'ta' ? 'முக்கிய கடமைகள்' : 'Core Duties'}
-              </h2>
-              <div className="flex flex-wrap gap-2">
-                {isAdminUser && (
-                  <>
-                    <button onClick={handleEdit} className="inline-flex items-center justify-center w-10 h-10 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-black hover:shadow-md transition-all" title={currentLang === 'ta' ? 'திருத்து' : 'Edit'}>
-                      <Edit3 size={18} />
-                    </button>
-                  </>
-                )}
-                <Link to="/" className="inline-flex px-4 py-2 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-sm font-semibold text-slate-700">
-                  {currentLang === 'ta' ? 'முகப்பிற்கு திரும்ப' : 'Back to Home'}
-                </Link>
+            <Link 
+              to="/" 
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-sm font-extrabold transition-all cursor-pointer shrink-0 shadow-2xs"
+            >
+              {currentLang === 'ta' ? 'முகப்பிற்கு திரும்ப' : 'Back to Home'}
+            </Link>
+          </div>
+
+          {/* 3 In A Row Card Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {tigerForces.map((force, idx) => (
+              <div 
+                key={force.id || idx}
+                className="group bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-xs hover:shadow-2xl hover:border-red-500/30 transform hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  {/* Picture */}
+                  <div className="relative w-full h-64 sm:h-72 bg-gradient-to-b from-slate-100/90 via-slate-50 to-white overflow-hidden border-b border-slate-100 p-2 flex items-center justify-center">
+                    <img 
+                      src={force.image} 
+                      alt={currentLang === 'ta' ? force.taTitle : force.enTitle} 
+                      className="w-full h-full object-contain object-center group-hover:scale-105 transition-transform duration-500 drop-shadow-sm"
+                    />
+
+                    {isAdminUser && (
+                      <button 
+                        type="button"
+                        onClick={() => openForceEditModal(force, idx)}
+                        className="absolute top-3 left-3 bg-white/90 hover:bg-white text-slate-800 px-3 py-1.5 rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+                        title="Edit Force Picture & Details"
+                      >
+                        <Edit3 size={14} className="text-red-600" />
+                        <span>{currentLang === 'ta' ? 'திருத்து' : 'Edit'}</span>
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Heading & Description */}
+                  <div className="p-6">
+                    <h3 className={`text-xl font-black text-slate-900 mb-2.5 group-hover:text-red-600 transition-colors ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                      {currentLang === 'ta' ? force.taTitle : force.enTitle}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-600 font-medium leading-relaxed">
+                      {currentLang === 'ta' ? force.descTa : force.descEn}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="px-6 pb-6 pt-0">
+                  <div className="w-full pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-black text-red-600 uppercase tracking-wider">
+                    <span>TVPK TIGER FORCE</span>
+                    <span>#{String(idx + 1).padStart(2, '0')}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <div className="space-y-4">
-              {tigerForceDuties.map((duty, idx) => {
-                const Icon = duty.icon;
-                const points = currentLang === 'ta' ? duty.taPoints : duty.enPoints;
-                return (
-                  <article key={duty.key} className="rounded-2xl border border-slate-200 bg-slate-50 p-4 md:p-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center shrink-0">
-                        <Icon size={20} className="text-primary" />
-                      </div>
-                      <div className="min-w-0 w-full">
-                        <div className="text-xs font-black text-primary/80 mb-1">{currentLang === 'ta' ? `கடமை ${idx + 1}` : `DUTY ${idx + 1}`}</div>
-                        <h3 className={`text-lg md:text-xl font-black text-slate-900 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                          {currentLang === 'ta' ? duty.taTitle : duty.enTitle}
-                        </h3>
-                        <p className={`mt-2 text-slate-700 leading-7 ${currentLang === 'ta' ? 'font-tamil text-base' : 'font-header text-sm'}`}>
-                          {currentLang === 'ta' ? duty.taDesc : duty.enDesc}
-                        </p>
-
-                        <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
-                          <p className={`text-xs uppercase tracking-wide text-slate-500 font-black mb-2 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                            {currentLang === 'ta' ? 'விரிவான செயல்பாடுகள்' : 'Operational Expansion'}
-                          </p>
-                          <ul className={`list-disc pl-5 space-y-2 text-slate-700 leading-7 ${currentLang === 'ta' ? 'font-tamil text-base' : 'font-header text-sm'}`}>
-                            {points.map((point, pIdx) => (
-                              <li key={`${duty.key}-point-${pIdx}`}>{point}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </article>
-                );
-              })}
-            </div>
-          </section>
-
+            ))}
+          </div>
         </div>
       </div>
     );

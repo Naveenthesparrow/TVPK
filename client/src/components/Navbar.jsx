@@ -100,11 +100,11 @@ const Navbar = () => {
             </div>
 
             <div className="bg-primary text-white border-b border-red-800/40">
-                <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-6 min-h-[4.5rem] py-2 flex items-center gap-3 justify-between">
-                    <Link to="/" className="flex items-center gap-2.5 min-w-0 shrink-0">
-                        <img src={logoImg} alt="TVPK logo" className="w-11 h-11 sm:w-12 sm:h-12 rounded-full object-cover ring-2 ring-secondary/80" />
-                        <div className="min-w-0">
-                            <p className={`text-sm md:text-base xl:text-lg font-black leading-tight text-secondary ${currentLang === 'ta' ? 'font-tamil whitespace-normal' : 'font-header truncate max-w-[10.5rem] sm:max-w-none'}`}>
+                <div className="max-w-[1600px] mx-auto px-2.5 sm:px-4 lg:px-6 min-h-[4.25rem] sm:min-h-[4.5rem] py-2 flex items-center gap-2 sm:gap-3 justify-between">
+                    <Link to="/" className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 sm:flex-initial mr-1">
+                        <img src={logoImg} alt="TVPK logo" className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover ring-2 ring-secondary/80 shrink-0" />
+                        <div className="min-w-0 flex-1">
+                            <p className={`text-[12px] sm:text-sm md:text-base xl:text-lg font-black leading-snug text-secondary ${currentLang === 'ta' ? 'font-tamil break-words' : 'font-header truncate max-w-[10.5rem] sm:max-w-none'}`}>
                                 {currentLang === 'ta' ? (
                                     <>
                                         <span>{t('brand.name', { lng: currentLang })}</span>
@@ -134,9 +134,9 @@ const Navbar = () => {
                                 {t('nav.news_events', { lng: currentLang })}<ChevronDown size={13} />
                             </button>
                             {openDropdown === '/news' && (
-                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
+                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150 p-1">
                                     {dropdownItems['/news'].map((item, idx) => (
-                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 rounded-md transition outline-none border-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                             {item.label}
                                         </Link>
                                     ))}
@@ -153,9 +153,9 @@ const Navbar = () => {
                                 {t('nav.party_history', { lng: currentLang })}<ChevronDown size={13} />
                             </button>
                             {openDropdown === '/history' && (
-                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150">
+                                <div className="absolute left-0 mt-1 w-56 bg-white text-slate-900 shadow-2xl rounded-lg overflow-hidden z-50 animate-in fade-in duration-150 p-1">
                                     {dropdownItems['/history'].map((item, idx) => (
-                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 transition border-b border-slate-100 last:border-b-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
+                                        <Link key={idx} to={item.to} onClick={() => setOpenDropdown(null)} className={`block px-4 py-2.5 text-sm font-semibold hover:bg-primary/10 rounded-md transition outline-none border-0 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
                                             {item.label}
                                         </Link>
                                     ))}
@@ -181,9 +181,6 @@ const Navbar = () => {
                         )}
                         <Link to="/join" className={actionBtnClass}>
                             {t('nav.join', { lng: currentLang })}
-                        </Link>
-                        <Link to="/donate" className="hidden xl:inline-flex px-4 h-10 rounded-lg border border-secondary/70 text-secondary font-black text-sm items-center justify-center hover:bg-secondary hover:text-[#5c0d0d] transition">
-                            {t('nav.donate', { lng: currentLang })}
                         </Link>
                         <div className="hidden xl:block w-[42px]">
                             <ProfileMenu />
@@ -223,11 +220,11 @@ const Navbar = () => {
                     <div className="px-4 py-4 space-y-3">
                         <div className="grid grid-cols-2 gap-2">
                             <Link
-                                to="/donate"
+                                to="/join"
                                 onClick={() => setIsMenuOpen(false)}
                                 className="flex items-center justify-center rounded-lg bg-secondary text-[#5c0d0d] font-black px-3 py-3"
                             >
-                                {t('nav.donate', { lng: currentLang })}
+                                {t('nav.join', { lng: currentLang })}
                             </Link>
                             {!user ? (
                                 <Link
@@ -238,7 +235,7 @@ const Navbar = () => {
                                     {t('nav.login', { lng: currentLang })}
                                 </Link>
                             ) : (
-                                <div className="rounded-lg bg-white/10 px-3 py-3">
+                                <div className="rounded-lg bg-white/10 px-3 py-3 flex items-center justify-center">
                                     <ProfileMenu />
                                 </div>
                             )}
