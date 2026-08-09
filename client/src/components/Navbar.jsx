@@ -6,9 +6,9 @@ import { NavLink, Link, useLocation } from 'react-router-dom';
 import logoImg from '../assets/logo.png';
 
 const Navbar = () => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const location = useLocation();
-    const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
+    const currentLang = 'ta';
     const [user, setUser] = useState(() => {
         try { return JSON.parse(localStorage.getItem('tvpk_user')) || null; } catch { return null; }
     });
@@ -40,12 +40,6 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', onClickOutside);
     }, []);
 
-    const toggleLanguage = () => {
-        const raw = i18n.resolvedLanguage || i18n.language || 'en';
-        const newLang = String(raw).split('-')[0] === 'ta' ? 'en' : 'ta';
-        i18n.changeLanguage(newLang);
-    };
-
     const navLinkClass = ({ isActive }) =>
         `inline-flex items-center gap-1 px-2 py-2 text-sm font-black transition-colors tracking-wide whitespace-nowrap ${isActive
             ? 'text-secondary'
@@ -71,7 +65,14 @@ const Navbar = () => {
         ],
     };
 
-    const today = new Date().toLocaleDateString(currentLang === 'ta' ? 'ta-IN' : 'en-IN');
+    const tamilYear = (() => {
+        try {
+            const englishYear = new Date().getFullYear();
+            return englishYear + 31;
+        } catch {
+            return '2057';
+        }
+    })();
     const desktopNavGap = currentLang === 'ta' ? 'gap-4' : 'gap-6';
     const desktopItemClass = currentLang === 'ta'
         ? 'inline-flex items-center gap-1 px-2 py-1.5 text-xs 2xl:text-sm font-black transition-colors tracking-wide whitespace-nowrap text-white hover:text-secondary font-tamil'
@@ -86,9 +87,7 @@ const Navbar = () => {
             <div className="hidden lg:block bg-[#8c0000] text-white text-[11px]">
                 <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-6 h-7 flex items-center justify-between">
                     <p className={`truncate pr-4 ${currentLang === 'ta' ? 'font-tamil' : 'font-header'}`}>
-                        {currentLang === 'ta'
-                            ? `இன்று: ${today} | இணைப்பு: (+91) 9092529250`
-                            : `Today: ${today} | Helpline: (+91) 9092529250`}
+                        திருவள்ளுவர் ஆண்டு {tamilYear}
                     </p>
                     <div className="flex items-center gap-2">
                         <a href="#" className="hover:text-secondary transition-colors" aria-label="Facebook"><Facebook size={12} /></a>
@@ -167,13 +166,6 @@ const Navbar = () => {
                     </div>
 
                     <div className="hidden xl:flex items-center gap-2">
-                        <button
-                            onClick={toggleLanguage}
-                            aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
-                            className={currentLang === 'ta' ? 'px-3 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-xs border-2 border-amber-300 hover:brightness-105 transition shadow-sm' : 'px-3.5 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-sm border-2 border-amber-300 hover:brightness-105 transition shadow-sm'}
-                        >
-                            {currentLang === 'ta' ? 'En' : 'அ'}
-                        </button>
                         {!user && (
                             <Link to="/login" className="px-4 h-10 rounded-xl bg-white text-[#8b0000] font-black text-sm inline-flex items-center justify-center hover:bg-slate-100 transition shadow-sm border-2 border-white">
                                 {t('nav.login', { lng: currentLang })}
@@ -188,13 +180,6 @@ const Navbar = () => {
                     </div>
 
                     <div className="flex xl:hidden items-center gap-2 shrink-0">
-                        <button
-                            onClick={toggleLanguage}
-                            aria-label={currentLang === 'ta' ? 'Switch to English' : 'Switch to Tamil'}
-                            className="px-3 h-10 rounded-xl bg-secondary text-[#5c0d0d] font-black text-sm border-2 border-amber-300 shadow-sm hover:brightness-105 transition cursor-pointer"
-                        >
-                            {currentLang === 'ta' ? 'En' : 'அ'}
-                        </button>
                         {user ? (
                             <div className="w-[36px]">
                                 <ProfileMenu />
