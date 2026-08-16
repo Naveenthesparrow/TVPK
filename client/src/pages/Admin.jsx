@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { Trash2 } from 'lucide-react';
 import { isAdmin } from '../utils/adminHelpers';
 
 async function readJsonSafe(res) {
@@ -118,9 +119,30 @@ const Admin = () => {
     }
   };
 
+  const deleteApplicant = async (id) => {
+    const token = localStorage.getItem('tvpk_token');
+    const ok = window.confirm(
+      currentLang === 'ta'
+        ? 'இந்த விண்ணப்பத்தை நிரந்தரமாக நீக்க வேண்டுமா? இந்த செயலை மாற்ற முடியாது.'
+        : 'Are you sure you want to permanently delete this application? This action cannot be undone.'
+    );
+    if (!ok) return;
+    try {
+      const r = await fetch(`${api}/admin/applicants/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const j = await readJsonSafe(r);
+      if (!r.ok) return alert(j?.error || (currentLang === 'ta' ? 'நீக்குதல் தோல்வியடைந்தது' : 'Delete failed'));
+      setApplicants((prev) => prev.filter((item) => item._id !== id));
+    } catch {
+      alert(currentLang === 'ta' ? 'நீக்குதல் தோல்வியடைந்தது' : 'Delete failed');
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-slate-50 py-8">
-      <div className="max-w-5xl mx-auto p-6 bg-white rounded shadow mt-8">
+    <div className="min-h-screen bg-slate-50 py-4 sm:py-8 p-3 sm:p-6">
+      <div className="max-w-5xl mx-auto p-4 sm:p-6 bg-white rounded-2xl shadow mt-4 sm:mt-8 border border-slate-200">
         <div className="flex items-center justify-end mb-4">
           <Link
             to="/admin/dashboard"
@@ -169,27 +191,39 @@ const Admin = () => {
               <div key={a._id} className={`border rounded-lg p-4 ${a.status === 'removed' ? 'bg-slate-50/70 border-slate-200' : 'bg-white border-slate-200'} shadow-sm hover:shadow-md transition-shadow`}>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div className="flex items-center gap-4 min-w-0">
-                    <div className="w-14 h-14 bg-slate-100 rounded overflow-hidden shrink-0 border border-slate-200">
-                      {a.aadharImage ? (
-                        <img src={`${api}${a.aadharImage}`} alt="aadhar" className="w-full h-full object-cover" />
+                    <div className="w-14 h-14 bg-slate-100 rounded-full overflow-hidden shrink-0 border-2 border-slate-200 shadow-inner">
+                      {a.professionalPhoto ? (
+                        <img src={`${api}${a.professionalPhoto}`} alt="user photo" className="w-full h-full object-cover" />
                       ) : (
-                        <div className="w-full h-full grid place-items-center text-xs text-slate-400">No image</div>
+                        <div className="w-full h-full grid place-items-center text-[10px] leading-tight text-slate-400 text-center font-bold px-1 bg-slate-50">No photo</div>
                       )}
                     </div>
                     <div className="min-w-0">
                       <div className="font-bold truncate text-base text-slate-900">{a.name}</div>
                       <div className="text-sm text-slate-600 truncate">{a.email || a.phone}</div>
-                      <div className="text-xs text-slate-500 mt-0.5">
-                        Status: <span className="font-semibold uppercase tracking-wide text-red-600">{a.status}</span>
+                      <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1.5 flex-wrap">
+                        <span>Status:</span>
+                        <span className={`font-black uppercase tracking-wider text-[10px] px-2 py-0.5 rounded-full border ${
+                          a.status === 'approved'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : a.status === 'rejected'
+                            ? 'bg-red-50 text-red-700 border-red-200'
+                            : a.status === 'removed'
+                            ? 'bg-slate-100 text-slate-600 border-slate-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
+                        }`}>{currentLang === 'ta'
+                          ? (a.status === 'approved' ? 'ஒப்புதல் பெற்றது' : a.status === 'rejected' ? 'நிராகரிக்கப்பட்டது' : a.status === 'removed' ? 'நீக்கப்பட்டது' : 'நிலுவையில்')
+                          : a.status
+                        }</span>
                         {a.memberSequence ? ` • TVPK${String(a.memberSequence).padStart(8, '0')}` : ''}
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                  <div className="flex items-center gap-2 flex-wrap justify-start md:justify-end w-full md:w-auto">
                     <button
                       onClick={() => setExpandedId(expandedId === a._id ? null : a._id)}
-                      className="px-3 py-2 border rounded text-sm bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold transition-colors"
+                      className="px-3 py-2 border border-blue-200 text-blue-700 hover:bg-blue-50 bg-blue-50/20 text-xs font-bold rounded-lg transition-colors"
                     >
                       {expandedId === a._id
                         ? (currentLang === 'ta' ? 'விவரங்களை மறைக்கவும்' : 'Hide Details')
@@ -200,7 +234,7 @@ const Admin = () => {
                         target="_blank"
                         rel="noreferrer"
                         href={`${api}${a.aadharImage}`}
-                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                        className="px-3 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white text-xs font-medium rounded-lg transition-colors"
                       >
                         {currentLang === 'ta' ? 'ஆதாரைப் பார்க்கவும்' : 'View Aadhar'}
                       </a>
@@ -210,60 +244,74 @@ const Admin = () => {
                         target="_blank"
                         rel="noreferrer"
                         href={`${api}${a.professionalPhoto}`}
-                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                        className="px-3 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white text-xs font-medium rounded-lg transition-colors"
                       >
                         {currentLang === 'ta' ? 'தொழில்முறை புகைப்படம்' : 'View Photo'}
                       </a>
                     ) : (
-                      <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'புகைப்படம் இல்லை' : 'No Photo'}</span>
+                      <span className="px-3 py-2 text-xs text-slate-400 border border-slate-200 rounded-lg bg-slate-50 font-medium">{currentLang === 'ta' ? 'புகைப்படம் இல்லை' : 'No Photo'}</span>
                     )}
                     {a.casteCertificate ? (
                       <a
                         target="_blank"
                         rel="noreferrer"
                         href={`${api}${a.casteCertificate}`}
-                        className="px-3 py-2 border rounded text-sm bg-white hover:bg-slate-50 text-slate-700 transition-colors"
+                        className="px-3 py-2 border border-slate-200 text-slate-700 hover:bg-slate-50 bg-white text-xs font-medium rounded-lg transition-colors"
                       >
                         {currentLang === 'ta' ? 'சான்றிதழைப் பார்க்கவும்' : 'View Certificate'}
                       </a>
                     ) : (
-                      <span className="px-3 py-2 text-sm text-slate-400 border rounded bg-slate-50">{currentLang === 'ta' ? 'சான்றிதழ் இல்லை' : 'No Certificate'}</span>
+                      <span className="px-3 py-2 text-xs text-slate-400 border border-slate-200 rounded-lg bg-slate-50 font-medium">{currentLang === 'ta' ? 'சான்றிதழ் இல்லை' : 'No Certificate'}</span>
                     )}
 
                     {a.status === 'pending' ? (
                       <>
                         <button
                           onClick={() => updateStatus(a._id, 'approved', 'user')}
-                          className="px-3 py-2 bg-green-600 hover:bg-green-700 text-white rounded text-sm font-semibold transition-colors"
+                          className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black rounded-lg shadow-xs transition-colors cursor-pointer"
                         >
                           {currentLang === 'ta' ? 'ஒப்புதல்' : 'Approve'}
                         </button>
                         <button
                           onClick={() => updateStatus(a._id, 'rejected')}
-                          className="px-3 py-2 bg-red-600 hover:bg-red-700 text-white rounded text-sm font-semibold transition-colors"
+                          className="px-4 py-2 border border-red-200 text-red-600 hover:bg-red-50 text-xs font-bold rounded-lg transition-colors cursor-pointer"
                         >
                           {currentLang === 'ta' ? 'மறுப்பு' : 'Reject'}
                         </button>
                       </>
                     ) : a.status === 'approved' && view !== 'removed' ? (
+                      <button
+                        onClick={() => updateStatus(a._id, 'removed')}
+                        className="px-3 py-2 border border-slate-200 text-slate-400 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                      >
+                        {currentLang === 'ta' ? 'உறுப்பினரை நீக்கவும்' : 'Remove Member'}
+                      </button>
+                    ) : a.status === 'approved' ? (
+                      null
+                    ) : a.status === 'rejected' ? (
                       <>
-                        <span className="px-3 py-2 text-sm text-emerald-700 border border-emerald-200 rounded bg-emerald-50 font-medium">{currentLang === 'ta' ? 'செயலில் உள்ள உறுப்பினர்' : 'Active Member'}</span>
                         <button
-                          onClick={() => updateStatus(a._id, 'removed')}
-                          className="px-3 py-2 bg-rose-600 hover:bg-rose-700 text-white rounded text-sm font-semibold transition-colors"
+                          onClick={() => deleteApplicant(a._id)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-black rounded-lg shadow-xs transition-colors cursor-pointer"
                         >
-                          {currentLang === 'ta' ? 'உறுப்பினரை நீக்கவும்' : 'Remove Member'}
+                          <Trash2 size={14} />
+                          {currentLang === 'ta' ? 'நீக்கவும்' : 'Delete'}
                         </button>
                       </>
-                    ) : a.status === 'approved' ? (
-                      <span className="px-3 py-2 text-sm text-emerald-700 border border-emerald-200 rounded bg-emerald-50 font-medium">{currentLang === 'ta' ? 'ஒப்புதல் பெற்றது' : 'Approved'}</span>
                     ) : a.status === 'removed' ? (
                       <>
-                        <span className="px-3 py-2 text-sm text-slate-600 border border-slate-200 rounded bg-slate-100">{currentLang === 'ta' ? 'நீக்கப்பட்டது' : 'Removed'}</span>
-                        <span className="px-3 py-2 text-sm text-slate-500 border border-slate-200 rounded bg-white">{currentLang === 'ta' ? 'எண் ஒதுக்கப்படவில்லை' : 'Number retired'}</span>
+                        <span className="px-3 py-2 text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200 rounded-lg">{currentLang === 'ta' ? 'நீக்கப்பட்டது' : 'Removed'}</span>
+                        <span className="px-3 py-2 text-xs font-medium bg-white text-slate-500 border border-slate-200 rounded-lg">{currentLang === 'ta' ? 'எண் ஒதுக்கப்படவில்லை' : 'Number retired'}</span>
+                        <button
+                          onClick={() => deleteApplicant(a._id)}
+                          className="inline-flex items-center gap-1.5 px-4 py-2 bg-rose-600 hover:bg-rose-700 text-white text-xs font-black rounded-lg shadow-xs transition-colors cursor-pointer"
+                        >
+                          <Trash2 size={14} />
+                          {currentLang === 'ta' ? 'நிரந்தரமாக நீக்கவும்' : 'Delete Permanently'}
+                        </button>
                       </>
                     ) : (
-                      <span className="px-3 py-2 text-sm text-slate-500 border border-slate-200 rounded bg-slate-50">{currentLang === 'ta' ? 'இறுதியாக்கப்பட்டது' : 'Finalized'}</span>
+                      <span className="px-3 py-2 text-xs font-medium bg-slate-50 text-slate-500 border border-slate-200 rounded-lg">{currentLang === 'ta' ? 'இறுதியாக்கப்பட்டது' : 'Finalized'}</span>
                     )}
                   </div>
                 </div>

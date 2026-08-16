@@ -7,11 +7,18 @@ const UploadedFile = require('../models/UploadedFile');
 const Counter = require('../models/Counter');
 const { normalizeEmail } = require('../utils/email');
 
-const isPdfFile = (file) => Boolean(file) && (file.mimetype === 'application/pdf' || /\.pdf$/i.test(file.originalname || ''));
+const isValidDocFile = (file) => {
+  if (!file) return false;
+  const mime = file.mimetype || '';
+  const name = file.originalname || '';
+  const allowedMime = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
+  const allowedExt = /\.(pdf|jpg|jpeg|png)$/i;
+  return allowedMime.includes(mime) || allowedExt.test(name);
+};
 
-const pdfOnlyFileFilter = (req, file, cb) => {
-  if (isPdfFile(file)) return cb(null, true);
-  const error = new Error('Only PDF files are allowed');
+const docFileFilter = (req, file, cb) => {
+  if (isValidDocFile(file)) return cb(null, true);
+  const error = new Error('Only PDF and image files (JPG, JPEG, PNG) are allowed');
   error.code = 'INVALID_FILE_TYPE';
   error.field = file.fieldname;
   cb(error);
@@ -20,7 +27,7 @@ const pdfOnlyFileFilter = (req, file, cb) => {
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
-  fileFilter: pdfOnlyFileFilter,
+  fileFilter: docFileFilter,
 });
 const uploadMemberFiles = upload.fields([
   { name: 'aadharImage', maxCount: 1 },
@@ -30,8 +37,8 @@ const uploadMemberFiles = upload.fields([
 
 const saveFileToDb = async (file, kind) => {
   if (!file) return undefined;
-  if (!isPdfFile(file)) {
-    const error = new Error('Only PDF files are allowed');
+  if (!isValidDocFile(file)) {
+    const error = new Error('Only PDF and image files (JPG, JPEG, PNG) are allowed');
     error.code = 'INVALID_FILE_TYPE';
     error.field = kind;
     throw error;
@@ -94,7 +101,7 @@ router.post('/apply', (req, res, next) => {
         professionalPhoto: 'Professional photo',
       };
       const label = fieldLabels[err.field] || 'Uploaded file';
-      return res.status(400).json({ error: `Upload failed: ${label} must be a PDF file` });
+      return res.status(400).json({ error: `Upload failed: ${label} must be a PDF or image file (JPG, JPEG, PNG)` });
     }
     return res.status(400).json({ error: 'Upload failed' });
   });
@@ -122,7 +129,7 @@ router.post('/apply', (req, res, next) => {
 
     // Basic validation
     if (!name) return res.status(400).json({ error: 'Name is required' });
-    if (!/^[ \p{L}.]+$/u.test(name)) {
+    if (!/^[ \p{L}\p{M}.]+$/u.test(name)) {
       return res.status(400).json({ error: 'Name can only contain letters, spaces, and dots.' });
     }
 

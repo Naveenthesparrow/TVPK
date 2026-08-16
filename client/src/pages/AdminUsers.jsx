@@ -141,12 +141,12 @@ export default function AdminUsers() {
   return (
     <div className="min-h-screen bg-slate-50 py-10">
       <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h1 className={`text-3xl font-black ${currentLang === 'ta' ? 'font-tamil' : ''}`}>{currentLang === 'ta' ? 'பயனர்கள் & பாத்திரங்கள்' : 'Users & Roles'}</h1>
             <p className={`text-sm text-slate-500 ${currentLang === 'ta' ? 'font-tamil' : ''}`}>{currentLang === 'ta' ? 'அனைத்து கணக்குகளையும் பார்வையிட்டு, பயனர்களை நிர்வாகியாக உயர்த்தவும்.' : 'View all accounts and promote users to admin.'}</p>
           </div>
-          <Link to="/admin/dashboard" className="px-4 py-2 rounded bg-white border hover:bg-slate-100 transition">
+          <Link to="/admin/dashboard" className="px-4 py-2 rounded bg-white border hover:bg-slate-100 transition shrink-0 text-center text-sm font-semibold">
             {currentLang === 'ta' ? 'முகாமுக்கு திரும்பவும்' : 'Back to Dashboard'}
           </Link>
         </div>

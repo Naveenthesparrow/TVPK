@@ -1,8 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LogOut, Crown, LayoutDashboard } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const ProfileMenu = () => {
+  const { i18n } = useTranslation();
+  const currentLang = (i18n.resolvedLanguage || i18n.language || 'en').split('-')[0];
   const [user, setUser] = useState(() => {
     try { return JSON.parse(localStorage.getItem('tvpk_user')) || null; } catch { return null; }
   });
@@ -48,17 +51,24 @@ const ProfileMenu = () => {
         <div className="absolute right-0 mt-3 w-64 bg-white border-0 rounded-xl shadow-2xl shadow-black/20 z-50 overflow-hidden animate-in fade-in duration-150">
           <div className="px-4 py-4 bg-gradient-to-r from-primary to-primary/90 text-white border-b-0">
             <div className="font-bold text-base">{user.name}</div>
-            {user.role && <div className="text-xs text-yellow-100 font-semibold mt-0.5 flex items-center gap-1.5"><Crown size={14} /> {user.role.toUpperCase()}</div>}
+            {user.role && (
+              <div className="text-xs text-yellow-100 font-semibold mt-0.5 flex items-center gap-1.5">
+                <Crown size={14} /> 
+                {user.role.toLowerCase() === 'admin' 
+                  ? (currentLang === 'ta' ? 'நிர்வாகி' : 'ADMIN') 
+                  : (currentLang === 'ta' ? 'உறுப்பினர்' : 'MEMBER')}
+              </div>
+            )}
           </div>
           {user.role === 'admin' && (
             <Link to="/admin/dashboard" className="block px-4 py-3 text-sm font-semibold text-primary hover:bg-primary/5 transition border-b border-slate-100 cursor-pointer flex items-center gap-2">
               <LayoutDashboard size={16} />
-              Admin Dashboard
+              {currentLang === 'ta' ? 'நிர்வாக டாஷ்போர்டு' : 'Admin Dashboard'}
             </Link>
           )}
           <button onClick={logout} className="w-full flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 transition">
             <LogOut size={16} />
-            Sign Out
+            {currentLang === 'ta' ? 'வெளியேறு' : 'Sign Out'}
           </button>
         </div>
       )}

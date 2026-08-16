@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const SiteContent = require('../models/SiteContent');
 const User = require('../models/User');
@@ -28,11 +29,18 @@ const authenticateAdmin = async (req, res, next) => {
 
 // Multer for admin uploads (re-use same storage as members route)
 const multer = require('multer');
-const isPdfFile = (file) => Boolean(file) && (file.mimetype === 'application/pdf' || /\.pdf$/i.test(file.originalname || ''));
+const isValidDocFile = (file) => {
+  if (!file) return false;
+  const mime = file.mimetype || '';
+  const name = file.originalname || '';
+  const allowedMime = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
+  const allowedExt = /\.(pdf|jpg|jpeg|png)$/i;
+  return allowedMime.includes(mime) || allowedExt.test(name);
+};
 
-const pdfOnlyFileFilter = (req, file, cb) => {
-  if (isPdfFile(file)) return cb(null, true);
-  const error = new Error('Only PDF files are allowed');
+const docFileFilter = (req, file, cb) => {
+  if (isValidDocFile(file)) return cb(null, true);
+  const error = new Error('Only PDF and image files (JPG, JPEG, PNG) are allowed');
   error.code = 'INVALID_FILE_TYPE';
   error.field = file.fieldname;
   cb(error);
@@ -41,14 +49,14 @@ const pdfOnlyFileFilter = (req, file, cb) => {
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 15 * 1024 * 1024 },
-  fileFilter: pdfOnlyFileFilter,
+  fileFilter: docFileFilter,
 });
 const UploadedFile = require('../models/UploadedFile');
 
 const saveFileToDb = async (file, kind) => {
   if (!file) return undefined;
-  if (!isPdfFile(file)) {
-    const error = new Error('Only PDF files are allowed');
+  if (!isValidDocFile(file)) {
+    const error = new Error('Only PDF and image files (JPG, JPEG, PNG) are allowed');
     error.code = 'INVALID_FILE_TYPE';
     error.field = kind;
     throw error;
@@ -173,6 +181,39 @@ router.post('/applicants/:id/status', authenticateAdmin, async (req, res) => {
   }
 });
 
+// Delete applicant permanently (admin only) - only allowed for rejected or removed applicants
+router.delete('/applicants/:id', authenticateAdmin, async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ error: 'Invalid applicant ID' });
+    }
+    const applicant = await MemberApplicant.findById(id);
+    if (!applicant) return res.status(404).json({ error: 'Applicant not found' });
+
+    if (applicant.status !== 'rejected' && applicant.status !== 'removed') {
+      return res.status(400).json({ error: 'Only rejected or removed applications can be permanently deleted.' });
+    }
+
+    // Clean up uploaded files
+    const fileFields = ['aadharImage', 'casteCertificate', 'professionalPhoto'];
+    for (const field of fileFields) {
+      if (applicant[field]) {
+        const fileId = applicant[field].replace('/files/', '');
+        if (mongoose.Types.ObjectId.isValid(fileId)) {
+          await UploadedFile.findByIdAndDelete(fileId);
+        }
+      }
+    }
+
+    await MemberApplicant.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('Failed to delete applicant', err);
+    res.status(500).json({ error: 'Failed to delete applicant' });
+  }
+});
+
 // Upload caste certificate for an applicant
 router.post('/applicants/:id/caste', authenticateAdmin, (req, res, next) => {
   upload.single('casteCertificate')(req, res, (err) => {
@@ -184,7 +225,7 @@ router.post('/applicants/:id/caste', authenticateAdmin, (req, res, next) => {
       return res.status(400).json({ error: `Upload failed: ${err.message}` });
     }
     if (err && err.code === 'INVALID_FILE_TYPE') {
-      return res.status(400).json({ error: 'Upload failed: Community certificate must be a PDF file' });
+      return res.status(400).json({ error: 'Upload failed: Community certificate must be a PDF or image file (JPG, JPEG, PNG)' });
     }
     return res.status(400).json({ error: 'Upload failed' });
   });
