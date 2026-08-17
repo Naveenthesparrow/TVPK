@@ -48,6 +48,7 @@ app.use(cors({
     // Allow tools like curl/Postman that may not send Origin.
     if (!origin) return callback(null, true);
     if (allowedOrigins.has(origin) || isLocalOrigin(origin)) return callback(null, true);
+    console.warn(`[CORS] Blocked request from origin: ${origin}. Allowed origins are:`, Array.from(allowedOrigins));
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
@@ -73,6 +74,7 @@ const cspDirectives = {
 };
 app.use(helmet({
   contentSecurityPolicy: cspDirectives,
+  crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
   crossOriginResourcePolicy: { policy: 'cross-origin' },
   // Keep strict transport headers opt-in to avoid localhost fetch failures during local development.
   hsts: process.env.ENABLE_HTTPS_HEADERS === 'true',
