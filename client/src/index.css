@@ -69,6 +69,23 @@ h6 {
   font-family: "Noto Sans Tamil", sans-serif;
 }
 
+/* Fix Tamil letter-spacing (prevent split vowel signs/pullis) */
+.font-tamil,
+.font-tamil * {
+  letter-spacing: normal !important;
+}
+
+/* Ensure all headers under .font-tamil container render with Noto Sans Tamil and proper spacing */
+.font-tamil h1,
+.font-tamil h2,
+.font-tamil h3,
+.font-tamil h4,
+.font-tamil h5,
+.font-tamil h6,
+.font-tamil .font-header {
+  font-family: "Noto Sans Tamil", sans-serif !important;
+}
+
 /*
   Noto Sans Tamil renders ~15% larger than Outfit at the same px size.
   These subtle corrections ensure both languages have the same visual

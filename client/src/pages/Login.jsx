@@ -26,6 +26,7 @@ function isExpired(token) {
 
 const Login = () => {
   const { t, i18n } = useTranslation();
+  const isTamil = i18n.language === 'ta';
   const [mode, setMode]       = useState('login');
   const [email, setEmail]     = useState('');
   const [password, setPassword] = useState('');
@@ -80,7 +81,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_8%_10%,_#e2e8f0_0,_transparent_18%),radial-gradient(circle_at_92%_92%,_#dbeafe_0,_transparent_22%),linear-gradient(180deg,_#f8fafc_0%,_#eef2f7_100%)] flex items-start justify-center p-3.5 sm:p-6 pt-6 sm:pt-10 pb-12">
+    <div className={`min-h-screen bg-[radial-gradient(circle_at_8%_10%,_#e2e8f0_0,_transparent_18%),radial-gradient(circle_at_92%_92%,_#dbeafe_0,_transparent_22%),linear-gradient(180deg,_#f8fafc_0%,_#eef2f7_100%)] flex items-start justify-center p-3.5 sm:p-6 pt-6 sm:pt-10 pb-12 ${isTamil ? 'font-tamil' : ''}`}>
       <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-[0_22px_60px_-40px_rgba(15,23,42,0.3)] border-2 border-slate-300 p-6 sm:p-8 mt-4 sm:mt-8 animate-in fade-in slide-in-from-top-3 duration-200">
 
         {/* Title */}

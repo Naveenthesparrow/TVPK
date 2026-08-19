@@ -601,8 +601,10 @@ export default function Join() {
     );
   };
 
+  const isTamil = i18n.language === 'ta';
+
   return (
-    <div className="max-w-4xl mx-auto p-2.5 sm:p-6 mb-16">
+    <div className={`max-w-4xl mx-auto p-2.5 sm:p-6 mb-16 ${isTamil ? 'font-tamil' : ''}`}>
       <div className="bg-white rounded-3xl shadow-xl border-2 border-slate-300 p-4 sm:p-8">
         <div className="flex items-start justify-between pb-5 border-b border-slate-100">
           <div>

@@ -16,8 +16,10 @@ const Donation = () => {
 
     const presetAmounts = [100, 250, 500, 1000, 2500, 5000];
 
+    const isTamil = currentLang === 'ta';
+
     return (
-        <div className="bg-slate-50/50 py-16 md:py-24 min-h-screen relative group">
+        <div className={`bg-slate-50/50 py-16 md:py-24 min-h-screen relative group ${isTamil ? 'font-tamil' : ''}`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             <div className="text-center mb-12 md:mb-20">
